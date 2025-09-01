@@ -12,7 +12,6 @@ import Link from "next/link";
 
 const CartPage = () => {
   const { state, removeItem, updateQuantity, clearCart } = useCart();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const handleQuantityChange = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -20,16 +19,6 @@ const CartPage = () => {
     } else {
       updateQuantity(id, newQuantity);
     }
-  };
-
-  const handleCheckout = () => {
-    setIsCheckingOut(true);
-    // Simulate checkout process
-    setTimeout(() => {
-      alert("Thank you for your order! This is a demo - no actual payment will be processed.");
-      clearCart();
-      setIsCheckingOut(false);
-    }, 2000);
   };
 
   if (state.items.length === 0) {
@@ -243,24 +232,12 @@ const CartPage = () => {
                   </div>
 
                   {/* Checkout Button */}
-                  <Button
-                    onClick={handleCheckout}
-                    disabled={isCheckingOut}
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-bold"
-                  >
-                    {isCheckingOut ? (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                      />
-                    ) : (
-                      <>
-                        <CreditCard className="w-5 h-5 mr-2" />
-                        Proceed to Checkout
-                      </>
-                    )}
-                  </Button>
+                  <Link href="/checkout">
+                    <Button className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-bold">
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      Proceed to Checkout
+                    </Button>
+                  </Link>
 
                   {/* Additional Info */}
                   <div className="text-center text-sm text-gray-500 space-y-2">
