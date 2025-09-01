@@ -155,6 +155,44 @@ button:hover, .btn:hover {
   display: none;  /* Safari and Chrome */
 }
 
+/* Prevent scaling on category cards */
+.no-scale {
+  transform: none !important;
+}
+
+.no-scale:hover {
+  transform: none !important;
+}
+
+.no-scale-btn {
+  transform: none !important;
+}
+
+.no-scale-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Category image scaling fix */
+.category-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.category-image-container::before {
+  content: '';
+  position: absolute;
+  top: -2.5%;
+  left: -2.5%;
+  right: -2.5%;
+  bottom: -2.5%;
+  z-index: -1;
+}
+
+.category-image-container img {
+  transform-origin: center;
+}
+
 /* Anime style text effects */
 .anime-text-shadow {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(236, 72, 153, 0.3);

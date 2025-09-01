@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
+      amount: amount, // Convert to cents
       currency,
       metadata,
       automatic_payment_methods: {

@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, ShoppingCart, Heart, Flame, ChefHat, Leaf, Fish, Crown, Star } from "lucide-react";
-import categoriesData from "@/data/categories.json";
+import { Flame, ChefHat, Leaf, Fish, Crown, Star } from "lucide-react";
 import productsData from "@/data/products.json";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -30,10 +27,12 @@ const ProductsPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const productsPerPage = 6;
 
-  // Filter products based on selected category
-  const filteredProducts = selectedCategory
-    ? productsData.filter(product => product.category_id === selectedCategory)
-    : productsData;
+  // Memoize filtered products to prevent recalculation on every render
+  const filteredProducts = useMemo(() => {
+    return selectedCategory
+      ? productsData.filter(product => product.category_id === selectedCategory)
+      : productsData;
+  }, [selectedCategory]);
 
   // Initialize products
   useEffect(() => {
@@ -47,38 +46,44 @@ const ProductsPage = () => {
     const initialProducts = filteredProducts.slice(0, productsPerPage);
     setDisplayedProducts(initialProducts);
     setCurrentPage(2);
-  }, [selectedCategory, filteredProducts]);
+  }, [selectedCategory, filteredProducts, productsPerPage]);
 
   // Load more products function
   const loadMoreProducts = useCallback(() => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    
-    // Simulate API delay
-    setTimeout(() => {
-      const startIndex = (currentPage - 1) * productsPerPage;
-      const endIndex = startIndex + productsPerPage;
-      const newProducts = filteredProducts.slice(startIndex, endIndex);
+    setLoading(prevLoading => {
+      if (prevLoading) return prevLoading; // Already loading
       
-      if (newProducts.length === 0) {
-        setHasMore(false);
-      } else {
-        // Ensure no duplicate products by checking IDs
-        setDisplayedProducts(prev => {
-          const existingIds = new Set(prev.map(p => p.id));
-          const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id));
-          return [...prev, ...uniqueNewProducts];
-        });
-        setCurrentPage(prev => prev + 1);
-      }
+      setLoading(true);
       
-      setLoading(false);
-    }, 500);
-  }, [currentPage, filteredProducts, loading, hasMore]);
+      // Simulate API delay
+      setTimeout(() => {
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+        const newProducts = filteredProducts.slice(startIndex, endIndex);
+        
+        if (newProducts.length === 0) {
+          setHasMore(false);
+        } else {
+          // Ensure no duplicate products by checking IDs
+          setDisplayedProducts(prev => {
+            const existingIds = new Set(prev.map(p => p.id));
+            const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id));
+            return [...prev, ...uniqueNewProducts];
+          });
+          setCurrentPage(prev => prev + 1);
+        }
+        
+        setLoading(false);
+      }, 500);
+      
+      return true;
+    });
+  }, [currentPage, filteredProducts, productsPerPage]);
 
   // Infinite scroll handler
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight * 0.8) {
         loadMoreProducts();

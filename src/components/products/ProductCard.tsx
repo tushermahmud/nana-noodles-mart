@@ -50,16 +50,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-500 border-2 border-pink-100 overflow-hidden relative bg-white/90 backdrop-blur-sm anime-border">
+    <Card className="group hover:shadow-2xl transition-all duration-300 border-2 border-pink-100 overflow-hidden relative bg-white/90 backdrop-blur-sm anime-border">
       <CardHeader className="pb-4">
         <div className="relative">
           {/* Product Image - Clickable */}
           <Link href={`/products/${product.id}`}>
-            <div className="w-full h-48 rounded-xl overflow-hidden mb-4 group-hover:scale-110 transition-transform duration-500 relative cursor-pointer">
+            <div className="w-full h-48 rounded-xl overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300 relative cursor-pointer">
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-700"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-400"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
