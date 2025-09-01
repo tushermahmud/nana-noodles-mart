@@ -1,26 +1,185 @@
+/* Import anime/pop style fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ec4899, #f97316);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #db2777, #ea580c);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Anime/Pop Style Typography */
+body {
+  font-family: 'Fredoka', sans-serif;
+}
+
+.anime-title {
+  font-family: 'Righteous', cursive;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pop-text {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+}
+
+/* Gradient text with anime style */
+.gradient-text {
+  background: linear-gradient(135deg, #ec4899, #f97316, #facc15, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+/* Anime style glow effects */
+.anime-glow {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 40px rgba(249, 115, 22, 0.3);
+}
+
+.anime-glow:hover {
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.8), 0 0 60px rgba(249, 115, 22, 0.5);
+}
+
+/* Pop style button effects */
+.btn-hover-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hover-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.btn-hover-effect:hover::before {
+  left: 100%;
+}
+
+/* Anime style floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(2deg); }
+  50% { transform: translateY(-5px) rotate(0deg); }
+  75% { transform: translateY(-15px) rotate(-2deg); }
+}
+
+.anime-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pop style pulse glow */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.8), 0 0 60px rgba(249, 115, 22, 0.6);
+    transform: scale(1.05);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.anime-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Button visibility fixes for Tailwind v4 */
+button, .btn, [role="button"] {
+  position: relative;
+  z-index: 10;
+  color: inherit;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+}
+
+/* Card visibility with anime style */
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(236, 72, 153, 0.2);
+  border-radius: 20px;
+}
+
+/* Force button text to be visible */
+button * {
+  color: inherit;
+}
+
+/* Ensure all button text is visible with anime style */
+button, .btn {
+  font-weight: 800;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+/* Hover state improvements with anime style */
+button:hover, .btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+/* Anime style text effects */
+.anime-text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(236, 72, 153, 0.3);
+}
+
+.pop-text-shadow {
+  text-shadow: 1px 1px 0px #fff, 2px 2px 0px #ec4899, 3px 3px 0px #f97316;
+}
+
+/* Anime style borders */
+.anime-border {
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(45deg, #ec4899, #f97316, #facc15, #a855f7) border-box;
+}
+
+/* Pop style gradients */
+.pop-gradient {
+  background: linear-gradient(45deg, #ec4899, #f97316, #facc15, #a855f7, #ec4899);
+  background-size: 400% 400%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

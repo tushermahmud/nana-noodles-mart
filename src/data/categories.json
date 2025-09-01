@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Signature Ramen",
+    "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&crop=center",
+    "count": 4,
+    "icon": "ChefHat",
+    "color": "from-pink-500 to-orange-500",
+    "bgColor": "from-pink-100 to-orange-100",
+    "borderColor": "border-pink-200",
+    "popular": true,
+    "features": ["Tonkotsu", "Miso", "Shoyu", "Black Garlic"]
+  },
+  {
+    "id": 2,
+    "name": "Spicy Ramen",
+    "image": "https://images.unsplash.com/photo-1557872943-5a8ac4ddc5e9?w=400&h=300&fit=crop&crop=center",
+    "count": 3,
+    "icon": "Flame",
+    "color": "from-red-500 to-orange-500",
+    "bgColor": "from-red-100 to-orange-100",
+    "borderColor": "border-red-200",
+    "popular": false,
+    "features": ["Extra Spicy", "Ghost Pepper", "Fire Ramen"]
+  },
+  {
+    "id": 3,
+    "name": "Vegetarian Ramen",
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&crop=center",
+    "count": 2,
+    "icon": "Leaf",
+    "color": "from-green-500 to-emerald-500",
+    "bgColor": "from-green-100 to-emerald-100",
+    "borderColor": "border-green-200",
+    "popular": false,
+    "features": ["Plant-based", "Organic", "Vegan"]
+  },
+  {
+    "id": 4,
+    "name": "Seafood Ramen",
+    "image": "https://images.unsplash.com/photo-1557872943-5a8ac4ddc5e9?w=400&h=300&fit=crop&crop=center",
+    "count": 3,
+    "icon": "Fish",
+    "color": "from-blue-500 to-cyan-500",
+    "bgColor": "from-blue-100 to-cyan-100",
+    "borderColor": "border-blue-200",
+    "popular": true,
+    "features": ["Shrimp", "Crab", "Lobster"]
+  },
+  {
+    "id": 5,
+    "name": "Premium Ramen",
+    "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&crop=center",
+    "count": 2,
+    "icon": "Crown",
+    "color": "from-purple-500 to-pink-500",
+    "bgColor": "from-purple-100 to-pink-100",
+    "borderColor": "border-purple-200",
+    "popular": true,
+    "features": ["Wagyu", "Truffle", "Gold Leaf"]
+  },
+  {
+    "id": 6,
+    "name": "Fusion Ramen",
+    "image": "https://images.unsplash.com/photo-1557872943-5a8ac4ddc5e9?w=400&h=300&fit=crop&crop=center",
+    "count": 3,
+    "icon": "Star",
+    "color": "from-yellow-500 to-orange-500",
+    "bgColor": "from-yellow-100 to-orange-100",
+    "borderColor": "border-yellow-200",
+    "popular": false,
+    "features": ["Korean BBQ", "Thai Curry", "Mexican"]
+  }
+]
