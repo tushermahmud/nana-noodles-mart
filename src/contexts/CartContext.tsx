@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 
 export interface CartItem {
   id: number;
@@ -120,9 +120,18 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [isClient, setIsClient] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Set client flag on mount
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Load cart from localStorage on mount (client-side only)
+  useEffect(() => {
+    if (!isClient) return;
+    
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
@@ -132,12 +141,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error('Error loading cart from localStorage:', error);
       }
     }
-  }, []);
+    setIsHydrated(true);
+  }, [isClient]);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes (client-side only)
   useEffect(() => {
+    if (!isClient || !isHydrated) return;
+    
     localStorage.setItem('cart', JSON.stringify(state));
-  }, [state]);
+  }, [state, isClient, isHydrated]);
 
   const addItem = (item: Omit<CartItem, 'quantity'>) => {
     dispatch({ type: 'ADD_ITEM', payload: item });

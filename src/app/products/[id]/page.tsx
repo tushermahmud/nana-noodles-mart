@@ -28,9 +28,9 @@ interface Product {
 }
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 const ProductPage = ({ params }: ProductPageProps) => {
@@ -39,10 +39,20 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const [isAdding, setIsAdding] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [productId, setProductId] = useState<string | null>(null);
+
+  // Unwrap params Promise
+  useEffect(() => {
+    params.then((resolvedParams) => {
+      setProductId(resolvedParams.id);
+    });
+  }, [params]);
 
   useEffect(() => {
-    const productId = parseInt(params.id);
-    const foundProduct = productsData.find(p => p.id === productId);
+    if (!productId) return;
+    
+    const id = parseInt(productId);
+    const foundProduct = productsData.find(p => p.id === id);
     
     if (!foundProduct) {
       notFound();
@@ -56,7 +66,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
       .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
       .slice(0, 3);
     setRelatedProducts(related);
-  }, [params.id]);
+  }, [productId]);
 
   const handleAddToCart = () => {
     if (!product || !product.inStock) return;

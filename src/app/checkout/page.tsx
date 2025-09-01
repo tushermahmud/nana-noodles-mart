@@ -4,12 +4,27 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CreditCard, Truck, Shield, CheckCircle, Lock, MapPin, Phone, Mail, User, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+// Dynamically import Stripe components to avoid hydration issues
+const StripeCheckoutForm = dynamic(
+  () => import("../../components/checkout/StripeCheckoutForm"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="space-y-4">
+        <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+    ),
+  }
+) as any;
 
 interface CheckoutForm {
   firstName: string;
@@ -21,16 +36,14 @@ interface CheckoutForm {
   state: string;
   zipCode: string;
   country: string;
-  cardNumber: string;
-  cardName: string;
-  expiryDate: string;
-  cvv: string;
 }
 
 const CheckoutPage = () => {
   const { state, clearCart } = useCart();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [formData, setFormData] = useState<CheckoutForm>({
     firstName: "",
     lastName: "",
@@ -41,13 +54,8 @@ const CheckoutPage = () => {
     state: "",
     zipCode: "",
     country: "United States",
-    cardNumber: "",
-    cardName: "",
-    expiryDate: "",
-    cvv: "",
   });
 
-  const [activeStep, setActiveStep] = useState(1);
   const [shippingMethod, setShippingMethod] = useState("standard");
 
   const shippingMethods = [
@@ -78,17 +86,20 @@ const CheckoutPage = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
-
-    // Simulate payment processing
+  const handlePaymentSuccess = () => {
+    setPaymentSuccess(true);
+    setPaymentError(null);
+    
+    // Clear cart and redirect after successful payment
     setTimeout(() => {
-      alert("Order placed successfully! Thank you for your purchase.");
       clearCart();
       router.push("/");
-      setIsProcessing(false);
-    }, 3000);
+    }, 2000);
+  };
+
+  const handlePaymentError = (error: string) => {
+    setPaymentError(error);
+    setIsProcessing(false);
   };
 
   const subtotal = state.total;
@@ -108,7 +119,7 @@ const CheckoutPage = () => {
             className="text-center"
           >
             <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShoppingCart className="w-12 h-12 text-gray-400" />
+              <Truck className="w-12 h-12 text-gray-400" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8 max-w-md">
@@ -165,7 +176,7 @@ const CheckoutPage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="space-y-8">
                   {/* Contact Information */}
                   <Card className="border border-gray-200">
                     <CardHeader>
@@ -340,67 +351,21 @@ const CheckoutPage = () => {
                   <Card className="border border-gray-200">
                     <CardHeader>
                       <CardTitle className="flex items-center space-x-2">
-                        <CreditCard className="w-5 h-5 text-pink-600" />
+                        <Shield className="w-5 h-5 text-pink-600" />
                         <span>Payment Information</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Card Number *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="1234 5678 9012 3456"
-                          value={formData.cardNumber}
-                          onChange={(e) => handleInputChange("cardNumber", e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Name on Card *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.cardName}
-                          onChange={(e) => handleInputChange("cardName", e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                        />
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Expiry Date *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="MM/YY"
-                            value={formData.expiryDate}
-                            onChange={(e) => handleInputChange("expiryDate", e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            CVV *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            placeholder="123"
-                            value={formData.cvv}
-                            onChange={(e) => handleInputChange("cvv", e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                          />
-                        </div>
-                      </div>
+                    <CardContent>
+                      <StripeCheckoutForm
+                        amount={total}
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
+                        isProcessing={isProcessing}
+                        setIsProcessing={setIsProcessing}
+                      />
                     </CardContent>
                   </Card>
-                </form>
+                </div>
               </motion.div>
             </div>
 
@@ -467,6 +432,40 @@ const CheckoutPage = () => {
                     </div>
                   </div>
 
+                  {/* Success Message */}
+                  {paymentSuccess && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-green-50 border border-green-200 rounded-lg p-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <span className="text-green-800 font-medium">Payment Successful!</span>
+                      </div>
+                      <p className="text-green-700 text-sm mt-1">
+                        Redirecting to homepage...
+                      </p>
+                    </motion.div>
+                  )}
+
+                  {/* Error Message */}
+                  {paymentError && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-red-50 border border-red-200 rounded-lg p-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="w-5 h-5 text-red-600" />
+                        <span className="text-red-800 font-medium">Payment Failed</span>
+                      </div>
+                      <p className="text-red-700 text-sm mt-1">
+                        {paymentError}
+                      </p>
+                    </motion.div>
+                  )}
+
                   {/* Security Info */}
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-center space-x-2 mb-2">
@@ -477,26 +476,6 @@ const CheckoutPage = () => {
                       Your payment information is encrypted and secure. We never store your card details.
                     </p>
                   </div>
-
-                  {/* Place Order Button */}
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isProcessing}
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 text-lg font-bold"
-                  >
-                    {isProcessing ? (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                      />
-                    ) : (
-                      <>
-                        <Lock className="w-5 h-5 mr-2" />
-                        Place Order - ${total.toFixed(2)}
-                      </>
-                    )}
-                  </Button>
 
                   {/* Additional Info */}
                   <div className="text-center text-sm text-gray-500 space-y-2">

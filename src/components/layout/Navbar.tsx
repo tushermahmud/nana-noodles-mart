@@ -10,16 +10,26 @@ import { useCart } from "@/contexts/CartContext";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { state } = useCart();
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
+    // Set initial scroll state
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isClient]);
 
   return (
     <motion.nav

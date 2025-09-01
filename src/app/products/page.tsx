@@ -35,6 +35,20 @@ const ProductsPage = () => {
     ? productsData.filter(product => product.category_id === selectedCategory)
     : productsData;
 
+  // Initialize products
+  useEffect(() => {
+    // Reset everything when category changes
+    setDisplayedProducts([]);
+    setCurrentPage(1);
+    setHasMore(true);
+    setLoading(false);
+    
+    // Load initial products for the new category
+    const initialProducts = filteredProducts.slice(0, productsPerPage);
+    setDisplayedProducts(initialProducts);
+    setCurrentPage(2);
+  }, [selectedCategory, filteredProducts]);
+
   // Load more products function
   const loadMoreProducts = useCallback(() => {
     if (loading || !hasMore) return;
@@ -50,24 +64,18 @@ const ProductsPage = () => {
       if (newProducts.length === 0) {
         setHasMore(false);
       } else {
-        setDisplayedProducts(prev => [...prev, ...newProducts]);
+        // Ensure no duplicate products by checking IDs
+        setDisplayedProducts(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id));
+          return [...prev, ...uniqueNewProducts];
+        });
         setCurrentPage(prev => prev + 1);
       }
       
       setLoading(false);
     }, 500);
   }, [currentPage, filteredProducts, loading, hasMore]);
-
-  // Initialize products
-  useEffect(() => {
-    setDisplayedProducts([]);
-    setCurrentPage(1);
-    setHasMore(true);
-    
-    const initialProducts = filteredProducts.slice(0, productsPerPage);
-    setDisplayedProducts(initialProducts);
-    setCurrentPage(2);
-  }, [selectedCategory]);
 
   // Infinite scroll handler
   useEffect(() => {
