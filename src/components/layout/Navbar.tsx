@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, Menu, X } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, User } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 
 const Navbar = () => {
@@ -45,16 +46,18 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3 cursor-pointer">
-            <div className="relative">
-              <Image
-                src="/logo.png"
-                alt="Nana's Noodle Mart Logo"
-                width={200}
-                height={100}
-              />
-            </div>
-          </motion.div>
+          <Link href="/">
+            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3 cursor-pointer">
+              <div className="relative">
+                <Image
+                  src="/logo.png"
+                  alt="Nana's Noodle Mart Logo"
+                  width={200}
+                  height={100}
+                />
+              </div>
+            </motion.div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -93,6 +96,21 @@ const Navbar = () => {
                 </motion.div>
               )}
             </motion.a>
+
+            {/* Login/Register Buttons */}
+            <div className="flex items-center space-x-2">
+              <Link href="/login">
+                <Button variant="outline" size="sm" className="border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700">
+                  <User className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -173,6 +191,21 @@ const Navbar = () => {
                     </span>
                   )}
                 </motion.a>
+
+                {/* Mobile Login/Register */}
+                <div className="px-3 py-2 space-y-2">
+                  <Link href="/login">
+                    <Button variant="outline" className="w-full border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700">
+                      <User className="w-4 h-4 mr-2" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </motion.div>
           )}

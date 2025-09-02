@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChefHat, Flame, Leaf, Fish, Crown, Star } from "lucide-react";
+import Link from "next/link";
 
 interface CategoriesProps {
   onCategorySelect?: (categoryId: number | null) => void;
@@ -127,76 +128,77 @@ const Categories = ({ onCategorySelect, selectedCategory }: CategoriesProps) => 
                 viewport={{ once: true }}
                 className="flex-shrink-0 w-80"
               >
-                <Card 
-                  className={`group hover:shadow-lg transition-shadow duration-300 border-2 border-gray-200 overflow-hidden relative bg-white/90 backdrop-blur-sm cursor-pointer h-full anime-border ${
-                    selectedCategory === category.id ? 'ring-4 ring-pink-500 ring-opacity-50' : ''
-                  }`}
-                  onClick={() => handleCategoryClick(category.id)}
-                >
-                  <CardContent className="p-0 overflow-hidden">
-                    <div className="relative overflow-hidden">
-                      {/* Category Image */}
-                      <div className="w-full h-64 rounded-t-xl overflow-hidden relative">
-                        <div className="w-full h-full relative overflow-hidden">
-                          <img 
-                            src={category.image} 
-                            alt={category.name}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                          
-                          {/* Category Icon */}
-                          <div className={`absolute top-4 left-4 w-12 h-12 bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center shadow-lg`}>
-                            <category.icon className="w-6 h-6 text-white" />
-                          </div>
-                          
-                          {/* Popular Badge */}
-                          {category.popular && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ delay: 0.5 }}
-                              className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
-                            >
-                              Popular
-                            </motion.div>
-                          )}
-                          
-                          {/* Item Count */}
-                          <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-bold pop-text">
-                            {category.count} items
+                <Link href={`/categories/${category.id}`}>
+                  <Card 
+                    className={`group hover:shadow-lg transition-shadow duration-300 border-2 border-gray-200 overflow-hidden relative bg-white/90 backdrop-blur-sm cursor-pointer h-full anime-border ${
+                      selectedCategory === category.id ? 'ring-4 ring-pink-500 ring-opacity-50' : ''
+                    }`}
+                  >
+                    <CardContent className="p-0 overflow-hidden">
+                      <div className="relative overflow-hidden">
+                        {/* Category Image */}
+                        <div className="w-full h-64 rounded-t-xl overflow-hidden relative">
+                          <div className="w-full h-full relative overflow-hidden">
+                            <img 
+                              src={category.image} 
+                              alt={category.name}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            
+                            {/* Category Icon */}
+                            <div className={`absolute top-4 left-4 w-12 h-12 bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center shadow-lg`}>
+                              <category.icon className="w-6 h-6 text-white" />
+                            </div>
+                            
+                            {/* Popular Badge */}
+                            {category.popular && (
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.5 }}
+                                className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
+                              >
+                                Popular
+                              </motion.div>
+                            )}
+                            
+                            {/* Item Count */}
+                            <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-bold pop-text">
+                              {category.count} items
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      {/* Category Info Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                        <h3 className="text-xl font-bold text-white mb-2 anime-title">
-                          {category.name}
-                        </h3>
                         
-                        {/* Features */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {category.features.map((feature, i) => (
-                            <span key={i} className={`px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full font-semibold border border-white/30 pop-text`}>
-                              {feature}
-                            </span>
-                          ))}
+                        {/* Category Info Overlay */}
+                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                          <h3 className="text-xl font-bold text-white mb-2 anime-title">
+                            {category.name}
+                          </h3>
+                          
+                          {/* Features */}
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {category.features.map((feature, i) => (
+                              <span key={i} className={`px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full font-semibold border border-white/30 pop-text`}>
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                          
+                          {/* CTA Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`w-full border-2 border-white/30 bg-white/20 backdrop-blur-sm text-white hover:bg-gradient-to-r ${category.color} hover:text-white transition-all duration-300 no-scale-btn`}
+                          >
+                            Explore {category.name}
+                            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </Button>
                         </div>
-                        
-                        {/* CTA Button */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className={`w-full border-2 border-white/30 bg-white/20 backdrop-blur-sm text-white hover:bg-gradient-to-r ${category.color} hover:text-white transition-all duration-300 no-scale-btn`}
-                        >
-                          Explore {category.name}
-                          <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Button>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </div>
