@@ -216,6 +216,17 @@ button:hover, .btn:hover {
   animation: gradient-shift 3s ease infinite;
 }
 
+.shelf-gradient {
+  background: radial-gradient(
+    120% 140% at 30% 20%,
+    #D6B89B 0%,   /* lighter */
+    #C89E76 35%,  /* light */
+    #B98452 60%,  /* base */
+    #9A6B3E 85%,  /* darker */
+    #755130 100%  /* darkest */
+  );
+}
+
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
