@@ -42,7 +42,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about" className="py-20 bg-gradient-to-br from-white via-pink-50/40 to-black/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Story Section */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">

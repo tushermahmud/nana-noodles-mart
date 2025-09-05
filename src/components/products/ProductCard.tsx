@@ -50,7 +50,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-300 border-2 border-pink-100 overflow-hidden relative bg-white/90 backdrop-blur-sm anime-border">
+    <Card className="group hover:shadow-2xl transition-all duration-300 border-2 border-pink-200 overflow-hidden relative bg-gradient-to-br from-white via-pink-50/30 to-white backdrop-blur-sm anime-border">
       <CardHeader className="pb-4">
         <div className="relative">
           {/* Product Image - Clickable */}
@@ -63,34 +63,34 @@ const ProductCard = ({ product }: ProductCardProps) => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
-              {/* Floating elements */}
+              {/* Floating elements with gold/cream colors */}
               <motion.div
                 animate={{ y: [-5, 5, -5] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-2 right-2 w-3 h-3 bg-yellow-400 rounded-full opacity-80 anime-glow"
+                className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full opacity-80 anime-glow"
               />
               <motion.div
                 animate={{ y: [5, -5, 5] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute bottom-2 left-2 w-2 h-2 bg-pink-400 rounded-full opacity-80 anime-glow"
+                className="absolute bottom-2 left-2 w-2 h-2 bg-gradient-to-r from-amber-200 to-yellow-200 rounded-full opacity-80 anime-glow"
               />
             </div>
           </Link>
 
-          {/* Popular Badge */}
+          {/* Popular Badge with gold accent */}
           {product.popular && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg anime-glow"
+              className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg anime-glow"
             >
               Popular
             </motion.div>
           )}
 
-          {/* Category Badge */}
-          <div className="absolute top-2 right-2 bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-bold pop-text">
+          {/* Category Badge with black theme */}
+          <div className="absolute top-2 right-2 bg-gradient-to-r from-gray-800 to-black text-white px-3 py-1 rounded-full text-xs font-bold pop-text shadow-lg">
             {product.category}
           </div>
 
@@ -122,25 +122,36 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.description}
         </p>
 
-        {/* Features */}
+        {/* Features with gold/cream accents */}
         <div className="flex flex-wrap gap-2 mb-4">
           {product.features.map((feature, i) => (
-            <span key={i} className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full font-semibold pop-text">
+            <span key={i} className="px-3 py-1 bg-gradient-to-r from-yellow-50 to-orange-50 text-amber-700 text-xs rounded-full font-semibold pop-text border border-amber-200 shadow-sm">
               {feature}
             </span>
           ))}
         </div>
 
-        {/* Spice Level */}
-        <div className="flex items-center mb-4">
+        {/* Spice Level with enhanced styling */}
+        <div className="flex items-center mb-4 p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-100">
           <Flame className="w-4 h-4 text-red-500 mr-2" />
-          <span className="text-sm text-gray-600 font-semibold pop-text">
+          <span className="text-sm text-gray-700 font-semibold pop-text">
             Spice Level: {product.spiceLevel}/5
           </span>
+          {/* Spice level indicator with gold/cream dots */}
+          <div className="ml-auto flex space-x-1">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className={`w-2 h-2 rounded-full ${
+                  i < product.spiceLevel ? 'bg-gradient-to-r from-yellow-400 to-orange-400' : 'bg-gray-200'
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Price and CTA */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Price and CTA with enhanced styling */}
+        <div className="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-pink-50 to-orange-50 rounded-lg border border-pink-100">
           <div className="flex items-center space-x-2">
             <span className="text-2xl font-black text-pink-600 anime-title">
               ${product.price}
@@ -154,7 +165,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <Button
             variant="ghost"
             size="sm"
-            className="text-pink-600 hover:text-pink-700"
+            className="text-pink-600 hover:text-pink-700 hover:bg-pink-100 rounded-full transition-all duration-300"
           >
             <Heart className="w-4 h-4" />
           </Button>
@@ -165,9 +176,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <Button
             variant="default"
             size="sm"
-            className={`flex-1 font-bold border-2 transition-all duration-300 ${
+            className={`flex-1 font-bold border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
               isInCart 
-                ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-green-500 hover:border-green-600' 
                 : 'bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white border-pink-500 hover:border-pink-600'
             }`}
             onClick={handleAddToCart}
@@ -195,7 +206,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <Button
               variant="outline"
               size="sm"
-              className="border-2 border-pink-500 text-pink-600 hover:bg-pink-500 hover:text-white btn-hover-effect"
+              className="border-2 border-pink-500 text-pink-600 hover:bg-pink-500 hover:text-white btn-hover-effect shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <ArrowRight className="w-4 h-4" />
             </Button>

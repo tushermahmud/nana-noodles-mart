@@ -6,7 +6,7 @@ import { ArrowRight, Play } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-white via-pink-50 to-orange-50 overflow-hidden">
+    <section className="relative min-h-screen bg-gradient-to-br from-white via-pink-50/40 to-black/5 overflow-hidden">
       {/* Background Elements */}
       <motion.div
         animate={{ 
