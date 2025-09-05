@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
+import Image from "next/image";
 
 const Hero = () => {
   return (
@@ -145,66 +146,85 @@ const Hero = () => {
           </motion.div>
 
           {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="relative"
-          >
-            <div className="relative w-full h-96 lg:h-[500px] bg-gradient-to-br from-pink-200 via-orange-200 to-yellow-200 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <motion.div
-                    animate={{ y: [-10, 10, -10] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="w-48 h-48 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border-2 border-white/30"
-                  >
-                    <span className="text-9xl">🍜</span>
-                  </motion.div>
-                  <h3 className="text-3xl font-black text-gray-800 mb-2">Authentic Asian Flavors</h3>
-                  <p className="text-lg text-gray-700 font-semibold">Made with love & tradition</p>
-                </div>
-              </div>
-            </div>
+         <div className="relative w-full max-w-4xl mx-auto h-[600px] flex items-center justify-center">
+  {/* Frame behind the design */}
+  <div className="absolute inset-0">
+    <Image
+      src="/frame.png"
+      alt="Frame"
+      fill
+      className="object-contain"
+    />
+  </div>
 
-            {/* Floating Elements */}
-            <motion.div
-              animate={{ 
-                y: [-10, 10, -10],
-                rotate: [0, 180, 360]
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-400 rounded-full opacity-80 shadow-lg"
-            />
-            
-            <motion.div
-              animate={{ 
-                y: [10, -10, 10],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full opacity-80 shadow-lg"
-            />
+  {/* Animated Design on top of frame */}
+  <motion.div
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: 0.3, duration: 0.8 }}
+    className="relative w-[80%] h-[80%] flex items-center justify-center"
+  >
+    {/* Background Gradient (animated) */}
+    <motion.div
+      animate={{ rotate: [0, 5, -5, 0] }}
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      className="absolute inset-0 bg-gradient-to-br from-pink-200 via-orange-200 to-yellow-200 rounded-3xl shadow-2xl border-4 border-white"
+    />
 
-            {/* Special Offer Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="absolute -bottom-6 -left-6 bg-gradient-to-r from-pink-500 to-orange-500 rounded-2xl p-4 shadow-xl border-2 border-white/20 backdrop-blur-sm"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">🎉</span>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white anime-title">Special Offer</p>
-                  <p className="text-xs text-white/90 pop-text">Free shipping on orders $50+</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+    {/* Overlay + Noodles + Text */}
+    <div className="relative w-full h-full flex items-center justify-center">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-3xl"></div>
+
+      <div className="text-center relative z-10">
+        <motion.div
+          animate={{ y: [-10, 10, -10] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="w-48 h-48 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border-2 border-white/30"
+        >
+          <Image width={200} height={200} src="/Untitled design.gif" alt="Noodles" />
+        </motion.div>
+
+        <h3 className="text-3xl font-black text-gray-800 mb-2">Authentic Asian Flavors</h3>
+        <p className="text-lg text-gray-700 font-semibold">Made with love & tradition</p>
+      </div>
+
+      {/* Floating Elements */}
+      <motion.div
+        animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-400 rounded-full opacity-80 shadow-lg"
+      />
+
+      <motion.div
+        animate={{ y: [10, -10, 10], scale: [1, 1.2, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full opacity-80 shadow-lg"
+      />
+
+      {/* Special Offer Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        className="absolute -bottom-6 -left-6 bg-gradient-to-r from-pink-500 to-orange-500 rounded-2xl p-4 shadow-xl border-2 border-white/20 backdrop-blur-sm"
+      >
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+            <span className="text-2xl">🎉</span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white anime-title">Special Offer</p>
+            <p className="text-xs text-white/90 pop-text">Free shipping on orders $50+</p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </motion.div>
+</div>
+
+
+
+
         </div>
       </div>
     </section>
