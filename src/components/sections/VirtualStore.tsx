@@ -89,34 +89,34 @@ const VirtualStore = () => {
                         {/* Individual Basket Container */}
                         <div className="relative">
                           {/* Real Basket Image Background */}
-                          <div className="relative w-full h-48 rounded-lg shadow-xl border-2 border-amber-200/50">
+                          <div className="relative w-full h-48 rounded-lg shadow-xl">
                             {/* Use the actual shelf/basket image */}
                             <img
-                              src="/shelf-basket.png"
+                              src="/shelf-basket6.png"
                               alt="Product Basket"
                               className="w-full h-full object-cover"
                             />
                             
                             {/* Noodle Product inside basket */}
-                            <div className="absolute inset-0 flex items-center justify-center p-8">
+                            <div className="absolute inset-0 flex items-center justify-center p-8 -skew-x-10">
                               <motion.div
-                                whileHover={{ scale: 1.05, rotate: 2 }}
+                                whileHover={{ scale: 1.05, rotate: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="relative w-3/4 h-3/4 flex items-center justify-center hover:translate-y-[-50px]"
+                                className="relative w-full h-3/4 flex items-center justify-center"
                               >
                                 <img
                                   src={"/ramen-bowl-1.webp"}
                                   alt={product.name}
-                                  className="w-full h-full object-contain drop-shadow-lg mb-[120px] scale-150"
+                                  className="w-full skew-x-10 h-full object-contain drop-shadow-lg mb-[120px] scale-150 group-hover:translate-y-[-50px] transition-transform duration-300"
                                 />
                                 
                                 {/* Product info overlay */}
-                                <div className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-black/80 to-transparent p-1 rounded">
-                                  <h4 className="text-xs font-bold text-white truncate mb-1">
+                                <div className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-black/80 to-transparent p-1">
+                                  <h4 className="text-xs font-bold text-white truncate mb-1 mt-[48px] pt-[20px] skew-x-10">
                                     {product.name}
                                   </h4>
                                   <div className="flex items-center justify-between">
-                                    <span className="text-xs font-bold text-yellow-300">
+                                    <span className="text-xs font-bold text-yellow-300 skew-x-10">
                                       ${product.price}
                                     </span>
                                     {product.popular && (
