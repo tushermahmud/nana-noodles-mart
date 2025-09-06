@@ -36,8 +36,8 @@ const VirtualStore = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-white via-pink-50/40 to-black/10 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="py-20  overflow-hidden">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 anime-title">
             Welcome to <span className="gradient-text anime-text-shadow">Nana's Virtual Store</span>
@@ -47,10 +47,10 @@ const VirtualStore = () => {
           </p>
         </div>
 
-        
-
+{/*         <div className="bg-black w-full py-20 ml-7 skew-x-4 test-bg-2"></div>
+ */}
         {/* Virtual Store Shelves */}
-        <div className="space-y-20">
+        <div className="space-y-20 px-6 py-10 rounded-lg">
           {shelves.map((shelf, shelfIndex) => (
             <motion.div
               key={shelf.id}
@@ -63,7 +63,7 @@ const VirtualStore = () => {
               
 
               {/* Virtual Store Shelf with Baskets */}
-              <div className="bg-gradient-to-br shelf-gradient from-pink-50/30 via-white to-black/5 rounded-3xl p-8 border border-pink-200/30 shadow-xl backdrop-blur-sm">
+              <div className="bg-gradient-to-br">
                 <div className="relative">
                   {/* Shelf Background Image */}
                   <div className="absolute inset-0 flex justify-center items-center opacity-30">
@@ -75,7 +75,7 @@ const VirtualStore = () => {
                   </div>
                   
                   {/* Shelf Grid - 3x3 baskets */}
-                  <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 max-w-4xl mx-auto z-10">
+                  <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full mx-auto z-10 gap-y-5">
                     {shelf.products.slice(0, 9).map((product, index) => (
                       <motion.div
                         key={product.id}
@@ -89,34 +89,35 @@ const VirtualStore = () => {
                         {/* Individual Basket Container */}
                         <div className="relative">
                           {/* Real Basket Image Background */}
-                          <div className="relative w-full h-48 rounded-lg shadow-xl">
+                          <div className="relative w-full h-48 rounded-lg">
                             {/* Use the actual shelf/basket image */}
                             <img
-                              src="/shelf-basket6.png"
+                              src="/shelf-basket2-removebg-preview.png"
                               alt="Product Basket"
                               className="w-full h-full object-cover"
                             />
                             
                             {/* Noodle Product inside basket */}
-                            <div className="absolute inset-0 flex items-center justify-center p-8 -skew-x-10">
+                            <div className="absolute inset-0 flex items-center justify-center">
                               <motion.div
-                                whileHover={{ scale: 1.05, rotate: 0 }}
+                                whileHover={{ rotate: 0 }}
                                 transition={{ duration: 0.3 }}
                                 className="relative w-full h-3/4 flex items-center justify-center"
                               >
                                 <img
                                   src={"/ramen-bowl-1.webp"}
                                   alt={product.name}
-                                  className="w-full skew-x-10 h-full object-contain drop-shadow-lg mb-[120px] scale-150 group-hover:translate-y-[-50px] transition-transform duration-300"
+                                  className="h-full object-contain image-anime shadow-2xl mb-[30px] scale-100 group-hover:translate-y-[-50px] transition-transform duration-300"
                                 />
                                 
                                 {/* Product info overlay */}
-                                <div className="absolute bottom-1 left-1 right-1 bg-gradient-to-t from-black/80 to-transparent p-1">
-                                  <h4 className="text-xs font-bold text-white truncate mb-1 mt-[48px] pt-[20px] skew-x-10">
+                                <div className="absolute -bottom-[25px] gap-2 left-0 right-0 bg-[#BB8654] to-transparent p-1 h-[100px] border-3 border-[#CC9865] flex flex-col justify-center">
+                                  <h4 className="text-xs font-bold text-white truncate bg-[#BC935E] py-2">
                                     {product.name}
                                   </h4>
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-xs font-bold text-yellow-300 skew-x-10">
+                                  <hr className="border-[#9A7443] border-2" />
+                                  <div className="flex items-center justify-between py-2 bg-[#BC935E]">
+                                    <span className="text-xs font-bold text-yellow-300">
                                       ${product.price}
                                     </span>
                                     {product.popular && (

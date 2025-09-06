@@ -4,7 +4,6 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import Categories from "@/components/sections/Categories";
 import VirtualStore from "@/components/sections/VirtualStore";
-import ProductShowcase from "@/components/sections/ProductShowcase";
 import AboutSection from "@/components/sections/AboutSection";
 import Footer from "@/components/layout/Footer";
 
@@ -15,7 +14,6 @@ export default function Home() {
       <Hero />
       <Categories />
       <VirtualStore />
-      <ProductShowcase />
       <AboutSection />
       <Footer />
     </div>

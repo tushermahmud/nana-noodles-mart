@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Video } from "lucide-react";
 import Image from "next/image";
 
 const Hero = () => {
@@ -181,7 +181,7 @@ const Hero = () => {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           className="w-48 h-48 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border-2 border-white/30"
         >
-          <Image width={200} height={200} src="/Untitled design.gif" alt="Noodles" />
+          <video width={500} height={500} src="/hero-video.mp4_1757145674662.mp4" autoPlay muted loop className="rounded-full"/>
         </motion.div>
 
         <h3 className="text-3xl font-black text-gray-800 mb-2">Authentic Asian Flavors</h3>

@@ -219,12 +219,51 @@ button:hover, .btn:hover {
 .shelf-gradient {
   background: radial-gradient(
     120% 140% at 30% 20%,
-    #7B5E37 0%,   /* lighter */
-    #C89E76 35%,  /* light */
-    #7B5E37 60%,  /* base */
-    #9A6B3E 85%,  /* darker */
-    #755130 100%  /* darkest */
+    #7B5E37 0%,   /* lighter *//* darkest */
   );
+}
+
+.test-bg-2 {
+  background: repeating-linear-gradient(
+    to bottom,
+    #ccc,               /* divider color */
+    #7A5D36 5px,           /* line thickness */
+    #BC935E 5px,    /* gap starts */
+    #7A5D36 80px    /* gap size */
+  ) !important;
+}
+
+.test-bg {
+  background: repeating-linear-gradient(
+    to bottom,
+    #ccc,               /* divider color */
+    #7A5D36 5px,           /* line thickness */
+    #BC935E 5px,    /* gap starts */
+    #7A5D36 80px    /* gap size */
+  ) !important;
+}
+
+.test-bg-3 {
+  background: repeating-linear-gradient(
+    to bottom,
+    #9A7442, #9A7442 80px,   /* section 1 */
+    #333 80px, #333 84px,   /* divider line */
+    #8A673C 84px, #8A673C 160px, /* section 2 */
+    #333 160px, #333 164px, /* divider line */
+    #BD935F 164px, #BD935F 240px, /* section 3 */
+    #333 240px, #333 244px  /* divider line */
+  );
+
+}
+
+.image-anime {
+  transform: skew(-8deg, 1deg);
+  box-shadow: -9px 6px 24px #5E4728
+}
+
+@keyframes image-anime {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(90deg); }
 }
 
 @keyframes gradient-shift {
