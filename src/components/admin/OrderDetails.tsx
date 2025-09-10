@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { X, MapPin, Phone, Mail, Package, Truck, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { X, MapPin, Phone, Mail, Package, Truck, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface OrderDetailsProps {
   isOpen: boolean;
@@ -13,20 +13,20 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsProps) => {
-  const [newStatus, setNewStatus] = useState(order?.status || "");
+  const [newStatus, setNewStatus] = useState(order?.status || '');
 
   const statusOptions = [
-    { value: "pending", label: "Pending", color: "bg-yellow-100 text-yellow-800" },
-    { value: "confirmed", label: "Confirmed", color: "bg-blue-100 text-blue-800" },
-    { value: "preparing", label: "Preparing", color: "bg-purple-100 text-purple-800" },
-    { value: "shipped", label: "Shipped", color: "bg-indigo-100 text-indigo-800" },
-    { value: "delivered", label: "Delivered", color: "bg-green-100 text-green-800" },
-    { value: "cancelled", label: "Cancelled", color: "bg-red-100 text-red-800" }
+    { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
+    { value: 'confirmed', label: 'Confirmed', color: 'bg-blue-100 text-blue-800' },
+    { value: 'preparing', label: 'Preparing', color: 'bg-purple-100 text-purple-800' },
+    { value: 'shipped', label: 'Shipped', color: 'bg-indigo-100 text-indigo-800' },
+    { value: 'delivered', label: 'Delivered', color: 'bg-green-100 text-green-800' },
+    { value: 'cancelled', label: 'Cancelled', color: 'bg-red-100 text-red-800' },
   ];
 
   const getStatusColor = (status: string) => {
-    const statusOption = statusOptions.find(s => s.value === status);
-    return statusOption?.color || "bg-gray-100 text-gray-800";
+    const statusOption = statusOptions.find((s) => s.value === status);
+    return statusOption?.color || 'bg-gray-100 text-gray-800';
   };
 
   const handleStatusUpdate = () => {
@@ -81,7 +81,7 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">Phone</p>
-                    <p className="text-gray-900">{order.phone || "Not provided"}</p>
+                    <p className="text-gray-900">{order.phone || 'Not provided'}</p>
                   </div>
                 </div>
               </div>
@@ -103,12 +103,15 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
                 </h3>
                 <div className="space-y-3">
                   {order.items.map((item: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0"
+                    >
                       <div>
                         <p className="font-medium text-gray-900">{item.name || item}</p>
                         <p className="text-sm text-gray-600">Quantity: {item.quantity || 1}</p>
                       </div>
-                      <p className="font-medium text-gray-900">${item.price || "0.00"}</p>
+                      <p className="font-medium text-gray-900">${item.price || '0.00'}</p>
                     </div>
                   ))}
                 </div>
@@ -130,24 +133,29 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
                   Order Status
                 </h3>
                 <div className="mb-4">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}
+                  >
                     {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                   </span>
                 </div>
-                
+
                 {/* Status Timeline */}
                 <div className="space-y-4">
                   {statusOptions.map((status, index) => {
                     const isActive = status.value === order.status;
-                    const isCompleted = statusOptions.findIndex(s => s.value === order.status) > index;
-                    
+                    const isCompleted =
+                      statusOptions.findIndex((s) => s.value === order.status) > index;
+
                     return (
                       <div key={status.value} className="flex items-center">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          isActive || isCompleted 
-                            ? "bg-pink-500 text-white" 
-                            : "bg-gray-200 text-gray-400"
-                        }`}>
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            isActive || isCompleted
+                              ? 'bg-pink-500 text-white'
+                              : 'bg-gray-200 text-gray-400'
+                          }`}
+                        >
                           {isCompleted ? (
                             <CheckCircle className="w-4 h-4" />
                           ) : (
@@ -155,9 +163,11 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
                           )}
                         </div>
                         <div className="ml-3">
-                          <p className={`text-sm font-medium ${
-                            isActive || isCompleted ? "text-gray-900" : "text-gray-500"
-                          }`}>
+                          <p
+                            className={`text-sm font-medium ${
+                              isActive || isCompleted ? 'text-gray-900' : 'text-gray-500'
+                            }`}
+                          >
                             {status.label}
                           </p>
                         </div>
@@ -207,15 +217,15 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Method</span>
-                    <span className="text-gray-900">{order.paymentMethod || "Credit Card"}</span>
+                    <span className="text-gray-900">{order.paymentMethod || 'Credit Card'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Method</span>
-                    <span className="text-gray-900">{order.shippingMethod || "Standard"}</span>
+                    <span className="text-gray-900">{order.shippingMethod || 'Standard'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tracking Number</span>
-                    <span className="text-gray-900">{order.trackingNumber || "Not available"}</span>
+                    <span className="text-gray-900">{order.trackingNumber || 'Not available'}</span>
                   </div>
                 </div>
               </div>
@@ -224,16 +234,10 @@ const OrderDetails = ({ isOpen, onClose, order, onUpdateStatus }: OrderDetailsPr
 
           {/* Actions */}
           <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200 mt-6">
-            <Button
-              variant="outline"
-              onClick={onClose}
-              className="px-6 py-2"
-            >
+            <Button variant="outline" onClick={onClose} className="px-6 py-2">
               Close
             </Button>
-            <Button
-              className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
-            >
+            <Button className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white">
               Print Order
             </Button>
           </div>

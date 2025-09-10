@@ -1,69 +1,83 @@
-import { APIResponse } from "@/types/common";
+import { APIResponse } from '@/types/common';
 
 interface FetchOptions extends RequestInit {
-	next?: {
-		tags?: string[];
-		revalidate?: number;
-	};
+  next?: {
+    tags?: string[];
+    revalidate?: number;
+  };
+}
+
+async function getServerAccessToken(): Promise<string | null> {
+  if (typeof window !== 'undefined') return null;
+  try {
+    const { cookies } = await import('next/headers');
+    const { getIronSession } = await import('iron-session');
+    const { sessionOptions } = await import('@/lib/session');
+    const cookieStore = await cookies();
+    const session = await getIronSession<{ accessToken?: string }>(cookieStore, sessionOptions);
+    return session?.accessToken ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function performFetch<T>(
-	url: string,
-	options: FetchOptions = {}
+  url: string,
+  options: FetchOptions = {}
 ): Promise<APIResponse<T>> {
-	const {
-		next,
-		headers = {},
-		body,
-		...fetchOptions
-	} = options as FetchOptions & { headers: Record<string, any> };
+  const {
+    next,
+    headers = {},
+    body,
+    ...fetchOptions
+  } = options as FetchOptions & { headers: Record<string, any> };
 
-	// Add auth token if available
-	const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-	if (token) {
-		headers['Authorization'] = `Bearer ${token}`;
-	}
+  // Add auth token if available
+  const clientToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  const serverToken = typeof window === 'undefined' ? await getServerAccessToken() : null;
+  const token = clientToken || serverToken;
+  if (token) headers['Authorization'] = `Bearer ${token}`;
 
-	// Set default headers
-	headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  // Set default headers
+  headers['Content-Type'] = headers['Content-Type'] || 'application/json';
 
-	// Normalize body: JSON.stringify plain objects
-	let normalizedBody: BodyInit | undefined;
-	if (body instanceof FormData || body instanceof Blob || typeof body === 'string') {
-		normalizedBody = body as BodyInit;
-	} else if (body !== undefined && body !== null) {
-		normalizedBody = JSON.stringify(body);
-		headers['Content-Type'] = headers['Content-Type'] || 'application/json';
-	}
+  // Normalize body: JSON.stringify plain objects
+  let normalizedBody: BodyInit | undefined;
+  if (body instanceof FormData || body instanceof Blob || typeof body === 'string') {
+    normalizedBody = body as BodyInit;
+  } else if (body !== undefined && body !== null) {
+    normalizedBody = JSON.stringify(body);
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
 
-	try {
-		const response = await fetch(url, {
-			...fetchOptions,
-			headers,
-			body: normalizedBody,
-			next,
-		});
+  try {
+    const response = await fetch(url, {
+      ...fetchOptions,
+      headers,
+      body: normalizedBody,
+      next,
+    });
 
-		if (!response.ok) {
-			const errorData = await response.json().catch(() => ({}));
-			return {
-				success: false,
-				message: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
-				data: null,
-			};
-		}
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+        data: null,
+      };
+    }
 
-		const data = await response.json();
-		return {
-			success: data.success,
-			message: data.message || 'Success',
-			data: data.data || data,
-		};
-	} catch (error) {
-		return {
-			success: false,
-			message: error instanceof Error ? error.message : 'Network error',
-			data: null,
-		};
-	}
+    const data = await response.json();
+    return {
+      success: data.success,
+      message: data.message || 'Success',
+      data: data.data || data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Network error',
+      data: null,
+    };
+  }
 }

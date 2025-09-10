@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import ProductCard from "./ProductCard";
-import { Product } from "../types";
+import { motion } from 'framer-motion';
+import ProductCard from './ProductCard';
+import { Product } from '../types';
 
 interface BasketProps {
   products: Product[];
@@ -32,7 +32,7 @@ const Basket = ({ products, index, onProductClick }: BasketProps) => {
             alt="Product Basket"
             className="w-full h-full object-cover"
           />
-          
+
           {/* Noodle Products inside basket */}
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div

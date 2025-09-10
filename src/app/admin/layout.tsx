@@ -1,18 +1,13 @@
-"use client";
+'use client';
 
-import { ReactNode, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { 
-  Package, 
-  Tag, 
-  ShoppingCart, 
-  BarChart3 
-} from "lucide-react";
-import AdminHeader from "@/components/admin/AdminHeader";
-import AdminTabs from "@/components/admin/AdminTabs";
-import productsData from "@/data/products.json";
-import categoriesData from "@/data/categories.json";
-import tabsData from "@/data/tabs.json";
+import { ReactNode, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Package, Tag, ShoppingCart, BarChart3 } from 'lucide-react';
+import AdminHeader from '@/components/admin/AdminHeader';
+import AdminTabs from '@/components/admin/AdminTabs';
+import productsData from '@/data/products.json';
+import categoriesData from '@/data/categories.json';
+import tabsData from '@/data/tabs.json';
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -23,39 +18,39 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const [products] = useState(productsData);
   const [categories] = useState(categoriesData);
-  
+
   // Mock orders data
   const [orders] = useState([
     {
-      id: "ORD-001",
-      customer: "John Doe",
-      email: "john@example.com",
-      items: ["Premium Tonkotsu Ramen", "Spicy Miso Ramen"],
+      id: 'ORD-001',
+      customer: 'John Doe',
+      email: 'john@example.com',
+      items: ['Premium Tonkotsu Ramen', 'Spicy Miso Ramen'],
       total: 35.98,
-      status: "pending",
-      date: "2024-01-15",
-      address: "123 Main St, City, State"
+      status: 'pending',
+      date: '2024-01-15',
+      address: '123 Main St, City, State',
     },
     {
-      id: "ORD-002", 
-      customer: "Jane Smith",
-      email: "jane@example.com",
-      items: ["Vegetarian Ramen", "Seafood Ramen"],
+      id: 'ORD-002',
+      customer: 'Jane Smith',
+      email: 'jane@example.com',
+      items: ['Vegetarian Ramen', 'Seafood Ramen'],
       total: 32.99,
-      status: "shipped",
-      date: "2024-01-14",
-      address: "456 Oak Ave, City, State"
+      status: 'shipped',
+      date: '2024-01-14',
+      address: '456 Oak Ave, City, State',
     },
     {
-      id: "ORD-003",
-      customer: "Mike Johnson", 
-      email: "mike@example.com",
-      items: ["Premium Tonkotsu Ramen"],
+      id: 'ORD-003',
+      customer: 'Mike Johnson',
+      email: 'mike@example.com',
+      items: ['Premium Tonkotsu Ramen'],
       total: 18.99,
-      status: "delivered",
-      date: "2024-01-13",
-      address: "789 Pine Rd, City, State"
-    }
+      status: 'delivered',
+      date: '2024-01-13',
+      address: '789 Pine Rd, City, State',
+    },
   ]);
 
   // Map icon strings to actual components
@@ -66,13 +61,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     BarChart3,
   };
 
-  const tabs = tabsData.map(tab => ({
+  const tabs = tabsData.map((tab) => ({
     ...tab,
     icon: iconMap[tab.icon as keyof typeof iconMap],
-    count: tab.id === "products" ? products.length 
-         : tab.id === "categories" ? categories.length
-         : tab.id === "orders" ? orders.length
-         : null
+    count:
+      tab.id === 'products'
+        ? products.length
+        : tab.id === 'categories'
+          ? categories.length
+          : tab.id === 'orders'
+            ? orders.length
+            : null,
   }));
 
   // Get current active tab from pathname
@@ -84,8 +83,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <AdminHeader/>
-      
+      <AdminHeader />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -99,17 +98,19 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <div>
                   <p className="text-sm font-medium text-gray-600">{tab.label}</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {tab.count !== null ? tab.count : "—"}
+                    {tab.count !== null ? tab.count : '—'}
                   </p>
                 </div>
-                <div className={`p-3 rounded-lg ${
-                  activeTab === tab.id 
-                    ? "bg-gradient-to-r from-pink-500 to-orange-500" 
-                    : "bg-gray-100"
-                }`}>
-                  <tab.icon className={`w-6 h-6 ${
-                    activeTab === tab.id ? "text-white" : "text-gray-600"
-                  }`} />
+                <div
+                  className={`p-3 rounded-lg ${
+                    activeTab === tab.id
+                      ? 'bg-gradient-to-r from-pink-500 to-orange-500'
+                      : 'bg-gray-100'
+                  }`}
+                >
+                  <tab.icon
+                    className={`w-6 h-6 ${activeTab === tab.id ? 'text-white' : 'text-gray-600'}`}
+                  />
                 </div>
               </div>
             </div>
@@ -119,10 +120,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Tab Navigation */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
           <AdminTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-          
-          <main className="p-6">
-            {children}
-          </main>
+
+          <main className="p-6">{children}</main>
         </div>
       </div>
     </div>

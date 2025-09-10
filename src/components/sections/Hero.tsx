@@ -1,38 +1,38 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Video } from "lucide-react";
-import Image from "next/image";
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Play, Video } from 'lucide-react';
+import Image from 'next/image';
 
 const Hero = () => {
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-white via-pink-50/40 to-black/5 overflow-hidden">
       {/* Background Elements */}
       <motion.div
-        animate={{ 
+        animate={{
           x: [0, 100, 0],
           y: [0, -50, 0],
-          rotate: [0, 180, 360]
+          rotate: [0, 180, 360],
         }}
-        transition={{ 
-          duration: 20, 
-          repeat: Infinity, 
-          ease: "linear"
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'linear',
         }}
         className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-pink-300 to-orange-300 rounded-full opacity-30 blur-3xl"
       />
-      
+
       <motion.div
-        animate={{ 
+        animate={{
           x: [0, -80, 0],
           y: [0, 60, 0],
-          rotate: [0, -180, -360]
+          rotate: [0, -180, -360],
         }}
-        transition={{ 
-          duration: 25, 
-          repeat: Infinity, 
-          ease: "linear"
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: 'linear',
         }}
         className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-orange-300 to-yellow-300 rounded-full opacity-30 blur-3xl"
       />
@@ -60,7 +60,7 @@ const Hero = () => {
                   </div>
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                     className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full anime-glow"
                   />
                 </div>
@@ -80,10 +80,7 @@ const Hero = () => {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="text-5xl md:text-7xl font-black text-gray-900 mb-6 anime-title"
             >
-              Taste the{" "}
-              <span className="gradient-text anime-text-shadow animate-pulse">
-                Magic
-              </span>
+              Taste the <span className="gradient-text anime-text-shadow animate-pulse">Magic</span>
             </motion.h2>
 
             {/* Subtext */}
@@ -93,8 +90,8 @@ const Hero = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed pop-text"
             >
-              Discover our handcrafted noodles, authentic sauces, and family recipes passed down through generations. 
-              Every bowl tells a story of love and tradition.
+              Discover our handcrafted noodles, authentic sauces, and family recipes passed down
+              through generations. Every bowl tells a story of love and tradition.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -112,7 +109,7 @@ const Hero = () => {
                 Explore Products
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-              
+
               <Button
                 size="lg"
                 variant="outline"
@@ -132,7 +129,9 @@ const Hero = () => {
             >
               <div className="text-center">
                 <div className="text-2xl font-black text-pink-600 anime-title">50+</div>
-                <div className="text-sm text-gray-600 font-semibold pop-text">Years of Tradition</div>
+                <div className="text-sm text-gray-600 font-semibold pop-text">
+                  Years of Tradition
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-black text-orange-600 anime-title">1000+</div>
@@ -146,87 +145,96 @@ const Hero = () => {
           </motion.div>
 
           {/* Hero Image */}
-         <div className="relative w-full max-w-4xl mx-auto h-[600px] flex items-center justify-center">
-  {/* Frame behind the design */}
-  <div className="absolute inset-0">
-    <Image
-      src="/frame.png"
-      alt="Frame"
-      fill
-      className="object-contain"
-    />
-  </div>
+          <div className="relative w-full max-w-4xl mx-auto h-[600px] flex items-center justify-center">
+            {/* Frame behind the design */}
+            <div className="absolute inset-0">
+              <Image src="/frame.png" alt="Frame" fill className="object-contain" />
+            </div>
 
-  {/* Animated Design on top of frame */}
-  <motion.div
-    initial={{ opacity: 0, x: 50 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: 0.3, duration: 0.8 }}
-    className="relative w-[100%] h-[100%] flex items-center justify-center"
-  >
-    {/* Background Gradient (animated) */}
-    <motion.div
-      animate={{ rotate: [0, 5, -5, 0] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute inset-0 bg-gradient-to-br from-pink-200 via-orange-200 to-yellow-200 rounded-3xl shadow-2xl border-4 border-white"
-    />
+            {/* Animated Design on top of frame */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="relative w-[100%] h-[100%] flex items-center justify-center"
+            >
+              {/* Background Gradient (animated) */}
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute inset-0 bg-gradient-to-br from-pink-200 via-orange-200 to-yellow-200 rounded-3xl shadow-2xl border-4 border-white"
+              />
 
-    {/* Overlay + Noodles + Text */}
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-3xl"></div>
+              {/* Overlay + Noodles + Text */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-3xl"></div>
 
-      <div className="text-center relative z-10">
-        <img src="/authentic-1.jpg" alt="Noodles" className="w-24 md:w-32 h-24 md:h-32 rounded-full" />
-        <motion.div
-          animate={{ y: [-10, 10, -10] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="w-36 h-36 bg-white/20 rounded-full flex items-center justify-center mx-auto backdrop-blur-sm border-2 border-white/30"
-        >
-          <video width={500} height={500} src="/hero-video.mp4_1757145674662.mp4" autoPlay muted loop className="rounded-full"/>
-        </motion.div>
-        <img src="/authentic-2.jpg" alt="Noodles" className="w-24 md:w-28 h-24 md:h-28 rounded-full mb-8" />
+                <div className="text-center relative z-10">
+                  <img
+                    src="/authentic-1.jpg"
+                    alt="Noodles"
+                    className="w-24 md:w-32 h-24 md:h-32 rounded-full"
+                  />
+                  <motion.div
+                    animate={{ y: [-10, 10, -10] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    className="w-36 h-36 bg-white/20 rounded-full flex items-center justify-center mx-auto backdrop-blur-sm border-2 border-white/30"
+                  >
+                    <video
+                      width={500}
+                      height={500}
+                      src="/hero-video.mp4_1757145674662.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      className="rounded-full"
+                    />
+                  </motion.div>
+                  <img
+                    src="/authentic-2.jpg"
+                    alt="Noodles"
+                    className="w-24 md:w-28 h-24 md:h-28 rounded-full mb-8"
+                  />
 
-        <h3 className="text-3xl font-black text-gray-800 mb-2">Authentic Asian Flavors</h3>
-        <p className="text-lg text-gray-700 font-semibold">Made with love & tradition</p>
-      </div>
+                  <h3 className="text-3xl font-black text-gray-800 mb-2">
+                    Authentic Asian Flavors
+                  </h3>
+                  <p className="text-lg text-gray-700 font-semibold">Made with love & tradition</p>
+                </div>
 
-      {/* Floating Elements */}
-      <motion.div
-        animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-400 rounded-full opacity-80 shadow-lg"
-      />
+                {/* Floating Elements */}
+                <motion.div
+                  animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-pink-400 rounded-full opacity-80 shadow-lg"
+                />
 
-      <motion.div
-        animate={{ y: [10, -10, 10], scale: [1, 1.2, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full opacity-80 shadow-lg"
-      />
+                <motion.div
+                  animate={{ y: [10, -10, 10], scale: [1, 1.2, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full opacity-80 shadow-lg"
+                />
 
-      {/* Special Offer Card */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="absolute -bottom-6 -left-6 bg-gradient-to-r from-pink-500 to-orange-500 rounded-2xl p-4 shadow-xl border-2 border-white/20 backdrop-blur-sm"
-      >
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-2xl">🎉</span>
+                {/* Special Offer Card */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1, duration: 0.8 }}
+                  className="absolute -bottom-6 -left-6 bg-gradient-to-r from-pink-500 to-orange-500 rounded-2xl p-4 shadow-xl border-2 border-white/20 backdrop-blur-sm"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">🎉</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-white anime-title">Special Offer</p>
+                      <p className="text-xs text-white/90 pop-text">Free shipping on orders $50+</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
-          <div>
-            <p className="text-sm font-bold text-white anime-title">Special Offer</p>
-            <p className="text-xs text-white/90 pop-text">Free shipping on orders $50+</p>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  </motion.div>
-</div>
-
-
-
-
         </div>
       </div>
     </section>

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ShoppingCart, Star, Flame } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Product } from "../types";
+import { motion } from 'framer-motion';
+import { ShoppingCart, Star, Flame } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Product } from '../types';
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -32,12 +32,8 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
           {/* Modal Header */}
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {product.name}
-              </h2>
-              <p className="text-lg font-semibold text-pink-600">
-                ${product.price}
-              </p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h2>
+              <p className="text-lg font-semibold text-pink-600">${product.price}</p>
             </div>
             <button
               onClick={onClose}
@@ -61,7 +57,8 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
               <p className="text-gray-600 leading-relaxed">
-                {product.description || "A delicious and authentic ramen experience that brings the taste of Japan to your kitchen. Made with premium ingredients and traditional techniques, this ramen offers a rich, flavorful broth and perfectly cooked noodles."}
+                {product.description ||
+                  'A delicious and authentic ramen experience that brings the taste of Japan to your kitchen. Made with premium ingredients and traditional techniques, this ramen offers a rich, flavorful broth and perfectly cooked noodles.'}
               </p>
             </div>
 
@@ -77,9 +74,7 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
                     <Flame
                       key={i}
                       className={`w-4 h-4 ${
-                        i < product.spiceLevel
-                          ? "text-red-500"
-                          : "text-gray-300"
+                        i < product.spiceLevel ? 'text-red-500' : 'text-gray-300'
                       }`}
                     />
                   ))}

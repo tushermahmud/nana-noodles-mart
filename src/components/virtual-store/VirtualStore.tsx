@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Star } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import productsData from "@/data/products.json";
-import { useVirtualStore } from "./hooks/useVirtualStore";
-import { ShelfData, Product } from "./types";
-import VirtualStoreHeader from "./VirtualStoreHeader";
-import Shelf from "./Shelf";
-import ProductModal from "./modal/ProductModal";
-import CallToAction from "./CallToAction";
+import { Star } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import productsData from '@/data/products.json';
+import { useVirtualStore } from './hooks/useVirtualStore';
+import { ShelfData, Product } from './types';
+import VirtualStoreHeader from './VirtualStoreHeader';
+import Shelf from './Shelf';
+import ProductModal from './modal/ProductModal';
+import CallToAction from './CallToAction';
 
 interface VirtualStoreProps {
   products?: Product[];
@@ -22,12 +22,12 @@ const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
   // Default shelves configuration
   const defaultShelves: ShelfData[] = [
     {
-      id: "popular",
-      name: "Popular Favorites",
-      description: "Our best-selling ramen varieties",
+      id: 'popular',
+      name: 'Popular Favorites',
+      description: 'Our best-selling ramen varieties',
       icon: Star,
-      color: "from-pink-500 to-orange-500",
-      products: products || productsData.slice(0, 18)
+      color: 'from-pink-500 to-orange-500',
+      products: products || productsData.slice(0, 18),
     },
   ];
 
@@ -39,7 +39,7 @@ const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
       name: product.name,
       price: product.price,
       image: product.image,
-      category: product.category
+      category: product.category,
     });
   };
 

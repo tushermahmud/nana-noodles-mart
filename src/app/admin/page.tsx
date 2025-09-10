@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const AdminPage = () => {
   const router = useRouter();
 
   useEffect(() => {
     // Redirect to products page by default
-    router.push("/admin/products");
+    router.push('/admin/products');
   }, [router]);
 
   return (

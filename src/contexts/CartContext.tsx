@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
 
@@ -33,18 +33,16 @@ const initialState: CartState = {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
-      
+      const existingItem = state.items.find((item) => item.id === action.payload.id);
+
       if (existingItem) {
-        const updatedItems = state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+        const updatedItems = state.items.map((item) =>
+          item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item
         );
-        
-        const newTotal = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         return {
           ...state,
           items: updatedItems,
@@ -54,9 +52,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       } else {
         const newItem = { ...action.payload, quantity: 1 };
         const newItems = [...state.items, newItem];
-        const newTotal = newItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const newTotal = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const newItemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         return {
           ...state,
           items: newItems,
@@ -65,12 +63,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         };
       }
     }
-    
+
     case 'REMOVE_ITEM': {
-      const updatedItems = state.items.filter(item => item.id !== action.payload);
-      const newTotal = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const updatedItems = state.items.filter((item) => item.id !== action.payload);
+      const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-      
+
       return {
         ...state,
         items: updatedItems,
@@ -78,17 +76,19 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         itemCount: newItemCount,
       };
     }
-    
+
     case 'UPDATE_QUANTITY': {
-      const updatedItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-          : item
-      ).filter(item => item.quantity > 0);
-      
-      const newTotal = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const updatedItems = state.items
+        .map((item) =>
+          item.id === action.payload.id
+            ? { ...item, quantity: Math.max(0, action.payload.quantity) }
+            : item
+        )
+        .filter((item) => item.quantity > 0);
+
+      const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-      
+
       return {
         ...state,
         items: updatedItems,
@@ -96,13 +96,13 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         itemCount: newItemCount,
       };
     }
-    
+
     case 'CLEAR_CART':
       return initialState;
-      
+
     case 'LOAD_CART':
       return action.payload;
-      
+
     default:
       return state;
   }
@@ -131,7 +131,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load cart from localStorage on mount (client-side only)
   useEffect(() => {
     if (!isClient) return;
-    
+
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
@@ -147,7 +147,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Save cart to localStorage whenever it changes (client-side only)
   useEffect(() => {
     if (!isClient || !isHydrated) return;
-    
+
     localStorage.setItem('cart', JSON.stringify(state));
   }, [state, isClient, isHydrated]);
 

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import BasketGrid from "./basket/BasketGrid";
-import { ShelfData, Product } from "./types";
+import { motion } from 'framer-motion';
+import BasketGrid from './basket/BasketGrid';
+import { ShelfData, Product } from './types';
 
 interface ShelfProps {
   shelf: ShelfData;
@@ -23,10 +23,7 @@ const Shelf = ({ shelf, shelfIndex, onProductClick }: ShelfProps) => {
       {/* Virtual Store Shelf with Baskets */}
       <div className="bg-gradient-to-br">
         <div className="relative">
-          <BasketGrid
-            products={shelf.products}
-            onProductClick={onProductClick}
-          />
+          <BasketGrid products={shelf.products} onProductClick={onProductClick} />
         </div>
       </div>
     </motion.div>

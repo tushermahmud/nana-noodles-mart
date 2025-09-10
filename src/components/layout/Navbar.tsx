@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, Menu, X, User } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useCart } from "@/contexts/CartContext";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Search, ShoppingCart, Menu, X, User } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useCart } from '@/contexts/CartContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +20,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!isClient) return;
-    
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -28,8 +28,8 @@ const Navbar = () => {
     // Set initial scroll state
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [isClient]);
 
   return (
@@ -39,32 +39,54 @@ const Navbar = () => {
       transition={{ duration: 0.6 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200"
-          : "bg-transparent"
+          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/">
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3 cursor-pointer">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center space-x-3 cursor-pointer"
+            >
               <div className="relative">
-                <Image
-                  src="/logo.png"
-                  alt="Nana's Noodle Mart Logo"
-                  width={200}
-                  height={100}
-                />
+                <Image src="/logo.png" alt="Nana's Noodle Mart Logo" width={200} height={100} />
               </div>
             </motion.div>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <motion.a href="#categories" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">Categories</motion.a>
-            <motion.a href="/products" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">Products</motion.a>
-            <motion.a href="#about" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">About</motion.a>
-            <motion.a href="#contact" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">Contact</motion.a>
+            <motion.a
+              href="#categories"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
+              Categories
+            </motion.a>
+            <motion.a
+              href="/products"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
+              Products
+            </motion.a>
+            <motion.a
+              href="#about"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
+              About
+            </motion.a>
+            <motion.a
+              href="#contact"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
+              Contact
+            </motion.a>
           </div>
 
           {/* Desktop Right Side */}
@@ -100,13 +122,20 @@ const Navbar = () => {
             {/* Login/Register Buttons */}
             <div className="flex items-center space-x-2">
               <Link href="/login">
-                <Button variant="outline" size="sm" className="border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700"
+                >
                   <User className="w-4 h-4 mr-2" />
                   Login
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
+                >
                   Sign Up
                 </Button>
               </Link>
@@ -131,7 +160,7 @@ const Navbar = () => {
           {isMobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
+              animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
               className="lg:hidden border-t border-gray-200 bg-white/95 backdrop-blur-md"
@@ -165,7 +194,7 @@ const Navbar = () => {
                 >
                   Contact
                 </motion.a>
-                
+
                 {/* Mobile Search */}
                 <div className="px-3 py-2">
                   <div className="relative">
@@ -195,7 +224,10 @@ const Navbar = () => {
                 {/* Mobile Login/Register */}
                 <div className="px-3 py-2 space-y-2">
                   <Link href="/login">
-                    <Button variant="outline" className="w-full border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700">
+                    <Button
+                      variant="outline"
+                      className="w-full border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700"
+                    >
                       <User className="w-4 h-4 mr-2" />
                       Login
                     </Button>

@@ -20,12 +20,12 @@ apiClient.interceptors.request.use(
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     // Log request in development
     if (process.env.NODE_ENV === 'development') {
       console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`, config.data);
     }
-    
+
     return config;
   },
   (error: AxiosError) => {
@@ -39,16 +39,19 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     // Log response in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data);
+      console.log(
+        `✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`,
+        response.data
+      );
     }
-    
+
     return response;
   },
   (error: AxiosError) => {
     // Handle common error cases
     if (error.response) {
       const { status, data } = error.response;
-      
+
       switch (status) {
         case 401:
           // Unauthorized - clear token and redirect to login
@@ -74,7 +77,7 @@ apiClient.interceptors.response.use(
     } else {
       console.error('❌ Request Setup Error:', error.message);
     }
-    
+
     return Promise.reject(error);
   }
 );

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Product, ShelfData } from "../types";
+import { useState } from 'react';
+import { Product, ShelfData } from '../types';
 
 interface UseVirtualStoreProps {
   initialProducts?: Product[];

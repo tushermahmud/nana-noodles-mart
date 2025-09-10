@@ -1,56 +1,55 @@
-import { BaseEntity } from "./common";
+import { BaseEntity } from './common';
 
 export interface User extends BaseEntity {
-	email: string;
-	firstName: string;
-	lastName: string;
-	role: 'user' | 'admin';
-	isEmailVerified: boolean;
-	avatar?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: 'user' | 'admin';
+  isEmailVerified: boolean;
+  avatar?: string;
 }
 
 export interface LoginRequest {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 export interface LoginResponse {
-	success: boolean;
-	message: string;
-	authorization: {
-		type: 'bearer' | string;
-		access_token: string;
-		refresh_token: string;
-	};
-	type?: 'admin' | 'user' | string;
+  success: boolean;
+  message: string;
+  authorization: {
+    type: 'bearer' | string;
+    access_token: string;
+    refresh_token: string;
+  };
+  type?: 'admin' | 'user' | string;
 }
 
 export interface RegisterRequest {
-	first_name:string,
-	last_name:string,
-	email: string;
-	password: string;
-	type: 'admin' | 'user';
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  type: 'admin' | 'user';
 }
 
 export interface RegisterResponse {
-	success: boolean;
-	message: string;
+  success: boolean;
+  message: string;
 }
 
-
 export interface AuthResponse {
-	success: boolean;
-	message: string;
-	user: User;
-	authorization: {
-		type: 'bearer' | string;
-		access_token: string;
-		refresh_token: string;
-	};
-	type?: 'admin' | 'user' | string;
+  success: boolean;
+  message: string;
+  user: User;
+  authorization: {
+    type: 'bearer' | string;
+    access_token: string;
+    refresh_token: string;
+  };
+  type?: 'admin' | 'user' | string;
 }
 
 export interface UserInfo extends User {
-	// Additional user info fields if needed
+  // Additional user info fields if needed
 }

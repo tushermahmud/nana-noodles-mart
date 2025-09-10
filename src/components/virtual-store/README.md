@@ -73,7 +73,7 @@ virtual-store/
 ### Basic Usage
 
 ```tsx
-import { VirtualStore } from "@/components/virtual-store";
+import { VirtualStore } from '@/components/virtual-store';
 
 // Use with default configuration
 <VirtualStore />;
@@ -82,7 +82,7 @@ import { VirtualStore } from "@/components/virtual-store";
 ### Advanced Usage
 
 ```tsx
-import { VirtualStore } from "@/components/virtual-store";
+import { VirtualStore } from '@/components/virtual-store';
 
 // Use with custom products and shelves
 <VirtualStore products={customProducts} shelves={customShelves} />;
@@ -96,7 +96,7 @@ import {
   CallToAction,
   BasketGrid,
   ProductModal,
-} from "@/components/virtual-store";
+} from '@/components/virtual-store';
 
 // Use individual components
 <VirtualStoreHeader title="Custom Title" subtitle="Custom subtitle" />;
@@ -110,7 +110,7 @@ import {
 const customProducts = [
   {
     id: 1,
-    name: "Custom Ramen",
+    name: 'Custom Ramen',
     price: 15.99,
     // ... other product properties
   },
@@ -124,11 +124,11 @@ const customProducts = [
 ```tsx
 const customShelves: ShelfData[] = [
   {
-    id: "custom",
-    name: "Custom Category",
-    description: "Custom description",
+    id: 'custom',
+    name: 'Custom Category',
+    description: 'Custom description',
     icon: CustomIcon,
-    color: "from-blue-500 to-purple-500",
+    color: 'from-blue-500 to-purple-500',
     products: customProducts,
   },
 ];

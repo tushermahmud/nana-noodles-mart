@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface CallToActionProps {
   title?: string;
@@ -13,10 +13,10 @@ interface CallToActionProps {
 }
 
 const CallToAction = ({
-  title = "Ready to Explore More?",
-  subtitle = "Discover our complete collection of premium ramen products and find your new favorite flavors.",
-  buttonText = "Browse All Products",
-  buttonLink = "/products"
+  title = 'Ready to Explore More?',
+  subtitle = 'Discover our complete collection of premium ramen products and find your new favorite flavors.',
+  buttonText = 'Browse All Products',
+  buttonLink = '/products',
 }: CallToActionProps) => {
   return (
     <motion.div
@@ -27,12 +27,8 @@ const CallToAction = ({
       className="text-center mt-20"
     >
       <div className="bg-gradient-to-r from-pink-50/50 via-white to-black/5 rounded-3xl p-8 border border-pink-200/30 shadow-xl backdrop-blur-sm">
-        <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 anime-title">
-          {title}
-        </h3>
-        <p className="text-lg text-gray-600 mb-6 pop-text max-w-2xl mx-auto">
-          {subtitle}
-        </p>
+        <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 anime-title">{title}</h3>
+        <p className="text-lg text-gray-600 mb-6 pop-text max-w-2xl mx-auto">{subtitle}</p>
         <Link href={buttonLink}>
           <Button
             size="lg"

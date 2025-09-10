@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ShoppingCart, Heart, Flame, Star, Clock, Users, Award } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import productsData from "@/data/products.json";
-import categoriesData from "@/data/categories.json";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowLeft, ShoppingCart, Heart, Flame, Star, Clock, Users, Award } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import productsData from '@/data/products.json';
+import categoriesData from '@/data/categories.json';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -37,7 +37,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
   const { addItem, state } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [productId, setProductId] = useState<string | null>(null);
 
@@ -50,10 +50,10 @@ const ProductPage = ({ params }: ProductPageProps) => {
 
   useEffect(() => {
     if (!productId) return;
-    
+
     const id = parseInt(productId);
-    const foundProduct = productsData.find(p => p.id === id);
-    
+    const foundProduct = productsData.find((p) => p.id === id);
+
     if (!foundProduct) {
       notFound();
     }
@@ -63,14 +63,14 @@ const ProductPage = ({ params }: ProductPageProps) => {
 
     // Find related products from the same category
     const related = productsData
-      .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
+      .filter((p) => p.category === foundProduct.category && p.id !== foundProduct.id)
       .slice(0, 3);
     setRelatedProducts(related);
   }, [productId]);
 
   const handleAddToCart = () => {
     if (!product || !product.inStock) return;
-    
+
     setIsAdding(true);
     addItem({
       id: product.id,
@@ -79,7 +79,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
       image: product.image,
       category: product.category,
     });
-    
+
     setTimeout(() => setIsAdding(false), 1000);
   };
 
@@ -87,13 +87,13 @@ const ProductPage = ({ params }: ProductPageProps) => {
     return null;
   }
 
-  const cartItem = state.items.find(item => item.id === product.id);
+  const cartItem = state.items.find((item) => item.id === product.id);
   const isInCart = !!cartItem;
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
@@ -132,7 +132,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                
+
                 {/* Popular Badge */}
                 {product.popular && (
                   <motion.div
@@ -191,9 +191,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                   {product.name}
                 </h1>
                 <div className="flex items-center space-x-4 mb-4">
-                  <span className="text-3xl font-black text-pink-600">
-                    ${product.price}
-                  </span>
+                  <span className="text-3xl font-black text-pink-600">${product.price}</span>
                   {product.originalPrice > product.price && (
                     <span className="text-xl text-gray-400 line-through">
                       ${product.originalPrice}
@@ -210,9 +208,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
               {/* Description */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  {product.description}
-                </p>
+                <p className="text-gray-600 leading-relaxed text-lg">{product.description}</p>
               </div>
 
               {/* Features */}
@@ -243,9 +239,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                       ></div>
                     ))}
                   </div>
-                  <span className="text-gray-600 font-medium">
-                    {product.spiceLevel}/5
-                  </span>
+                  <span className="text-gray-600 font-medium">{product.spiceLevel}/5</span>
                 </div>
               </div>
 
@@ -256,15 +250,15 @@ const ProductPage = ({ params }: ProductPageProps) => {
                   onClick={handleAddToCart}
                   disabled={!product.inStock || isAdding}
                   className={`flex-1 py-4 text-lg font-bold border-2 transition-all duration-300 ${
-                    isInCart 
-                      ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600' 
+                    isInCart
+                      ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600'
                       : 'bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white border-pink-500 hover:border-pink-600'
                   }`}
                 >
                   {isAdding ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     />
                   ) : isInCart ? (
@@ -347,9 +341,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
                             <span className="text-lg font-bold text-pink-600">
                               ${relatedProduct.price}
                             </span>
-                            <span className="text-sm text-gray-500">
-                              {relatedProduct.category}
-                            </span>
+                            <span className="text-sm text-gray-500">{relatedProduct.category}</span>
                           </div>
                         </CardContent>
                       </Card>

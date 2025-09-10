@@ -1,65 +1,67 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { 
-  Eye,
-  Edit,
-  Search
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import OrderDetails from "@/components/admin/OrderDetails";
+import { useState } from 'react';
+import { Eye, Edit, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import OrderDetails from '@/components/admin/OrderDetails';
 
 const OrdersPage = () => {
   const [orders] = useState([
     {
-      id: "ORD-001",
-      customer: "John Doe",
-      email: "john@example.com",
-      items: ["Premium Tonkotsu Ramen", "Spicy Miso Ramen"],
+      id: 'ORD-001',
+      customer: 'John Doe',
+      email: 'john@example.com',
+      items: ['Premium Tonkotsu Ramen', 'Spicy Miso Ramen'],
       total: 35.98,
-      status: "pending",
-      date: "2024-01-15",
-      address: "123 Main St, City, State"
+      status: 'pending',
+      date: '2024-01-15',
+      address: '123 Main St, City, State',
     },
     {
-      id: "ORD-002", 
-      customer: "Jane Smith",
-      email: "jane@example.com",
-      items: ["Vegetarian Ramen", "Seafood Ramen"],
+      id: 'ORD-002',
+      customer: 'Jane Smith',
+      email: 'jane@example.com',
+      items: ['Vegetarian Ramen', 'Seafood Ramen'],
       total: 32.99,
-      status: "shipped",
-      date: "2024-01-14",
-      address: "456 Oak Ave, City, State"
+      status: 'shipped',
+      date: '2024-01-14',
+      address: '456 Oak Ave, City, State',
     },
     {
-      id: "ORD-003",
-      customer: "Mike Johnson", 
-      email: "mike@example.com",
-      items: ["Premium Tonkotsu Ramen"],
+      id: 'ORD-003',
+      customer: 'Mike Johnson',
+      email: 'mike@example.com',
+      items: ['Premium Tonkotsu Ramen'],
       total: 18.99,
-      status: "delivered",
-      date: "2024-01-13",
-      address: "789 Pine Rd, City, State"
-    }
+      status: 'delivered',
+      date: '2024-01-13',
+      address: '789 Pine Rd, City, State',
+    },
   ]);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const filteredOrders = orders.filter(order =>
-    order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.status.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "bg-yellow-100 text-yellow-800";
-      case "shipped": return "bg-blue-100 text-blue-800";
-      case "delivered": return "bg-green-100 text-green-800";
-      case "cancelled": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'shipped':
+        return 'bg-blue-100 text-blue-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -118,7 +120,9 @@ const OrdersPage = () => {
                 <td className="py-4 px-4">
                   <div className="text-sm">
                     {order.items.map((item, index) => (
-                      <p key={index} className="text-gray-600">{item}</p>
+                      <p key={index} className="text-gray-600">
+                        {item}
+                      </p>
                     ))}
                   </div>
                 </td>
@@ -126,7 +130,9 @@ const OrdersPage = () => {
                   <span className="font-medium text-gray-900">${order.total}</span>
                 </td>
                 <td className="py-4 px-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}
+                  >
                     {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                   </span>
                 </td>
@@ -135,11 +141,7 @@ const OrdersPage = () => {
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleViewOrder(order)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleViewOrder(order)}>
                       <Eye className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="sm">

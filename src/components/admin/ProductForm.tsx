@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { X, Upload, Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { X, Upload, Plus, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ProductFormProps {
   isOpen: boolean;
@@ -16,32 +16,32 @@ interface ProductFormProps {
 const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     id: product?.id || Date.now(),
-    name: product?.name || "",
-    description: product?.description || "",
-    price: product?.price || "",
-    originalPrice: product?.originalPrice || "",
-    image: product?.image || "",
-    category: product?.category || "",
+    name: product?.name || '',
+    description: product?.description || '',
+    price: product?.price || '',
+    originalPrice: product?.originalPrice || '',
+    image: product?.image || '',
+    category: product?.category || '',
     category_id: product?.category_id || 1,
     popular: product?.popular || false,
     inStock: product?.inStock !== undefined ? product.inStock : true,
     spiceLevel: product?.spiceLevel || 1,
-    features: product?.features || [""]
+    features: product?.features || [''],
   });
 
   const [errors, setErrors] = useState<any>({});
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [field]: ""
+        [field]: '',
       }));
     }
   };
@@ -49,25 +49,25 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   const handleFeatureChange = (index: number, value: string) => {
     const newFeatures = [...formData.features];
     newFeatures[index] = value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      features: newFeatures
+      features: newFeatures,
     }));
   };
 
   const addFeature = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      features: [...prev.features, ""]
+      features: [...prev.features, ''],
     }));
   };
 
   const removeFeature = (index: number) => {
     if (formData.features.length > 1) {
       const newFeatures = formData.features.filter((_, i) => i !== index);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        features: newFeatures
+        features: newFeatures,
       }));
     }
   };
@@ -75,11 +75,11 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   const validateForm = () => {
     const newErrors: any = {};
 
-    if (!formData.name.trim()) newErrors.name = "Product name is required";
-    if (!formData.description.trim()) newErrors.description = "Description is required";
-    if (!formData.price || formData.price <= 0) newErrors.price = "Valid price is required";
-    if (!formData.image.trim()) newErrors.image = "Image URL is required";
-    if (!formData.category) newErrors.category = "Category is required";
+    if (!formData.name.trim()) newErrors.name = 'Product name is required';
+    if (!formData.description.trim()) newErrors.description = 'Description is required';
+    if (!formData.price || formData.price <= 0) newErrors.price = 'Valid price is required';
+    if (!formData.image.trim()) newErrors.image = 'Image URL is required';
+    if (!formData.category) newErrors.category = 'Category is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -87,16 +87,16 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       const productData = {
         ...formData,
         price: parseFloat(formData.price),
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
         spiceLevel: parseInt(formData.spiceLevel),
-        features: formData.features.filter(f => f.trim() !== "")
+        features: formData.features.filter((f) => f.trim() !== ''),
       };
-      
+
       onSave(productData);
       onClose();
     }
@@ -116,7 +116,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
-              {product ? "Edit Product" : "Add New Product"}
+              {product ? 'Edit Product' : 'Add New Product'}
             </h2>
             <button
               onClick={onClose}
@@ -136,9 +136,9 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                    errors.name ? "border-red-500" : "border-gray-300"
+                    errors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Enter product name"
                 />
@@ -146,19 +146,17 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                 <select
                   value={formData.category_id}
                   onChange={(e) => {
                     const categoryId = parseInt(e.target.value);
-                    const category = categories.find(c => c.id === categoryId);
-                    handleInputChange("category_id", categoryId);
-                    handleInputChange("category", category?.name || "");
+                    const category = categories.find((c) => c.id === categoryId);
+                    handleInputChange('category_id', categoryId);
+                    handleInputChange('category', category?.name || '');
                   }}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                    errors.category ? "border-red-500" : "border-gray-300"
+                    errors.category ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
                   <option value="">Select Category</option>
@@ -174,34 +172,32 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
               <textarea
                 value={formData.description}
-                onChange={(e) => handleInputChange("description", e.target.value)}
+                onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={3}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                  errors.description ? "border-red-500" : "border-gray-300"
+                  errors.description ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Enter product description"
               />
-              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+              )}
             </div>
 
             {/* Pricing */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
                 <input
                   type="number"
                   step="0.01"
                   value={formData.price}
-                  onChange={(e) => handleInputChange("price", e.target.value)}
+                  onChange={(e) => handleInputChange('price', e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                    errors.price ? "border-red-500" : "border-gray-300"
+                    errors.price ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="0.00"
                 />
@@ -216,7 +212,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                   type="number"
                   step="0.01"
                   value={formData.originalPrice}
-                  onChange={(e) => handleInputChange("originalPrice", e.target.value)}
+                  onChange={(e) => handleInputChange('originalPrice', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   placeholder="0.00"
                 />
@@ -225,15 +221,13 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
             {/* Image URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Image URL *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Image URL *</label>
               <input
                 type="url"
                 value={formData.image}
-                onChange={(e) => handleInputChange("image", e.target.value)}
+                onChange={(e) => handleInputChange('image', e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                  errors.image ? "border-red-500" : "border-gray-300"
+                  errors.image ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="https://example.com/image.jpg"
               />
@@ -243,12 +237,10 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
             {/* Product Settings */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Spice Level
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Spice Level</label>
                 <select
                   value={formData.spiceLevel}
-                  onChange={(e) => handleInputChange("spiceLevel", parseInt(e.target.value))}
+                  onChange={(e) => handleInputChange('spiceLevel', parseInt(e.target.value))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 >
                   <option value={1}>Mild (1)</option>
@@ -264,7 +256,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                   <input
                     type="checkbox"
                     checked={formData.popular}
-                    onChange={(e) => handleInputChange("popular", e.target.checked)}
+                    onChange={(e) => handleInputChange('popular', e.target.checked)}
                     className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                   />
                   <span className="ml-2 text-sm font-medium text-gray-700">Popular</span>
@@ -276,7 +268,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                   <input
                     type="checkbox"
                     checked={formData.inStock}
-                    onChange={(e) => handleInputChange("inStock", e.target.checked)}
+                    onChange={(e) => handleInputChange('inStock', e.target.checked)}
                     className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
                   />
                   <span className="ml-2 text-sm font-medium text-gray-700">In Stock</span>
@@ -286,9 +278,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
             {/* Features */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Features
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Features</label>
               <div className="space-y-2">
                 {formData.features.map((feature, index) => (
                   <div key={index} className="flex items-center space-x-2">
@@ -323,19 +313,14 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
             {/* Form Actions */}
             <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                className="px-6 py-2"
-              >
+              <Button type="button" variant="outline" onClick={onClose} className="px-6 py-2">
                 Cancel
               </Button>
               <Button
                 type="submit"
                 className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
               >
-                {product ? "Update Product" : "Add Product"}
+                {product ? 'Update Product' : 'Add Product'}
               </Button>
             </div>
           </form>

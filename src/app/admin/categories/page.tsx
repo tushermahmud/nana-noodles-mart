@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { 
-  Plus,
-  Edit,
-  Trash2,
-  Package
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import CategoryForm from "@/components/admin/CategoryForm";
-import categoriesData from "@/data/categories.json";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Plus, Edit, Trash2, Package } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import CategoryForm from '@/components/admin/CategoryForm';
+import categoriesData from '@/data/categories.json';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState(categoriesData);
@@ -19,9 +14,9 @@ const CategoriesPage = () => {
 
   const handleSaveCategory = (categoryData: any) => {
     if (editingItem) {
-      setCategories(prev => prev.map(c => c.id === categoryData.id ? categoryData : c));
+      setCategories((prev) => prev.map((c) => (c.id === categoryData.id ? categoryData : c)));
     } else {
-      setCategories(prev => [...prev, categoryData]);
+      setCategories((prev) => [...prev, categoryData]);
     }
     setEditingItem(null);
   };
@@ -40,8 +35,8 @@ const CategoriesPage = () => {
           <p className="text-sm text-gray-600">Manage your product categories</p>
         </div>
         <div className="flex space-x-3">
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600"
             onClick={() => setShowAddModal(true)}
           >
@@ -64,11 +59,7 @@ const CategoriesPage = () => {
                 <Package className="w-6 h-6 text-white" />
               </div>
               <div className="flex space-x-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => handleEditItem(category)}
-                >
+                <Button variant="outline" size="sm" onClick={() => handleEditItem(category)}>
                   <Edit className="w-4 h-4" />
                 </Button>
                 <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">

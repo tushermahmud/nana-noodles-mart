@@ -1,30 +1,27 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
 // Dynamically import Stripe components to avoid hydration issues
-const StripeCheckoutForm = dynamic(
-  () => import("../../components/checkout/StripeCheckoutForm"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="space-y-4">
-        <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-        <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-      </div>
-    ),
-  }
-) as any;
+const StripeCheckoutForm = dynamic(() => import('../../components/checkout/StripeCheckoutForm'), {
+  ssr: false,
+  loading: () => (
+    <div className="space-y-4">
+      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  ),
+}) as any;
 
 interface CheckoutForm {
   firstName: string;
@@ -45,55 +42,55 @@ const CheckoutPage = () => {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [formData, setFormData] = useState<CheckoutForm>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "United States",
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: 'United States',
   });
 
-  const [shippingMethod, setShippingMethod] = useState("standard");
+  const [shippingMethod, setShippingMethod] = useState('standard');
 
   const shippingMethods = [
     {
-      id: "standard",
-      name: "Standard Shipping",
+      id: 'standard',
+      name: 'Standard Shipping',
       price: 0,
-      time: "3-5 business days",
+      time: '3-5 business days',
       icon: Truck,
     },
     {
-      id: "express",
-      name: "Express Shipping",
+      id: 'express',
+      name: 'Express Shipping',
       price: 9.99,
-      time: "1-2 business days",
+      time: '1-2 business days',
       icon: Truck,
     },
     {
-      id: "overnight",
-      name: "Overnight Shipping",
+      id: 'overnight',
+      name: 'Overnight Shipping',
       price: 19.99,
-      time: "Next business day",
+      time: 'Next business day',
       icon: Truck,
     },
   ];
 
   const handleInputChange = (field: keyof CheckoutForm, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePaymentSuccess = () => {
     setPaymentSuccess(true);
     setPaymentError(null);
-    
+
     // Clear cart and redirect after successful payment
     setTimeout(() => {
       clearCart();
-      router.push("/");
+      router.push('/');
     }, 2000);
   };
 
@@ -103,7 +100,7 @@ const CheckoutPage = () => {
   };
 
   const subtotal = state.total;
-  const shipping = shippingMethods.find(m => m.id === shippingMethod)?.price || 0;
+  const shipping = shippingMethods.find((m) => m.id === shippingMethod)?.price || 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
@@ -140,7 +137,7 @@ const CheckoutPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -152,9 +149,7 @@ const CheckoutPage = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-                  Checkout
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Checkout</h1>
                 <p className="text-lg text-gray-600">
                   Complete your order and enjoy your delicious ramen!
                 </p>
@@ -195,7 +190,7 @@ const CheckoutPage = () => {
                             type="text"
                             required
                             value={formData.firstName}
-                            onChange={(e) => handleInputChange("firstName", e.target.value)}
+                            onChange={(e) => handleInputChange('firstName', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -207,7 +202,7 @@ const CheckoutPage = () => {
                             type="text"
                             required
                             value={formData.lastName}
-                            onChange={(e) => handleInputChange("lastName", e.target.value)}
+                            onChange={(e) => handleInputChange('lastName', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -221,7 +216,7 @@ const CheckoutPage = () => {
                             type="email"
                             required
                             value={formData.email}
-                            onChange={(e) => handleInputChange("email", e.target.value)}
+                            onChange={(e) => handleInputChange('email', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -233,7 +228,7 @@ const CheckoutPage = () => {
                             type="tel"
                             required
                             value={formData.phone}
-                            onChange={(e) => handleInputChange("phone", e.target.value)}
+                            onChange={(e) => handleInputChange('phone', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -258,7 +253,7 @@ const CheckoutPage = () => {
                           type="text"
                           required
                           value={formData.address}
-                          onChange={(e) => handleInputChange("address", e.target.value)}
+                          onChange={(e) => handleInputChange('address', e.target.value)}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                         />
                       </div>
@@ -271,7 +266,7 @@ const CheckoutPage = () => {
                             type="text"
                             required
                             value={formData.city}
-                            onChange={(e) => handleInputChange("city", e.target.value)}
+                            onChange={(e) => handleInputChange('city', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -283,7 +278,7 @@ const CheckoutPage = () => {
                             type="text"
                             required
                             value={formData.state}
-                            onChange={(e) => handleInputChange("state", e.target.value)}
+                            onChange={(e) => handleInputChange('state', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -295,7 +290,7 @@ const CheckoutPage = () => {
                             type="text"
                             required
                             value={formData.zipCode}
-                            onChange={(e) => handleInputChange("zipCode", e.target.value)}
+                            onChange={(e) => handleInputChange('zipCode', e.target.value)}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                           />
                         </div>
@@ -318,8 +313,8 @@ const CheckoutPage = () => {
                             key={method.id}
                             className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 ${
                               shippingMethod === method.id
-                                ? "border-pink-500 bg-pink-50"
-                                : "border-gray-200 hover:border-pink-300"
+                                ? 'border-pink-500 bg-pink-50'
+                                : 'border-gray-200 hover:border-pink-300'
                             }`}
                           >
                             <input
@@ -337,7 +332,7 @@ const CheckoutPage = () => {
                                   <p className="text-sm text-gray-600">{method.time}</p>
                                 </div>
                                 <span className="font-bold text-gray-900">
-                                  {method.price === 0 ? "Free" : `$${method.price.toFixed(2)}`}
+                                  {method.price === 0 ? 'Free' : `$${method.price.toFixed(2)}`}
                                 </span>
                               </div>
                             </div>
@@ -378,9 +373,7 @@ const CheckoutPage = () => {
             >
               <Card className="sticky top-8 border border-gray-200">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-gray-900">
-                    Order Summary
-                  </CardTitle>
+                  <CardTitle className="text-2xl font-bold text-gray-900">Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Order Items */}
@@ -417,7 +410,7 @@ const CheckoutPage = () => {
                     <div className="flex justify-between text-gray-600">
                       <span>Shipping</span>
                       <span className="text-green-600 font-semibold">
-                        {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                        {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
                       </span>
                     </div>
                     <div className="flex justify-between text-gray-600">
@@ -443,9 +436,7 @@ const CheckoutPage = () => {
                         <CheckCircle className="w-5 h-5 text-green-600" />
                         <span className="text-green-800 font-medium">Payment Successful!</span>
                       </div>
-                      <p className="text-green-700 text-sm mt-1">
-                        Redirecting to homepage...
-                      </p>
+                      <p className="text-green-700 text-sm mt-1">Redirecting to homepage...</p>
                     </motion.div>
                   )}
 
@@ -460,9 +451,7 @@ const CheckoutPage = () => {
                         <CheckCircle className="w-5 h-5 text-red-600" />
                         <span className="text-red-800 font-medium">Payment Failed</span>
                       </div>
-                      <p className="text-red-700 text-sm mt-1">
-                        {paymentError}
-                      </p>
+                      <p className="text-red-700 text-sm mt-1">{paymentError}</p>
                     </motion.div>
                   )}
 
@@ -473,7 +462,8 @@ const CheckoutPage = () => {
                       <span className="text-sm font-medium text-gray-900">Secure Checkout</span>
                     </div>
                     <p className="text-xs text-gray-600">
-                      Your payment information is encrypted and secure. We never store your card details.
+                      Your payment information is encrypted and secure. We never store your card
+                      details.
                     </p>
                   </div>
 

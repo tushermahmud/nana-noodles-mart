@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -14,12 +14,12 @@ interface StripePaymentFormProps {
   setIsProcessing: (processing: boolean) => void;
 }
 
-const StripePaymentForm = ({ 
-  amount, 
-  onSuccess, 
-  onError, 
-  isProcessing, 
-  setIsProcessing 
+const StripePaymentForm = ({
+  amount,
+  onSuccess,
+  onError,
+  isProcessing,
+  setIsProcessing,
 }: StripePaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -116,9 +116,7 @@ const StripePaymentForm = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Card Element */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Card Information *
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Card Information *</label>
         <div className="p-4 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-pink-500 focus-within:border-transparent">
           <CardElement options={cardElementOptions} />
         </div>

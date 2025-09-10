@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import ProductCard from "./ProductCard";
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import ProductCard from './ProductCard';
 
 interface Product {
   id: number;
@@ -37,14 +37,14 @@ const ProductsGrid = ({ products, title, subtitle, showHeader = true }: Products
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-4 anime-title">
-            {title || "Our Signature"}{" "}
+            {title || 'Our Signature'}{' '}
             <span className="gradient-text anime-text-shadow">
-              {subtitle || "Ramen Collection"}
+              {subtitle || 'Ramen Collection'}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto pop-text">
-            Each bowl is crafted with premium ingredients and traditional techniques. 
-            From classic tonkotsu to innovative fusion flavors, discover ramen perfection.
+            Each bowl is crafted with premium ingredients and traditional techniques. From classic
+            tonkotsu to innovative fusion flavors, discover ramen perfection.
           </p>
         </motion.div>
       )}

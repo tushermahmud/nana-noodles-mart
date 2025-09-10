@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/sections/Hero";
-import Categories from "@/components/sections/Categories";
-import { VirtualStore } from "@/components/virtual-store";
-import AboutSection from "@/components/sections/AboutSection";
-import Footer from "@/components/layout/Footer";
+import Navbar from '@/components/layout/Navbar';
+import Hero from '@/components/sections/Hero';
+import Categories from '@/components/sections/Categories';
+import { VirtualStore } from '@/components/virtual-store';
+import AboutSection from '@/components/sections/AboutSection';
+import Footer from '@/components/layout/Footer';
 
 export default function Home() {
   return (

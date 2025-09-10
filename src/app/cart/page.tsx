@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard, Truck } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Link from "next/link";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard, Truck } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Link from 'next/link';
 
 const CartPage = () => {
   const { state, removeItem, updateQuantity, clearCart } = useCart();
@@ -37,8 +37,8 @@ const CartPage = () => {
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8 max-w-md">
-              Looks like you haven't added any delicious ramen to your cart yet. 
-              Start shopping to fill it up!
+              Looks like you haven't added any delicious ramen to your cart yet. Start shopping to
+              fill it up!
             </p>
             <div className="space-x-4">
               <Link href="/products">
@@ -62,7 +62,7 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -75,8 +75,7 @@ const CartPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-                  Shopping{" "}
-                  <span className="text-pink-600">Cart</span>
+                  Shopping <span className="text-pink-600">Cart</span>
                 </h1>
                 <p className="text-lg text-gray-600">
                   {state.itemCount} items • Total: ${state.total.toFixed(2)}
@@ -138,7 +137,9 @@ const CartPage = () => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                                      onClick={() =>
+                                        handleQuantityChange(item.id, item.quantity - 1)
+                                      }
                                       className="w-8 h-8 p-0"
                                     >
                                       <Minus className="w-3 h-3" />
@@ -149,7 +150,9 @@ const CartPage = () => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                                      onClick={() =>
+                                        handleQuantityChange(item.id, item.quantity + 1)
+                                      }
                                       className="w-8 h-8 p-0"
                                     >
                                       <Plus className="w-3 h-3" />
@@ -204,9 +207,7 @@ const CartPage = () => {
             >
               <Card className="sticky top-8 border border-gray-200">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-gray-900">
-                    Order Summary
-                  </CardTitle>
+                  <CardTitle className="text-2xl font-bold text-gray-900">Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Summary Details */}
@@ -226,7 +227,7 @@ const CartPage = () => {
                     <div className="border-t border-gray-200 pt-3">
                       <div className="flex justify-between text-xl font-bold text-gray-900">
                         <span>Total</span>
-                        <span>${(state.total + (state.total * 0.08)).toFixed(2)}</span>
+                        <span>${(state.total + state.total * 0.08).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>

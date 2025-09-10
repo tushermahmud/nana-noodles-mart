@@ -1,13 +1,6 @@
-"use client";
+'use client';
 
-import { 
-  TrendingUp,
-  TrendingDown,
-  Users,
-  ShoppingCart,
-  DollarSign,
-  Package
-} from "lucide-react";
+import { TrendingUp, TrendingDown, Users, ShoppingCart, DollarSign, Package } from 'lucide-react';
 
 const AnalyticsPage = () => {
   return (
