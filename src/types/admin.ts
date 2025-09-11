@@ -1,5 +1,5 @@
-import { Pagination } from "./common";
-import { Category, Product } from "./products";
+import { Pagination } from './common';
+import { Category, Product } from './products';
 
 export interface AdminPledge {
   id: string;
@@ -15,7 +15,6 @@ export interface CategoryRow {
   categories: Category[];
   pagination: Pagination;
 }
-
 
 export interface AdminStats {
   totalUsers: number;

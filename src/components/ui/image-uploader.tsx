@@ -64,7 +64,7 @@ export const ImageUploader = ({ value, onChange, error, className = '' }: ImageU
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragActive(false);
-    
+
     const file = e.dataTransfer.files[0];
     if (file) {
       handleFileUpload(file);
@@ -121,7 +121,12 @@ export const ImageUploader = ({ value, onChange, error, className = '' }: ImageU
             <Button type="button" variant="outline" onClick={openFileDialog}>
               Replace image
             </Button>
-            <Button type="button" variant="outline" onClick={removeImage} className="text-red-600 hover:text-red-700">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={removeImage}
+              className="text-red-600 hover:text-red-700"
+            >
               Remove image
             </Button>
           </div>
@@ -132,8 +137,8 @@ export const ImageUploader = ({ value, onChange, error, className = '' }: ImageU
             dragActive
               ? 'border-pink-500 bg-pink-50'
               : error
-              ? 'border-red-500'
-              : 'border-gray-300 hover:border-pink-400'
+                ? 'border-red-500'
+                : 'border-gray-300 hover:border-pink-400'
           }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -152,9 +157,7 @@ export const ImageUploader = ({ value, onChange, error, className = '' }: ImageU
                 <p className="text-sm font-medium text-gray-700 mb-1">
                   Drop your image here, or click to browse
                 </p>
-                <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF up to 5MB
-                </p>
+                <p className="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
               </div>
             )}
           </div>

@@ -26,9 +26,10 @@ interface ProductFormProps {
 const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFormProps) => {
   console.log('product', product);
   const rawImage = (product?.imageUrl ?? product?.image ?? '') as string;
-  const normalizedImage = rawImage && !/^https?:|^data:/.test(rawImage)
-    ? `${BASE_URL.replace('/api', '')}/public/storage/${rawImage}`
-    : rawImage;
+  const normalizedImage =
+    rawImage && !/^https?:|^data:/.test(rawImage)
+      ? `${BASE_URL.replace('/api', '')}/public/storage/${rawImage}`
+      : rawImage;
 
   const [formData, setFormData] = useState({
     id: product?.id || Date.now(),
@@ -42,9 +43,12 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     spiceLevel: product?.spice_level || 1,
     features: Array.isArray(product?.features)
       ? product.features
-      : (typeof product?.features === 'string'
-          ? product.features.split(/[\,\n]/).map((s: string) => s.trim()).filter(Boolean)
-          : ['']),
+      : typeof product?.features === 'string'
+        ? product.features
+            .split(/[\,\n]/)
+            .map((s: string) => s.trim())
+            .filter(Boolean)
+        : [''],
   });
 
   const [errors, setErrors] = useState<any>({});
@@ -144,25 +148,24 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Image: only append if user changed it to a data URL; otherwise skip to preserve existing server value
     const imageToSend = formData.imageUrl || formData.image;
     if (imageToSend && imageToSend.startsWith('data:')) {
-      const blob = await fetch(imageToSend).then(r => r.blob());
+      const blob = await fetch(imageToSend).then((r) => r.blob());
       const file = new File([blob], 'product-image.jpg', { type: blob.type });
       fd.append('image', file);
     }
     try {
       const res = await updateProduct(String(formData.id), fd);
 
-    if (res.success) {
-      onSave({ ...formData, ...result.data } as unknown as Product);
-      toast.success(res.message ?? 'Product updated successfully');
-      onClose();
-    } else {
-      setErrors((prev: any) => ({ ...prev, form: res.message || 'Failed to update product' }));
-      toast.error(res.message ?? 'Failed to update product');
-    }
+      if (res.success) {
+        onSave({ ...formData, ...result.data } as unknown as Product);
+        toast.success(res.message ?? 'Product updated successfully');
+        onClose();
+      } else {
+        setErrors((prev: any) => ({ ...prev, form: res.message || 'Failed to update product' }));
+        toast.error(res.message ?? 'Failed to update product');
+      }
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
-    
   };
 
   if (!isOpen) return null;
@@ -279,7 +282,9 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
             {/* Image Uploader */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Image *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Product Image *
+              </label>
               <ImageUploader
                 value={formData.imageUrl}
                 onChange={(url) => handleInputChange('imageUrl', url)}
@@ -315,8 +320,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                   <span className="ml-2 text-sm font-medium text-gray-700">Popular</span>
                 </label>
               </div>
-
-              
             </div>
 
             {/* Features */}
@@ -359,12 +362,12 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <Button type="button" variant="outline" onClick={onClose} className="px-6 py-2">
                 Cancel
               </Button>
-                <Button
-                  type="submit"
-                  className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
-                >
-                  {product ? 'Update Product' : 'Add Product'}
-                </Button>
+              <Button
+                type="submit"
+                className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
+              >
+                {product ? 'Update Product' : 'Add Product'}
+              </Button>
             </div>
           </form>
         </div>

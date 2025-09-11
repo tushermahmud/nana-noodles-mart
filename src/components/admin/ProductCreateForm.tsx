@@ -6,7 +6,7 @@ import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { createProduct } from '@/actions/products';
-import { createProductSchema} from '@/schemas/product.schema';
+import { createProductSchema } from '@/schemas/product.schema';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
@@ -57,7 +57,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
   };
 
   const addFeature = () => {
-    if (formData.features.filter(f => f.trim() !== '').length >= 3) {
+    if (formData.features.filter((f) => f.trim() !== '').length >= 3) {
       setErrors((prev) => ({ ...prev, features: 'You can add at most 3 features' }));
       return;
     }
@@ -87,7 +87,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         image: formData.image,
         quantity: parseInt(formData.quantity) || 0,
         spice_level: formData.spice_level,
-        features: formData.features.filter(f => f.trim() !== ''),
+        features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
       };
 
@@ -123,7 +123,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         image: formData.image,
         quantity: parseInt(formData.quantity),
         spice_level: formData.spice_level,
-        features: formData.features.filter(f => f.trim() !== ''),
+        features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
       };
 
@@ -140,7 +140,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         productData.append('features', featuresString);
       }
       productData.append('popular', validatedData.popular.toString());
-      
+
       if (validatedData.image.startsWith('data:')) {
         const response = await fetch(validatedData.image);
         const blob = await response.blob();
@@ -156,9 +156,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
           console.log(key, value);
         }
       }
-      
+
       const result = await createProduct(productData);
-      
+
       if (result?.success) {
         toast.success(result?.message ?? 'Product created successfully');
         router.push('/admin/products');
@@ -199,9 +199,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Product Name *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Product Name *</label>
               <input
                 type="text"
                 value={formData.name}
@@ -215,7 +213,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category (optional)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category (optional)
+              </label>
               <select
                 value={formData.category}
                 onChange={(e) => handleInputChange('category', e.target.value)}
@@ -225,7 +225,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
               >
                 <option value="">All products (default)</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.name}>{c.name}</option>
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
               {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
@@ -308,7 +310,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                 <option value={4}>4 - Very Spicy</option>
                 <option value={5}>5 - Extra Hot</option>
               </select>
-              {errors.spice_level && <p className="text-red-500 text-sm mt-1">{errors.spice_level}</p>}
+              {errors.spice_level && (
+                <p className="text-red-500 text-sm mt-1">{errors.spice_level}</p>
+              )}
             </div>
 
             <div className="flex items-center space-x-4">
@@ -356,9 +360,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                 <Plus className="w-4 h-4 mr-2" />
                 Add Feature
               </button>
-              {errors.features && (
-                <p className="text-red-500 text-sm mt-1">{errors.features}</p>
-              )}
+              {errors.features && <p className="text-red-500 text-sm mt-1">{errors.features}</p>}
             </div>
           </div>
 

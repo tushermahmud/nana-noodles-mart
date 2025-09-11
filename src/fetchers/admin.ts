@@ -30,20 +30,17 @@ export async function getAdminProducts(params: PaginationParams) {
       },
     }
   );
-  console.log(res)
+  console.log(res);
   return res;
 }
 
 export async function getAdminCategories() {
-  const res = await performFetch<APIResponse<Category[]>>(
-    ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES,
-    {
-      method: 'GET',
-      next: {
-        tags: ['getAdminCategories'],
-      },
-    }
-  );
+  const res = await performFetch<APIResponse<Category[]>>(ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES, {
+    method: 'GET',
+    next: {
+      tags: ['getAdminCategories'],
+    },
+  });
   return res;
 }
 

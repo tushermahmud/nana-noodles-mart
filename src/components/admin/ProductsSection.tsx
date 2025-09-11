@@ -18,7 +18,11 @@ type ProductsSectionProps = {
   categories: Category[];
 };
 
-export const ProductsSection = ({ filteredProducts, pagination, categories }: ProductsSectionProps) => {
+export const ProductsSection = ({
+  filteredProducts,
+  pagination,
+  categories,
+}: ProductsSectionProps) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingItem, setEditingItem] = useState<Product | null>(null);
   const router = useRouter();
@@ -55,7 +59,6 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
-    
   };
 
   return (
@@ -88,7 +91,9 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
                       />
                       <div>
                         <p className="font-medium text-gray-900">{product.name}</p>
-                        <p className="text-sm text-gray-500 truncate max-w-xs">{product.description}</p>
+                        <p className="text-sm text-gray-500 truncate max-w-xs">
+                          {product.description}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -103,7 +108,9 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
                   <td className="py-4 px-4">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        (product as any).stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        (product as any).stock > 0
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
                       }`}
                     >
                       {(product as any).stock > 0 ? 'In Stock' : 'Out of Stock'}
@@ -112,7 +119,9 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
                   <td className="py-4 px-4">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        (product?.popular ?? false) ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
+                        (product?.popular ?? false)
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
                       }`}
                     >
                       {product.popular ? 'Popular' : 'Regular'}
@@ -126,7 +135,12 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
                       <Button variant="outline" size="sm" onClick={() => handleEditItem(product)}>
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700" onClick={() => openDeleteConfirm(product?.id)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                        onClick={() => openDeleteConfirm(product?.id)}
+                      >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -160,8 +174,12 @@ export const ProductsSection = ({ filteredProducts, pagination, categories }: Pr
             <h3 className="text-lg font-semibold text-gray-900">Delete product?</h3>
             <p className="mt-2 text-sm text-gray-600">This action cannot be undone.</p>
             <div className="mt-5 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setConfirmOpen(false)}>Cancel</Button>
-              <Button className="bg-red-600 text-white hover:bg-red-700" onClick={onConfirmDelete}>Delete</Button>
+              <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+                Cancel
+              </Button>
+              <Button className="bg-red-600 text-white hover:bg-red-700" onClick={onConfirmDelete}>
+                Delete
+              </Button>
             </div>
           </div>
         </div>

@@ -67,7 +67,6 @@ export async function performFetch<T>(
       next,
     });
 
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {

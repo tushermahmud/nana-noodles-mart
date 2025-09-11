@@ -16,7 +16,6 @@ export interface Product extends BaseEntity {
   features: string;
 }
 
-
 export interface Category {
   id: string;
   name: string;

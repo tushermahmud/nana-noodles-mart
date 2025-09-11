@@ -30,14 +30,13 @@ export async function POST(request: NextRequest) {
     // - Cloudinary
     // - Vercel Blob
     // - Uploadthing
-    
+
     // For now, return the data URL
-    return NextResponse.json({ 
+    return NextResponse.json({
       url: dataUrl,
       filename: file.name,
-      size: file.size 
+      size: file.size,
     });
-
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 });

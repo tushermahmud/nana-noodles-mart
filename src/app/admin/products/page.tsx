@@ -34,7 +34,20 @@ export default async function AdminProducts({ searchParams }: Props) {
         </div>
       </div>
 
-      <ProductsSection filteredProducts={filteredProducts as Product[]} pagination={(pagination ?? { currentPage: page, totalPages: 1, totalCount: filteredProducts.length, limit, hasNextPage: false, hasPrevPage: false })} categories={categories as Category[]} />
+      <ProductsSection
+        filteredProducts={filteredProducts as Product[]}
+        pagination={
+          pagination ?? {
+            currentPage: page,
+            totalPages: 1,
+            totalCount: filteredProducts.length,
+            limit,
+            hasNextPage: false,
+            hasPrevPage: false,
+          }
+        }
+        categories={categories as Category[]}
+      />
     </>
   );
 }
