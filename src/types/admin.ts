@@ -1,13 +1,21 @@
+import { Pagination } from "./common";
+import { Category, Product } from "./products";
+
 export interface AdminPledge {
   id: string;
   // Add pledge-specific fields as needed
 }
 
-export interface ProjectRow {
-  id: string;
-  name: string;
-  // Add project-specific fields as needed
+export interface ProductRow {
+  products: Product[];
+  pagination: Pagination;
 }
+
+export interface CategoryRow {
+  categories: Category[];
+  pagination: Pagination;
+}
+
 
 export interface AdminStats {
   totalUsers: number;

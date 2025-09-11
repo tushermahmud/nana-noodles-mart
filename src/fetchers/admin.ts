@@ -1,10 +1,10 @@
 import { ADMIN_ENDPOINTS } from '@/api/admin';
-import { AdminPledge, ProjectRow, AdminStats } from '@/types/admin';
+import { AdminPledge, ProductRow, AdminStats, CategoryRow } from '@/types/admin';
 import { UserInfo } from '@/types/auth';
-import { PaginatedAPIResponse, PaginationParams } from '@/types/common';
+import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
-import { Product } from '@/types/products';
+import { Category, Product } from '@/types/products';
 
 export async function getAdminUsers(params: PaginationParams) {
   const res = await performFetch<PaginatedAPIResponse<UserInfo>>(
@@ -21,7 +21,7 @@ export async function getAdminUsers(params: PaginationParams) {
 }
 
 export async function getAdminProducts(params: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<Product>>(
+  const res = await performFetch<ProductRow>(
     getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_PRODUCTS, params),
     {
       method: 'GET',
@@ -30,14 +30,13 @@ export async function getAdminProducts(params: PaginationParams) {
       },
     }
   );
-  console.log(res);
-
+  console.log(res)
   return res;
 }
 
-export async function getAdminCategories(params: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<ProjectRow>>(
-    getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES, params),
+export async function getAdminCategories() {
+  const res = await performFetch<APIResponse<Category[]>>(
+    ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES,
     {
       method: 'GET',
       next: {
@@ -45,12 +44,11 @@ export async function getAdminCategories(params: PaginationParams) {
       },
     }
   );
-
   return res;
 }
 
 export async function getAdminOrders(params: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<ProjectRow>>(
+  const res = await performFetch<PaginatedAPIResponse<ProductRow>>(
     getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_ORDERS, params),
     {
       method: 'GET',
@@ -64,7 +62,7 @@ export async function getAdminOrders(params: PaginationParams) {
 }
 
 export async function getAdminPayments(params: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<ProjectRow>>(
+  const res = await performFetch<PaginatedAPIResponse<ProductRow>>(
     getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_PAYMENTS, params),
     {
       method: 'GET',

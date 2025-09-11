@@ -4,29 +4,47 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Upload, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
+import { updateProductSchema } from '@/schemas/product.schema';
+import { z } from 'zod';
+import { performFetch } from '@/lib/apiUtils';
+import { PRODUCTS_ENDPOINTS } from '@/api/products';
+import { Category, Product } from '@/types/products';
+import { ImageUploader } from '@/components/ui/image-uploader';
+import { BASE_URL } from '@/config/env';
+import { updateProduct } from '@/actions/products';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/errorUtils';
+import Link from 'next/link';
 interface ProductFormProps {
   isOpen: boolean;
   onClose: () => void;
-  product?: any;
-  categories: any[];
-  onSave: (product: any) => void;
+  product?: Product;
+  categories: Category[];
+  onSave: (product: Product) => void;
 }
 
 const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFormProps) => {
+  console.log('product', product);
+  const rawImage = (product?.imageUrl ?? product?.image ?? '') as string;
+  const normalizedImage = rawImage && !/^https?:|^data:/.test(rawImage)
+    ? `${BASE_URL.replace('/api', '')}/public/storage/${rawImage}`
+    : rawImage;
+
   const [formData, setFormData] = useState({
     id: product?.id || Date.now(),
     name: product?.name || '',
     description: product?.description || '',
     price: product?.price || '',
-    originalPrice: product?.originalPrice || '',
-    image: product?.image || '',
+    image: normalizedImage,
     category: product?.category || '',
-    category_id: product?.category_id || 1,
+    imageUrl: product?.imageUrl || '',
     popular: product?.popular || false,
-    inStock: product?.inStock !== undefined ? product.inStock : true,
-    spiceLevel: product?.spiceLevel || 1,
-    features: product?.features || [''],
+    spiceLevel: product?.spice_level || 1,
+    features: Array.isArray(product?.features)
+      ? product.features
+      : (typeof product?.features === 'string'
+          ? product.features.split(/[\,\n]/).map((s: string) => s.trim()).filter(Boolean)
+          : ['']),
   });
 
   const [errors, setErrors] = useState<any>({});
@@ -39,7 +57,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
 
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({
+      setErrors((prev: any) => ({
         ...prev,
         [field]: '',
       }));
@@ -73,33 +91,78 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   };
 
   const validateForm = () => {
-    const newErrors: any = {};
+    try {
+      const dataForValidation = {
+        id: String(formData.id),
+        name: formData.name,
+        category: formData.category,
+        description: formData.description,
+        price: parseFloat(String(formData.price) || '0'),
+        image: formData.image,
 
-    if (!formData.name.trim()) newErrors.name = 'Product name is required';
-    if (!formData.description.trim()) newErrors.description = 'Description is required';
-    if (!formData.price || formData.price <= 0) newErrors.price = 'Valid price is required';
-    if (!formData.image.trim()) newErrors.image = 'Image URL is required';
-    if (!formData.category) newErrors.category = 'Category is required';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+        // Optional fields omitted if not needed by backend
+        spice_level: Number(formData.spiceLevel),
+        features: (formData.features || []).filter((f: string) => f.trim() !== ''),
+        popular: !!formData.popular,
+      } as any;
+      updateProductSchema.parse(dataForValidation);
+      setErrors({});
+      return { ok: true, data: dataForValidation } as const;
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        e.issues.forEach((issue) => {
+          const key = String(issue.path[0] ?? 'form');
+          fieldErrors[key] = issue.message;
+        });
+        setErrors(fieldErrors);
+      }
+      return { ok: false } as const;
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const result = validateForm();
+    if (!result.ok) return;
 
-    if (validateForm()) {
-      const productData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
-        spiceLevel: parseInt(formData.spiceLevel),
-        features: formData.features.filter((f) => f.trim() !== ''),
-      };
-
-      onSave(productData);
-      onClose();
+    // Build FormData to mirror Postman request
+    const fd = new FormData();
+    fd.append('name', result.data.name);
+    fd.append('category', result.data.category || 'all products');
+    fd.append('description', result.data.description);
+    fd.append('price', String(result.data.price));
+    if ((formData as any).quantity !== undefined) {
+      fd.append('quantity', String((formData as any).quantity));
     }
+    fd.append('spice_level', String(result.data.spice_level));
+    if (result.data.features && (result.data.features as string[]).length > 0) {
+      fd.append('features', (result.data.features as string[]).join(','));
+    }
+    fd.append('popular', String(result.data.popular));
+
+    // Image: only append if user changed it to a data URL; otherwise skip to preserve existing server value
+    const imageToSend = formData.imageUrl || formData.image;
+    if (imageToSend && imageToSend.startsWith('data:')) {
+      const blob = await fetch(imageToSend).then(r => r.blob());
+      const file = new File([blob], 'product-image.jpg', { type: blob.type });
+      fd.append('image', file);
+    }
+    try {
+      const res = await updateProduct(String(formData.id), fd);
+
+    if (res.success) {
+      onSave({ ...formData, ...result.data } as unknown as Product);
+      toast.success(res.message ?? 'Product updated successfully');
+      onClose();
+    } else {
+      setErrors((prev: any) => ({ ...prev, form: res.message || 'Failed to update product' }));
+      toast.error(res.message ?? 'Failed to update product');
+    }
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+    
   };
 
   if (!isOpen) return null;
@@ -148,20 +211,15 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                 <select
-                  value={formData.category_id}
-                  onChange={(e) => {
-                    const categoryId = parseInt(e.target.value);
-                    const category = categories.find((c) => c.id === categoryId);
-                    handleInputChange('category_id', categoryId);
-                    handleInputChange('category', category?.name || '');
-                  }}
+                  value={formData.category as string}
+                  onChange={(e) => handleInputChange('category', e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                     errors.category ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
                   <option value="">Select Category</option>
                   {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
+                    <option key={category.name} value={category.name}>
                       {category.name}
                     </option>
                   ))}
@@ -211,7 +269,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 <input
                   type="number"
                   step="0.01"
-                  value={formData.originalPrice}
+                  value={formData.price}
                   onChange={(e) => handleInputChange('originalPrice', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   placeholder="0.00"
@@ -219,19 +277,14 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               </div>
             </div>
 
-            {/* Image URL */}
+            {/* Image Uploader */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Image URL *</label>
-              <input
-                type="url"
-                value={formData.image}
-                onChange={(e) => handleInputChange('image', e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                  errors.image ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="https://example.com/image.jpg"
+              <label className="block text-sm font-medium text-gray-700 mb-2">Product Image *</label>
+              <ImageUploader
+                value={formData.imageUrl}
+                onChange={(url) => handleInputChange('imageUrl', url)}
+                error={errors.image}
               />
-              {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
             </div>
 
             {/* Product Settings */}
@@ -263,17 +316,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 </label>
               </div>
 
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={formData.inStock}
-                    onChange={(e) => handleInputChange('inStock', e.target.checked)}
-                    className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700">In Stock</span>
-                </label>
-              </div>
+              
             </div>
 
             {/* Features */}
@@ -316,12 +359,12 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <Button type="button" variant="outline" onClick={onClose} className="px-6 py-2">
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
-              >
-                {product ? 'Update Product' : 'Add Product'}
-              </Button>
+                <Button
+                  type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
+                >
+                  {product ? 'Update Product' : 'Add Product'}
+                </Button>
             </div>
           </form>
         </div>

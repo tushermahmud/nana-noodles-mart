@@ -1,142 +1,74 @@
-'use server';
+"use server";
 
-import { revalidateTag } from 'next/cache';
-import { PRODUCTS_ENDPOINTS, CATEGORIES_ENDPOINTS } from '@/api/products';
-import { APIResponse } from '@/types/common';
-import { Product, Category } from '@/types/products';
-import { performFetch } from '@/lib/apiUtils';
+import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
+import { performFetch } from "@/lib/apiUtils";
+import { APIResponse } from "@/types/common";
+import { Product } from "@/types/products";
+import { PRODUCTS_ENDPOINTS } from "@/api/products";
 
-// Product Actions
-export async function createProduct(data: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) {
-  const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.CREATE_PRODUCT, {
-    method: 'POST',
-    body: data,
-  });
 
-  if (res.isSuccess) {
-    revalidateTag('getProducts');
-    revalidateTag('getAdminProducts');
+export async function createProduct(productData: FormData) {
+  try {
+    const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.CREATE_PRODUCT, {
+      method: "POST",
+      body: productData,
+    });
+
+    if (res?.success) {
+      revalidateTag("getAdminProducts");
+      return { success: true, data: res.data };
+    }
+
+    return { success: false, message: res?.message || "Failed to create product" };
+  } catch (error) {
+    console.error("Error creating product:", error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : "Failed to create product" 
+    };
   }
-
-  return res;
 }
 
-export async function updateProduct(id: string, data: Partial<Product>) {
-  const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.UPDATE_PRODUCT(id), {
-    method: 'PATCH',
-    body: data,
-  });
+export async function updateProduct(id: string, productData: FormData) {
+  try {
+    const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.UPDATE_PRODUCT(id), {
+      method: "PATCH",
+      body: productData,
+    });
 
-  if (res.isSuccess) {
-    revalidateTag('getProducts');
-    revalidateTag('getProduct');
-    revalidateTag('getAdminProducts');
+    if (res?.success) {
+      revalidateTag("getAdminProducts");
+      return { success: true, data: res.data };
+    }
+
+    return { success: false, message: res?.message || "Failed to update product" };
+  } catch (error) {
+    console.error("Error updating product:", error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : "Failed to update product" 
+    };
   }
-
-  return res;
 }
 
 export async function deleteProduct(id: string) {
-  const res = await performFetch<void>(PRODUCTS_ENDPOINTS.DELETE_PRODUCT(id), {
-    method: 'DELETE',
-  });
+  try {
+    const res = await performFetch<APIResponse<null>>(PRODUCTS_ENDPOINTS.DELETE_PRODUCT(id), {
+      method: "DELETE",
+    });
 
-  if (res.isSuccess) {
-    revalidateTag('getProducts');
-    revalidateTag('getAdminProducts');
-  }
-
-  return res;
-}
-
-export async function uploadProductImage(productId: string, file: File) {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const res = await performFetch<{ imageUrl: string }>(
-    PRODUCTS_ENDPOINTS.UPLOAD_PRODUCT_IMAGE(productId),
-    {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // Don't set Content-Type for FormData, let browser set it
-      },
+    if (res?.success) {
+      revalidateTag("getAdminProducts");
+      return { success: true };
     }
-  );
 
-  if (res.isSuccess) {
-    revalidateTag('getProduct');
-    revalidateTag('getProducts');
+    return { success: false, message: res?.message || "Failed to delete product" };
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : "Failed to delete product" 
+    };
   }
-
-  return res;
-}
-
-// Category Actions
-export async function createCategory(data: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) {
-  const res = await performFetch<Category>(CATEGORIES_ENDPOINTS.CREATE_CATEGORY, {
-    method: 'POST',
-    body: data,
-  });
-
-  if (res.isSuccess) {
-    revalidateTag('getCategories');
-    revalidateTag('getActiveCategories');
-    revalidateTag('getAdminCategories');
-  }
-
-  return res;
-}
-
-export async function updateCategory(id: string, data: Partial<Category>) {
-  const res = await performFetch<Category>(CATEGORIES_ENDPOINTS.UPDATE_CATEGORY(id), {
-    method: 'PATCH',
-    body: data,
-  });
-
-  if (res.isSuccess) {
-    revalidateTag('getCategories');
-    revalidateTag('getCategory');
-    revalidateTag('getActiveCategories');
-    revalidateTag('getAdminCategories');
-  }
-
-  return res;
-}
-
-export async function deleteCategory(id: string) {
-  const res = await performFetch<void>(CATEGORIES_ENDPOINTS.DELETE_CATEGORY(id), {
-    method: 'DELETE',
-  });
-
-  if (res.isSuccess) {
-    revalidateTag('getCategories');
-    revalidateTag('getActiveCategories');
-    revalidateTag('getAdminCategories');
-  }
-
-  return res;
-}
-
-export async function uploadCategoryImage(categoryId: string, file: File) {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const res = await performFetch<{ imageUrl: string }>(
-    CATEGORIES_ENDPOINTS.UPLOAD_CATEGORY_IMAGE(categoryId),
-    {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // Don't set Content-Type for FormData, let browser set it
-      },
-    }
-  );
-
-  if (res.isSuccess) {
-    revalidateTag('getCategory');
-    revalidateTag('getCategories');
-  }
-
-  return res;
 }

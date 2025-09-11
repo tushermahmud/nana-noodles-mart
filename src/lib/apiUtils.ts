@@ -38,16 +38,25 @@ export async function performFetch<T>(
   const token = clientToken || serverToken;
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  // Set default headers
-  headers['Content-Type'] = headers['Content-Type'] || 'application/json';
-
-  // Normalize body: JSON.stringify plain objects
+  // Normalize body & set headers appropriately
   let normalizedBody: BodyInit | undefined;
-  if (body instanceof FormData || body instanceof Blob || typeof body === 'string') {
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+
+  if (isFormData) {
     normalizedBody = body as BodyInit;
+    // IMPORTANT: Let the browser/node set the multipart boundary
+    if ('Content-Type' in headers) delete headers['Content-Type'];
+  } else if (body instanceof Blob) {
+    normalizedBody = body as BodyInit;
+  } else if (typeof body === 'string') {
+    normalizedBody = body as BodyInit;
+    // Default JSON when caller passed a string body and didn't set content type
+    if (!headers['Content-Type']) headers['Content-Type'] = 'application/json';
   } else if (body !== undefined && body !== null) {
     normalizedBody = JSON.stringify(body);
     headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  } else {
+    // No body
   }
 
   try {
@@ -58,20 +67,21 @@ export async function performFetch<T>(
       next,
     });
 
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
-        message: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+        message: (errorData as any).message || `HTTP ${response.status}: ${response.statusText}`,
         data: null,
       };
     }
 
     const data = await response.json();
     return {
-      success: data.success,
-      message: data.message || 'Success',
-      data: data.data || data,
+      success: (data as any).success,
+      message: (data as any).message || 'Success',
+      data: (data as any).data || data,
     };
   } catch (error) {
     return {

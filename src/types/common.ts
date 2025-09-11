@@ -8,14 +8,15 @@ export interface PaginatedAPIResponse<T> {
   success: boolean;
   message: string;
   data: T[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalCount: number;
-    limit: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
+}
+
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  limit: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 }
 
 export interface PaginationParams {
@@ -23,7 +24,7 @@ export interface PaginationParams {
   limit?: number;
   sort?: string;
   order?: 'asc' | 'desc';
-  search?: string;
+  q?: string;
 }
 
 export interface BaseEntity {

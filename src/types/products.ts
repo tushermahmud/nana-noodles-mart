@@ -11,14 +11,21 @@ export interface Product extends BaseEntity {
   stock: number;
   popular: boolean;
   tags?: string[];
+  imageUrl: string;
+  spice_level: number;
+  features: string;
 }
 
-export interface Category extends BaseEntity {
+
+export interface Category {
+  id: string;
   name: string;
   description: string;
   image: string;
-  slug: string;
-  isActive: boolean;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  imageUrl: string;
   products?: Product[];
 }
 
