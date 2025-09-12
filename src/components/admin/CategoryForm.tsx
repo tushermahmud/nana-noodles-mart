@@ -2,7 +2,19 @@
 
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Package, ChefHat, Flame, Leaf, Fish, Crown, Star, Heart, Zap, Shield } from 'lucide-react';
+import {
+  X,
+  Package,
+  ChefHat,
+  Flame,
+  Leaf,
+  Fish,
+  Crown,
+  Star,
+  Heart,
+  Zap,
+  Shield,
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -53,7 +65,8 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
     },
   });
 
-  const selectedColor = CATEGORY_COLORS.find((c) => c.label === form.watch('color')) || CATEGORY_COLORS[0];
+  const selectedColor =
+    CATEGORY_COLORS.find((c) => c.label === form.watch('color')) || CATEGORY_COLORS[0];
 
   const iconMap = {
     Package,
@@ -124,11 +137,12 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
     <div className="p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Edit Category
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900">Edit Category</h2>
         {!inline && (
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl font-bold">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+          >
             <X className="w-6 h-6" />
           </button>
         )}
@@ -138,9 +152,7 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
         {/* Basic Information */}
         <div className="grid grid-cols-1 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category Name *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category Name *</label>
             <input
               type="text"
               {...form.register('name')}
@@ -150,7 +162,9 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
               placeholder="Enter category name"
             />
             {form.formState.errors.name && (
-              <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message as string}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {form.formState.errors.name.message as string}
+              </p>
             )}
           </div>
         </div>
@@ -167,7 +181,9 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
             rows={4}
           />
           {form.formState.errors.description && (
-            <p className="text-red-500 text-sm mt-1">{form.formState.errors.description.message as string}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {form.formState.errors.description.message as string}
+            </p>
           )}
         </div>
 
@@ -211,7 +227,9 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className={`w-full h-8 rounded bg-gradient-to-r ${colorOption.gradient} mb-2`}></div>
+                <div
+                  className={`w-full h-8 rounded bg-gradient-to-r ${colorOption.gradient} mb-2`}
+                ></div>
                 <p className="text-xs text-gray-600 text-center">{colorOption.label}</p>
               </button>
             ))}
@@ -219,7 +237,9 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
         </div>
 
         {/* Preview Card (uses derived bg/border) */}
-        <div className={`rounded-lg p-4 border ${selectedColor.border} bg-gradient-to-r ${selectedColor.bg}`}>
+        <div
+          className={`rounded-lg p-4 border ${selectedColor.border} bg-gradient-to-r ${selectedColor.bg}`}
+        >
           <p className="text-sm text-gray-700">Preview with selected background and border</p>
         </div>
 
@@ -241,11 +261,7 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
   );
 
   if (inline) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
-        {content}
-      </div>
-    );
+    return <div className="bg-white border border-gray-200 rounded-xl shadow-sm">{content}</div>;
   }
 
   if (!isOpen) return null;

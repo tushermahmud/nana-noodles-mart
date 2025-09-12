@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const createCategorySchema = z.object({
-  name: z.string().min(1, 'Category name is required').max(100, 'Category name must be less than 100 characters'),
+  name: z
+    .string()
+    .min(1, 'Category name is required')
+    .max(100, 'Category name must be less than 100 characters'),
   description: z.string().min(1, 'Description is required'),
   image: z.string().min(1, 'Image is required'),
   icon: z.string().min(1, 'Icon is required'),

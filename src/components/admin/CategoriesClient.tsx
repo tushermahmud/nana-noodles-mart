@@ -2,7 +2,21 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit, Trash2, Plus, Package, ChefHat, Flame, Leaf, Fish, Crown, Star, Heart, Zap, Shield } from 'lucide-react';
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Package,
+  ChefHat,
+  Flame,
+  Leaf,
+  Fish,
+  Crown,
+  Star,
+  Heart,
+  Zap,
+  Shield,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CategoryForm from '@/components/admin/CategoryForm';
 import Link from 'next/link';
@@ -15,7 +29,7 @@ import { getErrorMessage } from '@/lib/errorUtils';
 
 type CategoriesClientProps = {
   categories: Category[];
-}
+};
 
 const CategoriesClient = ({ categories: initialCategories }: CategoriesClientProps) => {
   const [categories, setCategories] = useState(initialCategories);
@@ -90,7 +104,10 @@ const CategoriesClient = ({ categories: initialCategories }: CategoriesClientPro
         </div>
         <div className="flex space-x-3">
           <Link href="/admin/categories/create">
-            <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Category
             </Button>
