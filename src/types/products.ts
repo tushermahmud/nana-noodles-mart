@@ -25,6 +25,9 @@ export interface Category {
   updated_at: string;
   deleted_at: string | null;
   imageUrl: string;
+  icon?: string;
+  color?: string;
+  features?: string[];
   products?: Product[];
 }
 

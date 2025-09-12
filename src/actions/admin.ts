@@ -5,18 +5,54 @@ import { ADMIN_ENDPOINTS } from '@/api/admin';
 import { APIResponse } from '@/types/common';
 import { AdminStats } from '@/types/admin';
 import { performFetch } from '@/lib/apiUtils';
+import { CATEGORIES_ENDPOINTS } from '@/api/products';
+import { Category } from '@/types/products';
 
-export async function updateOrderStatus(orderId: string, status: string) {
-  const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_ORDER_STATUS(orderId), {
-    method: 'PATCH',
-    body: { status },
+export async function createCategory(data: FormData) {
+  const res = await performFetch<APIResponse<Category>>(CATEGORIES_ENDPOINTS.CREATE_CATEGORY, {
+    method: 'POST',
+    body: data,
   });
 
-  if (res.isSuccess) {
-    revalidateTag('getAdminOrders');
-    revalidateTag('getOrders');
-    revalidateTag('getOrder');
+  if (res && res?.success) {
+    revalidateTag('getAdminCategories');
   }
+
+  return res;
+}
+
+export async function updateCategory(id: string, data: FormData) {
+  const res = await performFetch<APIResponse<Category>>(CATEGORIES_ENDPOINTS.UPDATE_CATEGORY(id), {
+    method: 'PATCH',
+    body: data,
+  });
+
+  if (res && res?.success) {
+    revalidateTag('getAdminCategories');
+  }
+
+  return res;
+}
+
+export async function deleteCategory(id: string) {
+  const res = await performFetch<APIResponse<unknown>>(CATEGORIES_ENDPOINTS.DELETE_CATEGORY(id), {
+    method: 'DELETE',
+  });
+
+  if (res && (res as any)?.success) {
+    revalidateTag('getAdminCategories');
+  }
+
+  return res as any;
+}
+
+export async function getAdminCategories() {
+  const res = await performFetch<APIResponse<Category[]>>(CATEGORIES_ENDPOINTS.GET_CATEGORIES, {
+    method: 'GET',
+    next: {
+      tags: ["getAdminCategories"],
+    },
+  });
 
   return res;
 }

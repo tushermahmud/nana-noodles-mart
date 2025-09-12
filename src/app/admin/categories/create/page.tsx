@@ -1,77 +1,34 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { X, Package, ChefHat, Flame, Leaf, Fish, Crown, Star, Heart, Zap, Shield } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { ImageUploader } from '@/components/ui/image-uploader';
-import { updateCategorySchema } from '@/schemas/category.schema';
-import { CATEGORY_COLORS } from '@/data/categoryColors';
 import { useRouter } from 'next/navigation';
+import CategoryForm from '@/components/admin/CategoryForm';
+import { Button } from '@/components/ui/button';
+import { CreateCategoryInput, createCategorySchema } from '@/schemas/category.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { ImageUploader } from '@/components/ui/image-uploader';
+import { CATEGORY_COLORS } from '@/data/categoryColors';
+import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
-import { updateCategory } from '@/actions/admin';
-import { Category } from '@/types/products';
-import { BASE_URL } from '@/config/env';
+import { createCategory } from '@/actions/admin';
 
-interface CategoryFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  category: Category; // Required for update
-  onSave: (category: any) => void;
-  inline?: boolean; // when true, render as inline section (no modal)
-}
-
-const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: CategoryFormProps) => {
+export default function CreateCategoryPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const defaultColorLabel = useMemo(() => {
-    if (category?.color) return category.color as string;
-    return CATEGORY_COLORS[0]?.label || 'Pink to Orange';
-  }, [category?.color]);
-
-  const rawImage = (category?.imageUrl ?? category?.image ?? '') as string;
-  const normalizedImage =
-    rawImage && !/^https?:|^data:/.test(rawImage)
-      ? `${BASE_URL.replace('/api', '')}/public/storage/${rawImage}`
-      : rawImage;
-
-  const [previewImage, setPreviewImage] = useState<string>(normalizedImage);
-
   const form = useForm({
-    resolver: zodResolver(updateCategorySchema),
+    resolver: zodResolver(createCategorySchema),
     defaultValues: {
-      id: category?.id || '',
-      name: category?.name || '',
-      description: category?.description || '',
-      image: normalizedImage,
-      icon: (category?.icon as string) || 'Package',
-      color: defaultColorLabel,
+        name: '',
+        description: '',
+        image: '',
+        icon: 'Package',
+        color: CATEGORY_COLORS[0]?.label,
     },
   });
-
   const selectedColor = CATEGORY_COLORS.find((c) => c.label === form.watch('color')) || CATEGORY_COLORS[0];
-
-  const iconMap = {
-    Package,
-    ChefHat,
-    Flame,
-    Leaf,
-    Fish,
-    Crown,
-    Star,
-    Heart,
-    Zap,
-    Shield,
-  } as const;
-
-  const getIcon = (iconName?: string) => {
-    const IconComponent = iconMap[iconName as keyof typeof iconMap] || Package;
-    return IconComponent;
-  };
 
   const iconOptions = [
     'Package',
@@ -85,33 +42,33 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
     'Zap',
     'Shield',
   ];
-
-  const onSubmit = async (_data: any) => {
+  const onSubmit = async (data: CreateCategoryInput) => {
     setIsSubmitting(true);
     try {
       const values = form.getValues();
       const formData = new FormData();
-      formData.append('id', values.id || '');
-      formData.append('name', values.name || '');
-      formData.append('description', values.description || '');
-      formData.append('icon', values.icon || '');
-      formData.append('color', values.color || '');
+      formData.append('name', values.name);
+      formData.append('description', values.description);
+      formData.append('icon', values.icon);
+      formData.append('color', values.color);
 
-      const imageToSend = previewImage || values.image;
-      if (imageToSend && imageToSend.startsWith('data:')) {
-        const blob = await fetch(imageToSend).then((r) => r.blob());
+      if (values.image?.startsWith('data:')) {
+        const response = await fetch(values.image);
+        const blob = await response.blob();
         const file = new File([blob], 'category-image.jpg', { type: blob.type });
         formData.append('image', file);
+      } else if (values.image) {
+        formData.append('image', values.image);
       }
 
-      const result = await updateCategory(values.id || '', formData);
+      const result = await createCategory(formData);
 
       if (result?.success) {
-        toast.success(result?.message ?? 'Category updated successfully');
-        onSave(result?.data ?? values);
-        onClose();
+        toast.success(result?.message ?? 'Category created successfully');
+        router.push('/admin/categories');
+        router.refresh();
       } else {
-        toast.error(result?.message ?? 'Failed to update category');
+        toast.error(result?.message ?? 'Failed to create category');
       }
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -120,19 +77,30 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
     }
   };
 
-  const content = (
-    <div className="p-6">
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Create Category</h1>
+          <p className="text-sm text-gray-600">Add a new category to organize your products</p>
+        </div>
+
+        <div className="p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Edit Category
-        </h2>
-        {!inline && (
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl font-bold">
-            <X className="w-6 h-6" />
-          </button>
-        )}
-      </div>
+      <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.back()}
+              className="flex items-center space-x-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back</span>
+            </Button>
+            <h2 className="text-2xl font-bold text-gray-900">Add New Category</h2>
+          </div>
+        </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Information */}
@@ -175,8 +143,8 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Category Image *</label>
           <ImageUploader
-            value={previewImage}
-            onChange={(url) => setPreviewImage(url)}
+            value={form.watch('image')}
+            onChange={(url) => form.setValue('image', url)}
             error={(form.formState.errors.image?.message as string) || undefined}
           />
         </div>
@@ -225,43 +193,17 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
 
         {/* Form Actions */}
         <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-          <Button type="button" variant="outline" onClick={onClose} className="px-6 py-2">
-            Cancel
-          </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
             className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white disabled:opacity-50"
           >
-            {isSubmitting ? 'Updating...' : 'Update Category'}
+            {isSubmitting ? 'Creating...' : 'Add Category'}
           </Button>
         </div>
       </form>
     </div>
-  );
-
-  if (inline) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
-        {content}
       </div>
-    );
-  }
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-      >
-        {content}
-      </motion.div>
     </div>
   );
-};
-
-export default CategoryForm;
+}
