@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, ShoppingCart, Heart, Flame, Plus, Minus } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import { useState } from "react";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, ShoppingCart, Heart, Flame, Plus, Minus } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import { useState } from 'react';
+import Link from 'next/link';
 
 interface Product {
   id: number;
@@ -29,13 +29,13 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { addItem, state, removeItem, updateQuantity } = useCart();
   const [isAdding, setIsAdding] = useState(false);
-  
-  const cartItem = state.items.find(item => item.id === product.id);
+
+  const cartItem = state.items.find((item) => item.id === product.id);
   const isInCart = !!cartItem;
 
   const handleAddToCart = () => {
     if (!product.inStock) return;
-    
+
     setIsAdding(true);
     addItem({
       id: product.id,
@@ -44,7 +44,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       image: product.image,
       category: product.category,
     });
-    
+
     // Reset button state after animation
     setTimeout(() => setIsAdding(false), 1000);
   };
@@ -66,12 +66,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
               {/* Floating elements with gold/cream colors */}
               <motion.div
                 animate={{ y: [-5, 5, -5] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full opacity-80 anime-glow"
               />
               <motion.div
                 animate={{ y: [5, -5, 5] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 className="absolute bottom-2 left-2 w-2 h-2 bg-gradient-to-r from-amber-200 to-yellow-200 rounded-full opacity-80 anime-glow"
               />
             </div>
@@ -118,14 +118,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </CardHeader>
 
       <CardContent className="pt-0">
-        <p className="text-gray-600 mb-4 leading-relaxed pop-text">
-          {product.description}
-        </p>
+        <p className="text-gray-600 mb-4 leading-relaxed pop-text">{product.description}</p>
 
         {/* Features with gold/cream accents */}
         <div className="flex flex-wrap gap-2 mb-4">
           {product.features.map((feature, i) => (
-            <span key={i} className="px-3 py-1 bg-gradient-to-r from-yellow-50 to-orange-50 text-amber-700 text-xs rounded-full font-semibold pop-text border border-amber-200 shadow-sm">
+            <span
+              key={i}
+              className="px-3 py-1 bg-gradient-to-r from-yellow-50 to-orange-50 text-amber-700 text-xs rounded-full font-semibold pop-text border border-amber-200 shadow-sm"
+            >
               {feature}
             </span>
           ))}
@@ -143,7 +144,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <div
                 key={i}
                 className={`w-2 h-2 rounded-full ${
-                  i < product.spiceLevel ? 'bg-gradient-to-r from-yellow-400 to-orange-400' : 'bg-gray-200'
+                  i < product.spiceLevel
+                    ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
+                    : 'bg-gray-200'
                 }`}
               />
             ))}
@@ -153,9 +156,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {/* Price and CTA with enhanced styling */}
         <div className="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-pink-50 to-orange-50 rounded-lg border border-pink-100">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl font-black text-pink-600 anime-title">
-              ${product.price}
-            </span>
+            <span className="text-2xl font-black text-pink-600 anime-title">${product.price}</span>
             {product.originalPrice > product.price && (
               <span className="text-lg text-gray-400 line-through pop-text">
                 ${product.originalPrice}
@@ -177,8 +178,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             variant="default"
             size="sm"
             className={`flex-1 font-bold border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
-              isInCart 
-                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-green-500 hover:border-green-600' 
+              isInCart
+                ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-green-500 hover:border-green-600'
                 : 'bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white border-pink-500 hover:border-pink-600'
             }`}
             onClick={handleAddToCart}
@@ -187,7 +188,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             {isAdding ? (
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                 className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
               />
             ) : isInCart ? (

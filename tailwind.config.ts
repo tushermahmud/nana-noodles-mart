@@ -1,10 +1,10 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -57,14 +57,14 @@ const config: Config = {
           700: '#b8440b',
           800: '#93360f',
           900: '#772e10',
-        }
+        },
       },
       fontFamily: {
-        'anime': ['Inter', 'system-ui', 'sans-serif'],
-        'pop': ['Inter', 'system-ui', 'sans-serif'],
+        anime: ['Inter', 'system-ui', 'sans-serif'],
+        pop: ['Inter', 'system-ui', 'sans-serif'],
       },
       animation: {
-        'float': 'float 3s ease-in-out infinite',
+        float: 'float 3s ease-in-out infinite',
         'bounce-slow': 'bounce 2s infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'slide-up': 'slide-up 0.5s ease-out',
@@ -78,13 +78,13 @@ const config: Config = {
           '50%': { transform: 'translateY(-10px)' },
         },
         'pulse-glow': {
-          '0%, 100%': { 
+          '0%, 100%': {
             boxShadow: '0 0 20px rgba(236, 72, 153, 0.3)',
-            transform: 'scale(1)'
+            transform: 'scale(1)',
           },
-          '50%': { 
+          '50%': {
             boxShadow: '0 0 30px rgba(236, 72, 153, 0.6)',
-            transform: 'scale(1.05)'
+            transform: 'scale(1.05)',
           },
         },
         'slide-up': {
@@ -107,7 +107,8 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'noodle-pattern': "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ec4899\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')",
+        'noodle-pattern':
+          'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ec4899" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
       },
     },
   },

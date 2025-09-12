@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion } from "framer-motion";
-import { Flame, ChefHat, Leaf, Fish, Crown, Star } from "lucide-react";
-import productsData from "@/data/products.json";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import ProductCard from "@/components/products/ProductCard";
-import Categories from "@/components/sections/Categories";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Flame, ChefHat, Leaf, Fish, Crown, Star } from 'lucide-react';
+import productsData from '@/data/products.json';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import ProductCard from '@/components/products/ProductCard';
+import Categories from '@/components/sections/Categories';
 
 // Icon mapping
 const iconMap = {
@@ -30,7 +30,7 @@ const ProductsPage = () => {
   // Memoize filtered products to prevent recalculation on every render
   const filteredProducts = useMemo(() => {
     return selectedCategory
-      ? productsData.filter(product => product.category_id === selectedCategory)
+      ? productsData.filter((product) => product.category_id === selectedCategory)
       : productsData;
   }, [selectedCategory]);
 
@@ -41,7 +41,7 @@ const ProductsPage = () => {
     setCurrentPage(1);
     setHasMore(true);
     setLoading(false);
-    
+
     // Load initial products for the new category
     const initialProducts = filteredProducts.slice(0, productsPerPage);
     setDisplayedProducts(initialProducts);
@@ -50,32 +50,32 @@ const ProductsPage = () => {
 
   // Load more products function
   const loadMoreProducts = useCallback(() => {
-    setLoading(prevLoading => {
+    setLoading((prevLoading) => {
       if (prevLoading) return prevLoading; // Already loading
-      
+
       setLoading(true);
-      
+
       // Simulate API delay
       setTimeout(() => {
         const startIndex = (currentPage - 1) * productsPerPage;
         const endIndex = startIndex + productsPerPage;
         const newProducts = filteredProducts.slice(startIndex, endIndex);
-        
+
         if (newProducts.length === 0) {
           setHasMore(false);
         } else {
           // Ensure no duplicate products by checking IDs
-          setDisplayedProducts(prev => {
-            const existingIds = new Set(prev.map(p => p.id));
-            const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id));
+          setDisplayedProducts((prev) => {
+            const existingIds = new Set(prev.map((p) => p.id));
+            const uniqueNewProducts = newProducts.filter((p) => !existingIds.has(p.id));
             return [...prev, ...uniqueNewProducts];
           });
-          setCurrentPage(prev => prev + 1);
+          setCurrentPage((prev) => prev + 1);
         }
-        
+
         setLoading(false);
       }, 500);
-      
+
       return true;
     });
   }, [currentPage, filteredProducts, productsPerPage]);
@@ -83,7 +83,7 @@ const ProductsPage = () => {
   // Infinite scroll handler
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight * 0.8) {
         loadMoreProducts();
@@ -97,7 +97,7 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-white via-pink-50 to-orange-50">
         {/* Header */}
         <motion.div
@@ -106,22 +106,16 @@ const ProductsPage = () => {
           className="pt-20 pb-16 text-center"
         >
           <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 anime-title">
-            Our{" "}
-            <span className="gradient-text anime-text-shadow">
-              Products
-            </span>
+            Our <span className="gradient-text anime-text-shadow">Products</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto pop-text">
-            Discover our complete collection of handcrafted ramen. From classic favorites to innovative fusion flavors, 
-            we have something for every taste and preference.
+            Discover our complete collection of handcrafted ramen. From classic favorites to
+            innovative fusion flavors, we have something for every taste and preference.
           </p>
         </motion.div>
 
         {/* Categories Section */}
-        <Categories 
-          onCategorySelect={setSelectedCategory}
-          selectedCategory={selectedCategory}
-        />
+        <Categories onCategorySelect={setSelectedCategory} selectedCategory={selectedCategory} />
 
         {/* Products Grid */}
         <section className="py-12">
@@ -158,7 +152,9 @@ const ProductsPage = () => {
                 animate={{ opacity: 1 }}
                 className="text-center mt-12"
               >
-                <p className="text-gray-600 pop-text">You've reached the end of our delicious collection! 🍜</p>
+                <p className="text-gray-600 pop-text">
+                  You've reached the end of our delicious collection! 🍜
+                </p>
               </motion.div>
             )}
 
@@ -170,14 +166,18 @@ const ProductsPage = () => {
                 className="text-center mt-12"
               >
                 <div className="text-6xl mb-4">🍜</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2 anime-title">No products found</h3>
-                <p className="text-gray-600 pop-text">Try selecting a different category or check back later!</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2 anime-title">
+                  No products found
+                </h3>
+                <p className="text-gray-600 pop-text">
+                  Try selecting a different category or check back later!
+                </p>
               </motion.div>
             )}
           </div>
         </section>
       </div>
-      
+
       <Footer />
     </div>
   );

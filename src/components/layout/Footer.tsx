@@ -1,8 +1,17 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, Youtube, Twitter, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowRight,
+} from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -24,7 +33,7 @@ const Footer = () => {
                 </div>
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                   className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
                 />
               </div>
@@ -34,8 +43,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Bringing you the finest handcrafted ramen with authentic flavors and premium ingredients. 
-              Every bowl tells a story of tradition and love.
+              Bringing you the finest handcrafted ramen with authentic flavors and premium
+              ingredients. Every bowl tells a story of tradition and love.
             </p>
             <div className="flex space-x-4">
               <motion.a
@@ -79,12 +88,12 @@ const Footer = () => {
             <h4 className="text-xl font-bold mb-6 text-white">Quick Links</h4>
             <ul className="space-y-3">
               {[
-                { name: "Home", href: "#" },
-                { name: "Products", href: "/products" },
-                { name: "Categories", href: "#categories" },
-                { name: "About Us", href: "#about" },
-                { name: "Contact", href: "#contact" },
-                { name: "FAQ", href: "#" },
+                { name: 'Home', href: '#' },
+                { name: 'Products', href: '/products' },
+                { name: 'Categories', href: '#categories' },
+                { name: 'About Us', href: '#about' },
+                { name: 'Contact', href: '#contact' },
+                { name: 'FAQ', href: '#' },
               ].map((link, index) => (
                 <motion.li
                   key={link.name}
@@ -167,9 +176,7 @@ const Footer = () => {
                 placeholder="Enter your email"
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent text-white placeholder-gray-400"
               />
-              <Button
-                className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold border-2 border-pink-500 hover:border-pink-600"
-              >
+              <Button className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold border-2 border-pink-500 hover:border-pink-600">
                 Subscribe
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>

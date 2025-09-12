@@ -1,44 +1,46 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Award, Heart, Clock, Star, Leaf, Zap } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, Users, Award, Heart, Clock, Star, Leaf, Zap } from 'lucide-react';
 
 const AboutSection = () => {
   const stats = [
     {
-      number: "50+",
-      label: "Years of Tradition",
-      color: "text-pink-600"
+      number: '50+',
+      label: 'Years of Tradition',
+      color: 'text-pink-600',
     },
     {
-      number: "1000+",
-      label: "Happy Customers",
-      color: "text-orange-600"
+      number: '1000+',
+      label: 'Happy Customers',
+      color: 'text-orange-600',
     },
     {
-      number: "25+",
-      label: "Unique Flavors",
-      color: "text-yellow-600"
-    }
+      number: '25+',
+      label: 'Unique Flavors',
+      color: 'text-yellow-600',
+    },
   ];
 
   const values = [
     {
-      title: "Premium Ingredients",
-      description: "We source only the finest, freshest ingredients from trusted local suppliers.",
-      icon: "🌾"
+      title: 'Premium Ingredients',
+      description: 'We source only the finest, freshest ingredients from trusted local suppliers.',
+      icon: '🌾',
     },
     {
-      title: "Traditional Methods",
-      description: "Every noodle is created using time-honored techniques passed down through generations.",
-      icon: "🍜"
+      title: 'Traditional Methods',
+      description:
+        'Every noodle is created using time-honored techniques passed down through generations.',
+      icon: '🍜',
     },
     {
-      title: "Made with Love",
-      description: "Every dish is prepared with the same care and attention that Nana put into her cooking.",
-      icon: "❤️"
-    }
+      title: 'Made with Love',
+      description:
+        'Every dish is prepared with the same care and attention that Nana put into her cooking.',
+      icon: '❤️',
+    },
   ];
 
   return (
@@ -79,10 +81,7 @@ const AboutSection = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
-                A Family Since{" "}
-                <span className="text-gray-900">
-                  1973
-                </span>
+                A Family Since <span className="text-gray-900">1973</span>
               </h2>
             </motion.div>
 
@@ -95,10 +94,14 @@ const AboutSection = () => {
               className="space-y-4"
             >
               <p className="text-lg text-gray-600 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+                qui officia deserunt mollit.
               </p>
             </motion.div>
 
@@ -163,7 +166,7 @@ const AboutSection = () => {
                 <div className="text-center">
                   <motion.div
                     animate={{ y: [-10, 10, -10] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                     className="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md"
                   >
                     <span className="text-6xl">👵</span>
@@ -188,7 +191,8 @@ const AboutSection = () => {
                 </div>
                 <div>
                   <p className="text-gray-900 font-medium leading-relaxed">
-                    "The secret ingredient is always love. That's what makes our noodles special." -Nana Chen
+                    "The secret ingredient is always love. That's what makes our noodles special."
+                    -Nana Chen
                   </p>
                 </div>
               </div>
@@ -196,20 +200,20 @@ const AboutSection = () => {
 
             {/* Background Elements */}
             <motion.div
-              animate={{ 
+              animate={{
                 y: [-10, 10, -10],
-                rotate: [0, 180, 360]
+                rotate: [0, 180, 360],
               }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute -top-4 -left-4 w-16 h-16 bg-gray-300 rounded-full opacity-60"
             />
-            
+
             <motion.div
-              animate={{ 
+              animate={{
                 y: [10, -10, 10],
-                scale: [1, 1.2, 1]
+                scale: [1, 1.2, 1],
               }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute -bottom-4 -right-4 w-12 h-12 bg-gray-400 rounded-full opacity-60"
             />
           </motion.div>
@@ -224,13 +228,11 @@ const AboutSection = () => {
           className="text-center mb-12"
         >
           <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-            Our{" "}
-            <span className="text-gray-900">
-              Values
-            </span>
+            Our <span className="text-gray-900">Values</span>
           </h3>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            These core principles guide everything we do, from selecting ingredients to serving our customers.
+            These core principles guide everything we do, from selecting ingredients to serving our
+            customers.
           </p>
         </motion.div>
 

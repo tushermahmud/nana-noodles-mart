@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/sections/Hero";
-import Categories from "@/components/sections/Categories";
-import ProductShowcase from "@/components/sections/ProductShowcase";
-import AboutSection from "@/components/sections/AboutSection";
-import Footer from "@/components/layout/Footer";
+import Navbar from '@/components/layout/Navbar';
+import Hero from '@/components/sections/Hero';
+import Categories from '@/components/sections/Categories';
+import { VirtualStore } from '@/components/virtual-store';
+import AboutSection from '@/components/sections/AboutSection';
+import Footer from '@/components/layout/Footer';
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Categories />
-      <ProductShowcase />
+      <VirtualStore />
       <AboutSection />
       <Footer />
     </div>

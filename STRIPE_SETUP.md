@@ -84,12 +84,10 @@ When deploying to production:
 ### Common Issues:
 
 1. **"Invalid API key" error**
-
    - Check that your environment variables are correctly set
    - Ensure you're using the correct key type (test vs live)
 
 2. **"Payment failed" error**
-
    - Verify you're using a valid test card number
    - Check the Stripe Dashboard for detailed error logs
 

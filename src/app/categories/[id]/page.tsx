@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion } from "framer-motion";
-import { use } from "react";
-import { ArrowLeft, Flame, ChefHat, Leaf, Fish, Crown, Star } from "lucide-react";
-import productsData from "@/data/products.json";
-import categoriesData from "@/data/categories.json";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import ProductCard from "@/components/products/ProductCard";
-import Link from "next/link";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { use } from 'react';
+import { ArrowLeft, Flame, ChefHat, Leaf, Fish, Crown, Star } from 'lucide-react';
+import productsData from '@/data/products.json';
+import categoriesData from '@/data/categories.json';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import ProductCard from '@/components/products/ProductCard';
+import Link from 'next/link';
 
 // Icon mapping
 const iconMap = {
@@ -39,27 +39,27 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
   // Memoize filtered products
   const filteredProducts = useMemo(() => {
     if (!category) return [];
-    return productsData.filter(product => product.category_id === category.id);
+    return productsData.filter((product) => product.category_id === category.id);
   }, [category]);
 
   // Initialize category and products
   useEffect(() => {
     const categoryId = parseInt(id);
-    const foundCategory = categoriesData.find(c => c.id === categoryId);
-    
+    const foundCategory = categoriesData.find((c) => c.id === categoryId);
+
     if (!foundCategory) {
       // Handle category not found
       return;
     }
 
     setCategory(foundCategory);
-    
+
     // Reset products
     setDisplayedProducts([]);
     setCurrentPage(1);
     setHasMore(true);
     setLoading(false);
-    
+
     // Load initial products
     const initialProducts = filteredProducts.slice(0, productsPerPage);
     setDisplayedProducts(initialProducts);
@@ -68,30 +68,30 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
 
   // Load more products function
   const loadMoreProducts = useCallback(() => {
-    setLoading(prevLoading => {
+    setLoading((prevLoading) => {
       if (prevLoading) return prevLoading;
-      
+
       setLoading(true);
-      
+
       setTimeout(() => {
         const startIndex = (currentPage - 1) * productsPerPage;
         const endIndex = startIndex + productsPerPage;
         const newProducts = filteredProducts.slice(startIndex, endIndex);
-        
+
         if (newProducts.length === 0) {
           setHasMore(false);
         } else {
-          setDisplayedProducts(prev => {
-            const existingIds = new Set(prev.map(p => p.id));
-            const uniqueNewProducts = newProducts.filter(p => !existingIds.has(p.id));
+          setDisplayedProducts((prev) => {
+            const existingIds = new Set(prev.map((p) => p.id));
+            const uniqueNewProducts = newProducts.filter((p) => !existingIds.has(p.id));
             return [...prev, ...uniqueNewProducts];
           });
-          setCurrentPage(prev => prev + 1);
+          setCurrentPage((prev) => prev + 1);
         }
-        
+
         setLoading(false);
       }, 500);
-      
+
       return true;
     });
   }, [currentPage, filteredProducts, productsPerPage]);
@@ -99,7 +99,7 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
   // Infinite scroll handler
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight * 0.8) {
         loadMoreProducts();
@@ -134,7 +134,7 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      
+
       {/* Category Banner */}
       <div className="relative h-96 bg-gradient-to-br from-orange-50 via-white to-pink-50">
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
@@ -150,7 +150,7 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
               >
                 <CategoryIcon className="w-12 h-12 text-white" />
               </motion.div>
-              
+
               {/* Category Info */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -162,8 +162,8 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
                   {category.name}
                 </h1>
                 <p className="text-xl text-gray-600 max-w-3xl pop-text">
-                  Discover our amazing collection of {category.name.toLowerCase()}. 
-                  From classic favorites to innovative flavors, we have something for every taste.
+                  Discover our amazing collection of {category.name.toLowerCase()}. From classic
+                  favorites to innovative flavors, we have something for every taste.
                 </p>
                 <div className="flex items-center space-x-4 mt-4">
                   <span className="text-lg text-gray-700 font-semibold">
@@ -195,8 +195,8 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
               {category.name} Collection
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto pop-text">
-              Explore our complete collection of {category.name.toLowerCase()}. 
-              Each dish is crafted with care and premium ingredients.
+              Explore our complete collection of {category.name.toLowerCase()}. Each dish is crafted
+              with care and premium ingredients.
             </p>
           </motion.div>
 
@@ -233,7 +233,9 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
               animate={{ opacity: 1 }}
               className="text-center mt-12"
             >
-              <p className="text-gray-600 pop-text">You've reached the end of our {category.name.toLowerCase()} collection! 🍜</p>
+              <p className="text-gray-600 pop-text">
+                You've reached the end of our {category.name.toLowerCase()} collection! 🍜
+              </p>
             </motion.div>
           )}
 
@@ -245,8 +247,12 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
               className="text-center mt-12"
             >
               <div className="text-6xl mb-4">🍜</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2 anime-title">No products found</h3>
-              <p className="text-gray-600 pop-text">This category is currently empty. Check back later!</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 anime-title">
+                No products found
+              </h3>
+              <p className="text-gray-600 pop-text">
+                This category is currently empty. Check back later!
+              </p>
             </motion.div>
           )}
         </div>
@@ -266,7 +272,7 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
           </Link>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

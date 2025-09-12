@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
@@ -13,19 +13,19 @@ interface StripeCheckoutFormProps {
   setIsProcessing: (processing: boolean) => void;
 }
 
-const StripeCheckoutForm = ({ 
-  amount, 
-  onSuccess, 
-  onError, 
-  isProcessing, 
-  setIsProcessing 
+const StripeCheckoutForm = ({
+  amount,
+  onSuccess,
+  onError,
+  isProcessing,
+  setIsProcessing,
 }: StripeCheckoutFormProps) => {
   const [isClient, setIsClient] = useState(false);
   const [stripePromise, setStripePromise] = useState<any>(null);
 
   useEffect(() => {
     setIsClient(true);
-    
+
     // Only load Stripe on the client side
     if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);

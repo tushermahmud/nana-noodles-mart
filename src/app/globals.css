@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -54,11 +54,15 @@ body {
 
 /* Anime style glow effects */
 .anime-glow {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5), 0 0 40px rgba(249, 115, 22, 0.3);
+  box-shadow:
+    0 0 20px rgba(236, 72, 153, 0.5),
+    0 0 40px rgba(249, 115, 22, 0.3);
 }
 
 .anime-glow:hover {
-  box-shadow: 0 0 30px rgba(236, 72, 153, 0.8), 0 0 60px rgba(249, 115, 22, 0.5);
+  box-shadow:
+    0 0 30px rgba(236, 72, 153, 0.8),
+    0 0 60px rgba(249, 115, 22, 0.5);
 }
 
 /* Pop style button effects */
@@ -84,10 +88,19 @@ body {
 
 /* Anime style floating animation */
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-10px) rotate(2deg); }
-  50% { transform: translateY(-5px) rotate(0deg); }
-  75% { transform: translateY(-15px) rotate(-2deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(-2deg);
+  }
 }
 
 .anime-float {
@@ -96,12 +109,15 @@ body {
 
 /* Pop style pulse glow */
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 40px rgba(236, 72, 153, 0.8), 0 0 60px rgba(249, 115, 22, 0.6);
+    box-shadow:
+      0 0 40px rgba(236, 72, 153, 0.8),
+      0 0 60px rgba(249, 115, 22, 0.6);
     transform: scale(1.05);
   }
 }
@@ -111,7 +127,9 @@ body {
 }
 
 /* Button visibility fixes for Tailwind v4 */
-button, .btn, [role="button"] {
+button,
+.btn,
+[role='button'] {
   position: relative;
   z-index: 10;
   color: inherit;
@@ -133,26 +151,28 @@ button * {
 }
 
 /* Ensure all button text is visible with anime style */
-button, .btn {
+button,
+.btn {
   font-weight: 800;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   letter-spacing: 0.5px;
 }
 
 /* Hover state improvements with anime style */
-button:hover, .btn:hover {
+button:hover,
+.btn:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 /* Hide scrollbar utility */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Safari and Chrome */
+  display: none; /* Safari and Chrome */
 }
 
 /* Prevent scaling on category cards */
@@ -195,18 +215,24 @@ button:hover, .btn:hover {
 
 /* Anime style text effects */
 .anime-text-shadow {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(236, 72, 153, 0.3);
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(236, 72, 153, 0.3);
 }
 
 .pop-text-shadow {
-  text-shadow: 1px 1px 0px #fff, 2px 2px 0px #ec4899, 3px 3px 0px #f97316;
+  text-shadow:
+    1px 1px 0px #fff,
+    2px 2px 0px #ec4899,
+    3px 3px 0px #f97316;
 }
 
 /* Anime style borders */
 .anime-border {
   border: 3px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(45deg, #ec4899, #f97316, #facc15, #a855f7) border-box;
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(45deg, #ec4899, #f97316, #facc15, #a855f7) border-box;
 }
 
 /* Pop style gradients */
@@ -216,8 +242,70 @@ button:hover, .btn:hover {
   animation: gradient-shift 3s ease infinite;
 }
 
+.shelf-gradient {
+  background: radial-gradient(120% 140% at 30% 20%, #7b5e37 0%, /* lighter */ /* darkest */);
+}
+
+.test-bg-2 {
+  background: repeating-linear-gradient(
+    to bottom,
+    #ccc,
+    /* divider color */ #7a5d36 5px,
+    /* line thickness */ #bc935e 5px,
+    /* gap starts */ #7a5d36 80px /* gap size */
+  ) !important;
+}
+
+.test-bg {
+  background: repeating-linear-gradient(
+    to bottom,
+    #ccc,
+    /* divider color */ #7a5d36 5px,
+    /* line thickness */ #bc935e 5px,
+    /* gap starts */ #7a5d36 80px /* gap size */
+  ) !important;
+}
+
+.test-bg-3 {
+  background: repeating-linear-gradient(
+    to bottom,
+    #9a7442,
+    #9a7442 80px,
+    /* section 1 */ #333 80px,
+    #333 84px,
+    /* divider line */ #8a673c 84px,
+    #8a673c 160px,
+    /* section 2 */ #333 160px,
+    #333 164px,
+    /* divider line */ #bd935f 164px,
+    #bd935f 240px,
+    /* section 3 */ #333 240px,
+    #333 244px /* divider line */
+  );
+}
+
+.image-anime {
+  transform: skew(-8deg, 1deg);
+  box-shadow: -9px 6px 24px #5e4728;
+}
+
+@keyframes image-anime {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
