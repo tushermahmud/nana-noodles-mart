@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { getProducts, getCurrentUser } from '@/fetchers/products';
+/* import { getProducts, getCurrentUser } from '@/fetchers/products';
 import { loginUser, addToCart } from '@/actions/auth';
-import { getCart } from '@/fetchers/cart';
+import { getCart } from '@/fetchers/cart'; */
 
 /**
  * Example component showing how to use the new API structure
@@ -11,7 +11,7 @@ import { getCart } from '@/fetchers/cart';
  */
 export default function UsageExample() {
   // Example of using fetchers (GET requests)
-  const handleFetchProducts = async () => {
+  /* const handleFetchProducts = async () => {
     try {
       const result = await getProducts({ page: 1, limit: 10 });
       if (result.isSuccess) {
@@ -85,11 +85,11 @@ export default function UsageExample() {
     } catch (error) {
       console.error('Add to cart error:', error);
     }
-  };
+  }; */
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">API Usage Examples</h1>
+      {/* <h1 className="text-2xl font-bold">API Usage Examples</h1>
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Fetchers (GET requests)</h2>
@@ -153,7 +153,7 @@ export default function UsageExample() {
             <strong>Server Actions:</strong> All actions use "use server" directive for Next.js
           </li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 }
