@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Eye, Edit, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import OrderDetails from '@/components/admin/OrderDetails';
+import { Order } from '@/types/orders';
 
 const OrdersPage = () => {
   const [orders] = useState([
@@ -41,7 +42,7 @@ const OrdersPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showOrderDetails, setShowOrderDetails] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const filteredOrders = orders.filter(
     (order) =>
@@ -70,7 +71,7 @@ const OrdersPage = () => {
     console.log(`Updating order ${orderId} to status: ${status}`);
   };
 
-  const handleViewOrder = (order: any) => {
+  const handleViewOrder = (order: Order) => {
     setSelectedOrder(order);
     setShowOrderDetails(true);
   };
@@ -141,7 +142,7 @@ const OrdersPage = () => {
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => handleViewOrder(order)}>
+                    <Button variant="outline" size="sm" onClick={() => handleViewOrder(order as unknown as Order)}>
                       <Eye className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="sm">

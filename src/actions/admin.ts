@@ -35,15 +35,15 @@ export async function updateCategory(id: string, data: FormData) {
 }
 
 export async function deleteCategory(id: string) {
-  const res = await performFetch<APIResponse<unknown>>(CATEGORIES_ENDPOINTS.DELETE_CATEGORY(id), {
+  const res = await performFetch<APIResponse>(CATEGORIES_ENDPOINTS.DELETE_CATEGORY(id), {
     method: 'DELETE',
   });
 
-  if (res && (res as any)?.success) {
+  if (res?.success) {
     revalidateTag('getAdminCategories');
   }
 
-  return res as any;
+  return res;
 }
 
 export async function getAdminCategories() {
@@ -57,7 +57,7 @@ export async function getAdminCategories() {
   return res;
 }
 
-export async function updatePaymentStatus(paymentId: string, status: string) {
+/* export async function updatePaymentStatus(paymentId: string, status: string) {
   const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_PAYMENT_STATUS(paymentId), {
     method: 'PATCH',
     body: { status },
@@ -70,9 +70,9 @@ export async function updatePaymentStatus(paymentId: string, status: string) {
   }
 
   return res;
-}
+} */
 
-export async function exportOrders(filters?: {
+/* export async function exportOrders(filters?: {
   startDate?: string;
   endDate?: string;
   status?: string;
@@ -96,4 +96,4 @@ export async function exportUsers(filters?: {
   });
 
   return res;
-}
+} */
