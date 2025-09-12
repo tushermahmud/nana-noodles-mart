@@ -50,7 +50,7 @@ export async function getAdminCategories() {
   const res = await performFetch<APIResponse<Category[]>>(CATEGORIES_ENDPOINTS.GET_CATEGORIES, {
     method: 'GET',
     next: {
-      tags: ["getAdminCategories"],
+      tags: ['getAdminCategories'],
     },
   });
 
