@@ -8,12 +8,12 @@ import { performFetch } from '@/lib/apiUtils';
 
 export async function createPaymentIntent(data: {
   amount: number;
-  currency?: string;
+  currency?: string;  
   metadata?: Record<string, string>;
 }) {
   const res = await performFetch<PaymentIntent>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
   return res;
@@ -26,10 +26,10 @@ export async function confirmPayment(data: { paymentIntentId: string; orderId: s
     transactionId: string;
   }>(PAYMENTS_ENDPOINTS.CONFIRM_PAYMENT, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getPaymentHistory');
@@ -49,10 +49,10 @@ export async function processRefund(data: {
     amount: number;
   }>(PAYMENTS_ENDPOINTS.PROCESS_REFUND, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getPaymentHistory');
     revalidateTag('getPaymentDetails');
   }
@@ -63,10 +63,10 @@ export async function processRefund(data: {
 export async function addPaymentMethod(data: { paymentMethodId: string; isDefault?: boolean }) {
   const res = await performFetch<PaymentMethod>(PAYMENTS_ENDPOINTS.ADD_PAYMENT_METHOD, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -78,7 +78,7 @@ export async function removePaymentMethod(methodId: string) {
     method: 'DELETE',
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -88,10 +88,10 @@ export async function removePaymentMethod(methodId: string) {
 export async function setDefaultPaymentMethod(methodId: string) {
   const res = await performFetch<void>(PAYMENTS_ENDPOINTS.SET_DEFAULT_PAYMENT_METHOD(methodId), {
     method: 'PATCH',
-    body: { isDefault: true },
+    body: JSON.stringify({ isDefault: true }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -115,7 +115,7 @@ export async function validateCoupon(code: string) {
     expiresAt?: string;
   }>(PAYMENTS_ENDPOINTS.VALIDATE_COUPON, {
     method: 'POST',
-    body: { code },
+    body: JSON.stringify({ code }),
   });
 
   return res;

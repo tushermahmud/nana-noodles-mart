@@ -24,10 +24,10 @@ export async function createOrder(data: {
 }) {
   const res = await performFetch<Order>(ORDERS_ENDPOINTS.CREATE_ORDER, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getCart');
     revalidateTag('getCartCount');
@@ -39,10 +39,10 @@ export async function createOrder(data: {
 export async function updateOrderStatus(id: string, status: Order['status']) {
   const res = await performFetch<Order>(ORDERS_ENDPOINTS.UPDATE_ORDER_STATUS(id), {
     method: 'PATCH',
-    body: { status },
+    body: JSON.stringify({ status }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -54,10 +54,10 @@ export async function updateOrderStatus(id: string, status: Order['status']) {
 export async function updatePaymentStatus(id: string, paymentStatus: Order['paymentStatus']) {
   const res = await performFetch<Order>(ORDERS_ENDPOINTS.UPDATE_PAYMENT_STATUS(id), {
     method: 'PATCH',
-    body: { paymentStatus },
+    body: JSON.stringify({ paymentStatus }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -69,10 +69,10 @@ export async function updatePaymentStatus(id: string, paymentStatus: Order['paym
 export async function addTrackingNumber(id: string, trackingNumber: string) {
   const res = await performFetch<Order>(ORDERS_ENDPOINTS.ADD_TRACKING_NUMBER(id), {
     method: 'PATCH',
-    body: { trackingNumber },
+    body: JSON.stringify({ trackingNumber }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -84,10 +84,10 @@ export async function addTrackingNumber(id: string, trackingNumber: string) {
 export async function cancelOrder(id: string, reason?: string) {
   const res = await performFetch<Order>(ORDERS_ENDPOINTS.CANCEL_ORDER(id), {
     method: 'PATCH',
-    body: { reason },
+    body: JSON.stringify({ reason }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -111,11 +111,11 @@ export async function requestReturn(
     ORDERS_ENDPOINTS.REQUEST_RETURN(id),
     {
       method: 'POST',
-      body: data,
+      body: JSON.stringify(data),
     }
   );
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
   }
@@ -130,7 +130,7 @@ export async function exportOrders(filters?: {
 }) {
   const res = await performFetch<{ downloadUrl: string }>(ORDERS_ENDPOINTS.EXPORT_ORDERS, {
     method: 'POST',
-    body: filters,
+    body: JSON.stringify(filters),
   });
 
   return res;

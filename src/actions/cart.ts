@@ -10,10 +10,10 @@ import { performFetch } from '@/lib/apiUtils';
 export async function addToCart(data: { productId: string; quantity: number }) {
   const res = await performFetch<CartItem>(CART_ENDPOINTS.ADD_TO_CART, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -24,10 +24,10 @@ export async function addToCart(data: { productId: string; quantity: number }) {
 export async function updateCartItem(itemId: string, quantity: number) {
   const res = await performFetch<CartItem>(CART_ENDPOINTS.UPDATE_CART_ITEM(itemId), {
     method: 'PATCH',
-    body: { quantity },
+    body: JSON.stringify({ quantity }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -40,7 +40,7 @@ export async function removeFromCart(itemId: string) {
     method: 'DELETE',
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -53,7 +53,7 @@ export async function clearCart() {
     method: 'DELETE',
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -68,10 +68,10 @@ export async function applyDiscountCode(code: string) {
     message: string;
   }>(CART_ENDPOINTS.APPLY_DISCOUNT, {
     method: 'POST',
-    body: { code },
+    body: JSON.stringify({ code }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
   }
 
@@ -83,7 +83,7 @@ export async function removeDiscountCode() {
     method: 'DELETE',
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
   }
 
@@ -98,10 +98,10 @@ export async function mergeGuestCart(
 ) {
   const res = await performFetch<Cart>(CART_ENDPOINTS.MERGE_GUEST_CART, {
     method: 'POST',
-    body: { items: guestCartItems },
+    body: JSON.stringify({ items: guestCartItems }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -112,10 +112,10 @@ export async function mergeGuestCart(
 export async function saveForLater(itemId: string) {
   const res = await performFetch<void>(CART_ENDPOINTS.SAVE_FOR_LATER, {
     method: 'POST',
-    body: { itemId },
+    body: JSON.stringify({ itemId }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getSavedItems');
     revalidateTag('getCartCount');
@@ -127,10 +127,10 @@ export async function saveForLater(itemId: string) {
 export async function moveToCart(itemId: string) {
   const res = await performFetch<CartItem>(CART_ENDPOINTS.MOVE_TO_CART, {
     method: 'POST',
-    body: { itemId },
+    body: JSON.stringify({ itemId }),
   });
 
-  if (res.isSuccess) {
+  if (res?.success) {
     revalidateTag('getCart');
     revalidateTag('getSavedItems');
     revalidateTag('getCartCount');
