@@ -1,5 +1,6 @@
 import { CART_ENDPOINTS } from '@/api/cart';
-import { Cart, Product } from '@/types/cart';
+import { Cart } from '@/types/cart';
+import { Product } from '@/types/products';
 import { APIResponse } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 
