@@ -8,15 +8,15 @@ export interface SessionData {
 }
 
 const sessionPassword =
-  process.env.SESSION_PASSWORD ||
-  process.env.IRON_SESSION_PASSWORD ||
+  process.env.NEXT_PUBLIC_SESSION_PASSWORD ||
+  process.env.NEXT_PUBLIC_SESSION_PASSWORD ||
   (process.env.NODE_ENV !== 'production'
     ? 'dev-insecure-session-password-change-me-please-0123456789abcd'
     : undefined);
 
 if (!sessionPassword) {
   throw new Error(
-    'iron-session: Missing SESSION_PASSWORD env. Set a strong 32+ char secret in .env(.local).'
+    'iron-session: Missing NEXT_PUBLIC_SESSION_PASSWORD env. Set a strong 32+ char secret in .env(.local).'
   );
 }
 
