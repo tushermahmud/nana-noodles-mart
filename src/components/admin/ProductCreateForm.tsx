@@ -21,7 +21,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    category: '',
+    categoryId: '',
     description: '',
     price: '',
     image: '',
@@ -81,7 +81,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
     try {
       const validationData = {
         name: formData.name,
-        category: formData.category,
+        categoryId: formData.categoryId,
         description: formData.description,
         price: parseFloat(formData.price) || 0,
         image: formData.image,
@@ -117,7 +117,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
     try {
       const validationData = {
         name: formData.name,
-        category: formData.category,
+        categoryId: formData.categoryId,
         description: formData.description,
         price: parseFloat(formData.price),
         image: formData.image,
@@ -130,7 +130,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
       const validatedData = createProductSchema.parse(validationData);
       const productData = new FormData();
       productData.append('name', validatedData.name);
-      productData.append('category', validatedData.category);
+      productData.append('categoryId', validatedData.categoryId);
       productData.append('description', validatedData.description);
       productData.append('price', validatedData.price.toString());
       productData.append('quantity', validatedData.quantity.toString());
@@ -152,7 +152,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
 
       const result = await createProduct(productData);
 
-      if (result?.success) {
+      if (result?.isSuccess) {
         toast.success(result?.message ?? 'Product created successfully');
         router.push('/admin/products');
         router.refresh();
@@ -208,20 +208,20 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                 Category (optional)
               </label>
               <select
-                value={formData.category}
-                onChange={(e) => handleInputChange('category', e.target.value)}
+                value={formData.categoryId}
+                onChange={(e) => handleInputChange('categoryId', e.target.value)}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                  errors.category ? 'border-red-500' : 'border-gray-300'
+                  errors.categoryId ? 'border-red-500' : 'border-gray-300'
                 }`}
               >
                 <option value="">All products (default)</option>
                 {categories.map((c) => (
-                  <option key={c.id} value={c.name}>
+                  <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
                 ))}
               </select>
-              {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+              {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>}
             </div>
           </div>
 

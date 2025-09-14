@@ -6,6 +6,7 @@ export interface SessionData {
   username?: string;
   accessToken?: string;
   refreshToken?: string;
+  role?: string;
 }
 
 const sessionPassword =

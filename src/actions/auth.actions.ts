@@ -21,6 +21,7 @@ export async function getSession(): Promise<SessionData> {
       username: session.username,
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
+      role: session.role,
     };
   } catch (error) {
     console.error('Error getting session:', error);

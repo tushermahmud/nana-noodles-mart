@@ -5,6 +5,7 @@ import { getSession, renewSession } from "./actions/auth.actions";
 import { protectedRoutes, authRoutes } from "./config/routeConfig";
 import { sessionOptions } from "./lib/session";
 import { isTokenExpired } from "./lib/tokenUtils";
+import { isAdmin } from "./lib/roleUtils";
 
 export async function middleware(request: NextRequest) {
   const session = await getSession();
@@ -13,6 +14,8 @@ export async function middleware(request: NextRequest) {
   // Debug logging for every request
   console.log(`🔍 MIDDLEWARE: ${request.method} ${request.nextUrl.pathname}`);
   console.log(`🔍 MIDDLEWARE: Is authenticated: ${isAuthenticated}`);
+  console.log(`🔍 MIDDLEWARE: User role: ${session.role || 'none'}`);
+  console.log(`🔍 MIDDLEWARE: Is admin: ${isAdmin(session)}`);
   console.log(`🔍 MIDDLEWARE: Has access token: ${!!session.accessToken}`);
   console.log(`🔍 MIDDLEWARE: Has refresh token: ${!!session.refreshToken}`);
 
@@ -129,6 +132,13 @@ export async function middleware(request: NextRequest) {
       redirectUrl.searchParams.append("next", path);
     }
     return NextResponse.redirect(redirectUrl);
+  }
+
+  // Check if user is trying to access admin routes
+  const isAdminRoute = path.startsWith('/admin');
+  if (isAdminRoute && !isAdmin(session)) {
+    console.log(`🚫 MIDDLEWARE: Non-admin user (${session.role}) trying to access admin route: ${path}`);
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return response;

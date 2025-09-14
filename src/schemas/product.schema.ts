@@ -7,10 +7,10 @@ export const createProductSchema = z.object({
     .min(2, 'Product name must be at least 2 characters')
     .max(100, 'Product name must be less than 100 characters'),
 
-  category: z
+  categoryId: z
     .string()
     .optional()
-    .transform((val) => (val && val.trim().length > 0 ? val : 'all products')),
+    .transform((val) => (val && val.trim().length > 0 ? val : '')),
 
   description: z
     .string()

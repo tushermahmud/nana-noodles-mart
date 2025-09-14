@@ -33,7 +33,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     description: product?.description || '',
     price: product?.price || '',
     image: normalizedImage,
-    category: product?.category || '',
+    categoryId: product?.categoryId || '',
     imageUrl: product?.imageUrl || '',
     popular: product?.popular || false,
     spiceLevel: product?.spice_level || 1,
@@ -95,7 +95,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
       const dataForValidation = {
         id: String(formData.id),
         name: formData.name,
-        category: formData.category,
+        categoryId: formData.categoryId,
         description: formData.description,
         price: parseFloat(String(formData.price) || '0'),
         image: formData.image,
@@ -129,7 +129,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
-    fd.append('category', result.data.category || 'all products');
+      fd.append('categoryId', result.data.categoryId || '');
     fd.append('description', result.data.description);
     fd.append('price', String(result.data.price));
     if ((formData as any).quantity !== undefined) {
@@ -150,14 +150,14 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     }
     try {
       const res = await updateProduct(String(formData.id), fd);
-
-      if (res.success) {
+      debugger
+      if (res?.isSuccess) {
         onSave({ ...formData, ...result.data } as unknown as Product);
-        toast.success(res.message ?? 'Product updated successfully');
+        toast.success(res?.message ?? 'Product updated successfully');
         onClose();
       } else {
-        setErrors((prev: any) => ({ ...prev, form: res.message || 'Failed to update product' }));
-        toast.error(res.message ?? 'Failed to update product');
+        setErrors((prev: any) => ({ ...prev, form: res?.message || 'Failed to update product' }));
+        toast.error(res?.message ?? 'Failed to update product');
       }
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -210,20 +210,20 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                 <select
-                  value={formData.category as string}
-                  onChange={(e) => handleInputChange('category', e.target.value)}
+                  value={formData.categoryId as string}
+                  onChange={(e) => handleInputChange('categoryId', e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                    errors.category ? 'border-red-500' : 'border-gray-300'
+                    errors.categoryId ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
                   <option value="">Select Category</option>
                   {categories.map((category) => (
-                    <option key={category.name} value={category.name}>
+                    <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
                   ))}
                 </select>
-                {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+                {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>}
               </div>
             </div>
 

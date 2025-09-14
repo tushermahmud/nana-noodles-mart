@@ -52,8 +52,8 @@ export const ProductsSection = ({
       const res = await deleteProduct(pendingDeleteId);
       setConfirmOpen(false);
       setPendingDeleteId(null);
-      toast.success(res.message ?? 'Product deleted successfully');
-      if (res.success) {
+      toast.success(res?.message ?? 'Product deleted successfully');
+      if (res?.isSuccess) {
         router.refresh();
       }
     } catch (error) {

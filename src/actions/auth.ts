@@ -16,13 +16,16 @@ export async function loginUser(data: LoginRequest) {
     includeAuthorization: false,
   });
 
+  console.log('🔄 AUTH_MAIN: Login response:', res);
+
   if (res && res?.isSuccess && res?.data) {
     const cookieStore = await cookies();
     const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
     session.isLoggedIn = true;
     session.accessToken = res.data.data?.token;
     session.refreshToken = res.data.data?.refreshToken;
-    session.user_id = res.data.data?.user_id;
+    session.user_id = res.data.data?.user?.id;
+	session.role = res.data.data?.user?.type ?? "user"
     await session.save();
     revalidateTag('getCurrentUser');
   }
