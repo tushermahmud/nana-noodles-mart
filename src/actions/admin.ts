@@ -14,7 +14,7 @@ export async function createCategory(data: FormData) {
     body: data,
   });
 
-  if (res && res?.success) {
+  if (res && res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 
@@ -27,7 +27,7 @@ export async function updateCategory(id: string, data: FormData) {
     body: data,
   });
 
-  if (res && res?.success) {
+  if (res && res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 
@@ -39,7 +39,7 @@ export async function deleteCategory(id: string) {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 

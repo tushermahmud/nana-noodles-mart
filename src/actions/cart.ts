@@ -13,7 +13,7 @@ export async function addToCart(data: { productId: string; quantity: number }) {
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -27,7 +27,7 @@ export async function updateCartItem(itemId: string, quantity: number) {
     body: JSON.stringify({ quantity }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -40,7 +40,7 @@ export async function removeFromCart(itemId: string) {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -53,7 +53,7 @@ export async function clearCart() {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -71,7 +71,7 @@ export async function applyDiscountCode(code: string) {
     body: JSON.stringify({ code }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
   }
 
@@ -83,7 +83,7 @@ export async function removeDiscountCode() {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
   }
 
@@ -101,7 +101,7 @@ export async function mergeGuestCart(
     body: JSON.stringify({ items: guestCartItems }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
@@ -115,7 +115,7 @@ export async function saveForLater(itemId: string) {
     body: JSON.stringify({ itemId }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getSavedItems');
     revalidateTag('getCartCount');
@@ -130,7 +130,7 @@ export async function moveToCart(itemId: string) {
     body: JSON.stringify({ itemId }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getSavedItems');
     revalidateTag('getCartCount');

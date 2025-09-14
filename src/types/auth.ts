@@ -15,14 +15,27 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  success: boolean;
-  message: string;
-  authorization: {
+  execStatus: boolean;
+  httpStatus: number;
+  status?: number;
+  msg: string;
+  customCode: string | null;
+  data: {
+    token: string;
+    refreshToken: string;
+    user_id: string;
+    userName?: string;
+    type?: 'admin' | 'user' | string;
+  };
+  // Legacy fields for backward compatibility
+  success?: boolean;
+  message?: string;
+  authorization?: {
     type: 'bearer' | string;
     access_token: string;
     refresh_token: string;
+    user_id: string;
   };
-  type?: 'admin' | 'user' | string;
 }
 
 export interface RegisterRequest {

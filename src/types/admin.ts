@@ -7,8 +7,8 @@ export interface AdminPledge {
 }
 
 export interface ProductRow {
-  products: Product[];
-  pagination: Pagination;
+  rows: Product[];
+  count: number;
 }
 
 export interface CategoryRow {

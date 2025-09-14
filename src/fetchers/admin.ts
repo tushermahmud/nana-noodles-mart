@@ -21,7 +21,7 @@ export async function getAdminUsers(params: PaginationParams) {
 }
 
 export async function getAdminProducts(params: PaginationParams) {
-  const res = await performFetch<ProductRow>(
+  const res = await performFetch<PaginatedAPIResponse<Product>>(
     getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_PRODUCTS, params),
     {
       method: 'GET',
@@ -30,8 +30,7 @@ export async function getAdminProducts(params: PaginationParams) {
       },
     }
   );
-  console.log(res);
-  return res;
+  return res?.data;
 }
 
 export async function getAdminCategories() {
@@ -41,7 +40,7 @@ export async function getAdminCategories() {
       tags: ['getAdminCategories'],
     },
   });
-  return res;
+  return res?.data;
 }
 
 export async function getAdminOrders(params: PaginationParams) {

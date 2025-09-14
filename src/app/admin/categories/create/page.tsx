@@ -44,6 +44,7 @@ export default function CreateCategoryPage() {
     'Shield',
   ];
   const onSubmit = async (data: CreateCategoryInput) => {
+    console.log("data", data);
     setIsSubmitting(true);
     try {
       const values = form.getValues();
@@ -63,8 +64,9 @@ export default function CreateCategoryPage() {
       }
 
       const result = await createCategory(formData);
+      console.log("result", result);
 
-      if (result?.success) {
+      if (result?.isSuccess) {
         toast.success(result?.message ?? 'Category created successfully');
         router.push('/admin/categories');
         router.refresh();

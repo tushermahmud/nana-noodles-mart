@@ -14,7 +14,7 @@ export async function createProduct(productData: FormData) {
       body: productData,
     });
 
-    if (res?.success) {
+    if (res?.isSuccess) {
       revalidateTag('getAdminProducts');
       return { success: true, data: res.data };
     }
@@ -36,7 +36,7 @@ export async function updateProduct(id: string, productData: FormData) {
       body: productData,
     });
 
-    if (res?.success) {
+    if (res?.isSuccess) {
       revalidateTag('getAdminProducts');
       return { success: true, data: res.data };
     }
@@ -57,7 +57,7 @@ export async function deleteProduct(id: string) {
       method: 'DELETE',
     });
 
-    if (res?.success) {
+    if (res?.isSuccess) {
       revalidateTag('getAdminProducts');
       return { success: true };
     }

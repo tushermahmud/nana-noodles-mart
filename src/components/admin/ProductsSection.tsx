@@ -4,8 +4,7 @@ import { Eye, Edit, Trash2 } from 'lucide-react';
 import { Category, Product } from '@/types/products';
 import { useState } from 'react';
 import ProductForm from './ProductForm';
-import { Pagination } from '@/types/common';
-import PaginationControls from '@/components/common/PaginationControls';
+import AdminPagination from '@/components/common/AdminPagination';
 import Image from 'next/image';
 import { deleteProduct } from '@/actions/products';
 import { useRouter } from 'next/navigation';
@@ -14,13 +13,13 @@ import { getErrorMessage } from '@/lib/errorUtils';
 
 type ProductsSectionProps = {
   filteredProducts: Product[];
-  pagination: Pagination;
+  count: number;
   categories: Category[];
 };
 
 export const ProductsSection = ({
   filteredProducts,
-  pagination,
+  count,
   categories,
 }: ProductsSectionProps) => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -28,6 +27,7 @@ export const ProductsSection = ({
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
 
   const handleSaveProduct = (productData: any) => {
     // TODO: trigger a revalidation/fetch from parent if needed
@@ -152,7 +152,7 @@ export const ProductsSection = ({
         </table>
       </div>
 
-      <PaginationControls pagination={pagination} />
+      <AdminPagination totalCount={count} defaultPageSize={5} />
 
       {showAddModal && (
         <ProductForm

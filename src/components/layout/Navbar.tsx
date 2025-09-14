@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Search, ShoppingCart, Menu, X, User } from 'lucide-react';
+import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
+import UserAuth from '@/components/auth/UserAuth';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -119,27 +120,8 @@ const Navbar = () => {
               )}
             </motion.a>
 
-            {/* Login/Register Buttons */}
-            <div className="flex items-center space-x-2">
-              <Link href="/login">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700"
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  Login
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
-                >
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
+            {/* User Authentication */}
+            <UserAuth />
           </div>
 
           {/* Mobile Menu Button */}
@@ -221,23 +203,8 @@ const Navbar = () => {
                   )}
                 </motion.a>
 
-                {/* Mobile Login/Register */}
-                <div className="px-3 py-2 space-y-2">
-                  <Link href="/login">
-                    <Button
-                      variant="outline"
-                      className="w-full border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700"
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      Login
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
+                {/* Mobile User Authentication */}
+                <UserAuth isMobile={true} />
               </div>
             </motion.div>
           )}

@@ -14,7 +14,7 @@ export default async function CreateProductPage() {
           <p className="text-gray-600 mt-2">Add a new product to your inventory</p>
         </div>
 
-        <ProductCreateForm categories={categories as Category[]} />
+        <ProductCreateForm categories={categories} />
       </div>
     </div>
   );

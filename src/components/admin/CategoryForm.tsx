@@ -119,7 +119,7 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
 
       const result = await updateCategory(values.id || '', formData);
 
-      if (result?.success) {
+      if (result?.isSuccess) {
         toast.success(result?.message ?? 'Category updated successfully');
         onSave(result?.data ?? values);
         onClose();

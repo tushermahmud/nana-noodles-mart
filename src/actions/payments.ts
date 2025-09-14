@@ -29,7 +29,7 @@ export async function confirmPayment(data: { paymentIntentId: string; orderId: s
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getPaymentHistory');
@@ -52,7 +52,7 @@ export async function processRefund(data: {
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentHistory');
     revalidateTag('getPaymentDetails');
   }
@@ -66,7 +66,7 @@ export async function addPaymentMethod(data: { paymentMethodId: string; isDefaul
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -78,7 +78,7 @@ export async function removePaymentMethod(methodId: string) {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -91,7 +91,7 @@ export async function setDefaultPaymentMethod(methodId: string) {
     body: JSON.stringify({ isDefault: true }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 

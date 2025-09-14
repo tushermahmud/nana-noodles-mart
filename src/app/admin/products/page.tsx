@@ -15,6 +15,7 @@ export default async function AdminProducts({ searchParams }: Props) {
   const limit = Number.parseInt(params?.pageSize ?? '5');
   const q = params?.search ?? '';
   const categoriesRes = await getAdminCategories();
+
   const categories = categoriesRes?.data ?? [];
 
   const productsRes = await getAdminProducts({
@@ -22,8 +23,8 @@ export default async function AdminProducts({ searchParams }: Props) {
     limit,
     q,
   });
-  const filteredProducts = productsRes?.data?.products ?? [];
-  const pagination = productsRes?.data?.pagination as Pagination | undefined;
+  const filteredProducts = productsRes?.data?.rows ?? [];
+  const pagination = productsRes?.data?.count;
   return (
     <>
       {/* Search and Actions */}
@@ -35,17 +36,8 @@ export default async function AdminProducts({ searchParams }: Props) {
       </div>
 
       <ProductsSection
-        filteredProducts={filteredProducts as Product[]}
-        pagination={
-          pagination ?? {
-            currentPage: page,
-            totalPages: 1,
-            totalCount: filteredProducts.length,
-            limit,
-            hasNextPage: false,
-            hasPrevPage: false,
-          }
-        }
+        filteredProducts={filteredProducts}
+        count={pagination ?? 0}
         categories={categories as Category[]}
       />
     </>

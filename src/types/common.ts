@@ -1,14 +1,16 @@
 export interface APIResponse<T = any> {
-  success: boolean;
+  isSuccess: boolean;
+  statusCode: number;
   message: string;
+  errorCode: string | null;
   data: T | null;
+  errorDetails?: string;
 }
 
-export interface PaginatedAPIResponse<T> {
-  success: boolean;
-  message: string;
-  data: T[];
-}
+export type PaginatedAPIResponse<T> = APIResponse<{
+	rows: T[];
+	count: number;
+}>;
 
 export interface Pagination {
   currentPage: number;
