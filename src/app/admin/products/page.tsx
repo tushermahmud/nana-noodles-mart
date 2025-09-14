@@ -1,6 +1,6 @@
 import { ProductsSection } from '@/components/admin/ProductsSection';
 import { ProductsActions } from '@/components/admin/ProductsActions';
-import { getAdminCategories, getAdminProducts } from '@/fetchers/admin';
+import { getAdminByCategories, getAdminProducts } from '@/fetchers/admin';
 import { SearchInput } from '@/components/admin/SearchInput';
 import { Category, Product } from '@/types/products';
 import type { Pagination } from '@/types/common';
@@ -14,7 +14,7 @@ export default async function AdminProducts({ searchParams }: Props) {
   const page = Number.parseInt(params?.page ?? '1');
   const limit = Number.parseInt(params?.pageSize ?? '5');
   const q = params?.search ?? '';
-  const categoriesRes = await getAdminCategories();
+  const categoriesRes = await getAdminByCategories();
 
   const categories = categoriesRes?.data ?? [];
 
@@ -38,7 +38,7 @@ export default async function AdminProducts({ searchParams }: Props) {
       <ProductsSection
         filteredProducts={filteredProducts}
         count={pagination ?? 0}
-        categories={categories as Category[]}
+        categories={categories}
       />
     </>
   );

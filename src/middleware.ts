@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
       console.log(`🔍 MIDDLEWARE: Time until access expires: ${Math.round((accessExp.getTime() - now.getTime()) / 1000)} seconds`);
       console.log(`🔍 MIDDLEWARE: Time until refresh expires: ${Math.round((refreshExp.getTime() - now.getTime()) / 1000)} seconds`);
     } catch (e) {
-      console.log('🔍 MIDDLEWARE: Could not decode tokens for debugging:', e.message);
+      console.log('🔍 MIDDLEWARE: Could not decode tokens for debugging:', (e as unknown as Error).message);
     }
     
     if (accessTokenExpired) {

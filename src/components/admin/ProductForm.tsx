@@ -2,19 +2,16 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Upload, Plus, Trash2 } from 'lucide-react';
+import { X, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { updateProductSchema } from '@/schemas/product.schema';
 import { z } from 'zod';
-import { performFetch } from '@/lib/apiUtils';
-import { PRODUCTS_ENDPOINTS } from '@/api/products';
 import { Category, Product } from '@/types/products';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { BASE_URL } from '@/config/env';
 import { updateProduct } from '@/actions/products';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
-import Link from 'next/link';
 interface ProductFormProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,7 +21,6 @@ interface ProductFormProps {
 }
 
 const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFormProps) => {
-  console.log('product', product);
   const rawImage = (product?.imageUrl ?? product?.image ?? '') as string;
   const normalizedImage =
     rawImage && !/^https?:|^data:/.test(rawImage)

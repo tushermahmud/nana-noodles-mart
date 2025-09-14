@@ -33,7 +33,7 @@ export async function getAdminProducts(params: PaginationParams) {
   return res?.data;
 }
 
-export async function getAdminCategories() {
+export async function getAdminByCategories() {
   const res = await performFetch<APIResponse<Category[]>>(ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES, {
     method: 'GET',
     next: {

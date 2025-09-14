@@ -1,9 +1,7 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { ADMIN_ENDPOINTS } from '@/api/admin';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { APIResponse } from '@/types/common';
-import { AdminStats } from '@/types/admin';
 import { performFetch } from '@/lib/apiUtils';
 import { CATEGORIES_ENDPOINTS } from '@/api/products';
 import { Category } from '@/types/products';
@@ -26,7 +24,6 @@ export async function updateCategory(id: string, data: FormData) {
     method: 'PATCH',
     body: data,
   });
-
   if (res && res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
@@ -46,16 +43,6 @@ export async function deleteCategory(id: string) {
   return res;
 }
 
-export async function getAdminCategories() {
-  const res = await performFetch<APIResponse<Category[]>>(CATEGORIES_ENDPOINTS.GET_CATEGORIES, {
-    method: 'GET',
-    next: {
-      tags: ['getAdminCategories'],
-    },
-  });
-
-  return res;
-}
 
 /* export async function updatePaymentStatus(paymentId: string, status: string) {
   const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_PAYMENT_STATUS(paymentId), {

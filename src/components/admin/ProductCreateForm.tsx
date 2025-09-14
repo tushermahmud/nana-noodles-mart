@@ -149,13 +149,6 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
       } else {
         productData.append('image', validatedData.image);
       }
-      for (const [key, value] of productData.entries()) {
-        if (value instanceof File) {
-          console.log(key, { name: value.name, size: value.size, type: value.type });
-        } else {
-          console.log(key, value);
-        }
-      }
 
       const result = await createProduct(productData);
 
@@ -164,8 +157,6 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         router.push('/admin/products');
         router.refresh();
       } else {
-        console.error(result?.message);
-
         toast.error(result?.message ?? 'Failed to create product');
       }
     } catch (error) {

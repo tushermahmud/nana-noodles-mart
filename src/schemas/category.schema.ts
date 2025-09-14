@@ -9,7 +9,7 @@ export const createCategorySchema = z.object({
   image: z.string().min(1, 'Image is required'),
   icon: z.string().min(1, 'Icon is required'),
   color: z.string().min(1, 'Color is required'), // label of the color
-  imageUrl: z.string().min(1, 'Image URL is required'),
+  imageUrl: z.string().optional(),
 });
 
 export const updateCategorySchema = createCategorySchema.partial().extend({
