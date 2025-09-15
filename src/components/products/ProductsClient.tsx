@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import Categories from '@/components/sections/Categories';
+import Categories from '@/components/sections/Categories-backup';
 import { VirtualStore } from '@/components/virtual-store';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { BASE_URL } from '@/config/env';
