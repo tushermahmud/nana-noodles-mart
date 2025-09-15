@@ -71,6 +71,16 @@ export interface RegisterRequest {
   type: 'admin' | 'user';
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+  data: null;
+}
+
 export interface RegisterResponse {
   success: boolean;
   message: string;

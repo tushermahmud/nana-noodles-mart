@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AUTH_ENDPOINTS } from '@/api/auth';
-import { LoginResponse, LoginRequest, RegisterRequest, RegisterResponse, User } from '@/types/auth';
+import { LoginResponse, LoginRequest, RegisterRequest, RegisterResponse, User, ForgotPasswordRequest, ForgotPasswordResponse } from '@/types/auth';
 import { performFetch } from '@/lib/apiUtils';
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
@@ -16,7 +16,6 @@ export async function loginUser(data: LoginRequest) {
     includeAuthorization: false,
   });
 
-  console.log('🔄 AUTH_MAIN: Login response:', res);
 
   if (res && res?.isSuccess && res?.data) {
     const cookieStore = await cookies();
@@ -32,6 +31,19 @@ export async function loginUser(data: LoginRequest) {
 
   return res;
 }
+
+
+export async function forgotPassword(email: string) {
+	const res = await performFetch<ForgotPasswordResponse>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+	  method: 'POST',
+	  body: { email },
+	  includeAuthorization: false,
+	});
+	console.log('🔄 AUTH_MAIN: Forgot password response:', res);
+	if (res && res?.isSuccess) {
+		return res;
+	}
+  }
 
 export async function registerUser(data: RegisterRequest) {
   const res = await performFetch<RegisterResponse>(AUTH_ENDPOINTS.REGISTER, {
@@ -84,19 +96,12 @@ export async function changePassword(data: { currentPassword: string; newPasswor
   return res;
 }
 
-export async function requestPasswordReset(email: string) {
-  const res = await performFetch<void>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
-    method: 'POST',
-    body: JSON.stringify({ email }),
-  });
 
-  return res;
-}
 
-export async function resetPassword(data: { token: string; newPassword: string }) {
+export async function resetPassword(data: { email: string; token: string; newPassword: string }) {
   const res = await performFetch<void>(AUTH_ENDPOINTS.RESET_PASSWORD, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
 
   return res;

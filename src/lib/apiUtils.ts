@@ -123,7 +123,7 @@ export async function performFetch<T>(
 		return {
 			isSuccess: true,
 			statusCode: response.status,
-			message: "Success",
+			message: data.msg ?? "Success",
 			errorCode: null,
 			data: data as T,
 		};
