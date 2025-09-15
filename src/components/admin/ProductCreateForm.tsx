@@ -24,6 +24,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
     categoryId: '',
     description: '',
     price: '',
+    original_price: '',
     image: '',
     quantity: '',
     spice_level: '',
@@ -89,6 +90,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
+        original_price: parseFloat(formData.original_price) || 0
       };
 
       createProductSchema.parse(validationData);
@@ -125,6 +127,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
+        original_price: parseFloat(formData.original_price ?? '0') || 0
       };
 
       const validatedData = createProductSchema.parse(validationData);
@@ -133,6 +136,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
       productData.append('categoryId', validatedData.categoryId);
       productData.append('description', validatedData.description);
       productData.append('price', validatedData.price.toString());
+      productData.append('original_price', validatedData.original_price?.toString() ?? '0');
       productData.append('quantity', validatedData.quantity.toString());
       productData.append('spice_level', validatedData.spice_level.toString());
       if (validatedData.features && validatedData.features.length > 0) {
@@ -257,6 +261,23 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                 placeholder="0.00"
               />
               {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Original Price (optional)</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.original_price}
+                onChange={(e) => handleInputChange('original_price', e.target.value)}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                  errors.original_price ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="0.00"
+              />
+              {errors.original_price && (
+                <p className="text-red-500 text-sm mt-1">{errors.original_price}</p>
+              )}
             </div>
 
             <div>

@@ -1,17 +1,17 @@
 import { PRODUCTS_ENDPOINTS, CATEGORIES_ENDPOINTS } from '@/api/products';
 import { Product, Category, SearchParams, ProductFilters } from '@/types/products';
-import { PaginatedAPIResponse, PaginationParams } from '@/types/common';
+import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
 
 // Product Fetchers
-export async function getProducts(params?: SearchParams) {
-  const res = await performFetch<PaginatedAPIResponse<Product>>(
-    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_PRODUCTS, params || {}),
+export async function getProducts() {
+  const res = await performFetch<APIResponse<Product[]>>(
+    PRODUCTS_ENDPOINTS.GET_PRODUCTS,
     {
       method: 'GET',
       next: {
-        tags: ['getProducts'],
+        tags: ['homeProducts'],
       },
     }
   );
@@ -19,11 +19,12 @@ export async function getProducts(params?: SearchParams) {
   return res;
 }
 
+
 export async function getProduct(id: string) {
   const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {
     method: 'GET',
     next: {
-      tags: ['getProduct', `getProduct-${id}`],
+      tags: ['homeProduct', `homeProduct-${id}`],
     },
   });
 

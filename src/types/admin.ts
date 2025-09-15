@@ -7,7 +7,7 @@ export interface AdminPledge {
 }
 
 export interface ProductRow {
-  rows: Product[];
+  row: Product[];
   count: number;
 }
 

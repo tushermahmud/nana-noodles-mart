@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ProductCard from './ProductCard';
-import { Product } from '../types';
+import { Product } from '@/types/products';
 
 interface BasketProps {
   products: Product[];

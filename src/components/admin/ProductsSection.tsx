@@ -70,14 +70,15 @@ export const ProductsSection = ({
               <th className="text-left py-3 px-4 font-medium text-gray-900">Product</th>
               <th className="text-left py-3 px-4 font-medium text-gray-900">Category</th>
               <th className="text-left py-3 px-4 font-medium text-gray-900">Price</th>
+              <th className="text-left py-3 px-4 font-medium text-gray-900">Original Price</th>
               <th className="text-left py-3 px-4 font-medium text-gray-900">Stock</th>
               <th className="text-left py-3 px-4 font-medium text-gray-900">Status</th>
               <th className="text-left py-3 px-4 font-medium text-gray-900">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.map((product) => {
-              const imgSrc = (product as any).imageUrl || product.image || '/placeholder.png';
+            {filteredProducts.map((product: Product) => {
+              const imgSrc = product.imageUrl || product.image || '/placeholder.png';
               return (
                 <tr key={product?.id ?? ''} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-4 px-4">
@@ -99,21 +100,24 @@ export const ProductsSection = ({
                   </td>
                   <td className="py-4 px-4">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                      {(product as any)?.category ?? ''}
+                      {product?.category?.name ?? ''}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    <span className="font-medium text-gray-900">${product.price}</span>
+                    <span className="font-medium text-gray-900">${product?.price ?? 0}</span>
+                  </td>
+                  <td className="py-4 px-4 text-center">
+                    <span className="font-medium text-gray-900">${product?.original_price ?? 0}</span>
                   </td>
                   <td className="py-4 px-4">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        (product as any).stock > 0
+                        (product?.quantity ?? 0) > 0
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
                       }`}
                     >
-                      {(product as any).stock > 0 ? 'In Stock' : 'Out of Stock'}
+                      {product?.quantity ?? 0 > 0 ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </td>
                   <td className="py-4 px-4">
@@ -129,9 +133,6 @@ export const ProductsSection = ({
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Eye className="w-4 h-4" />
-                      </Button>
                       <Button variant="outline" size="sm" onClick={() => handleEditItem(product)}>
                         <Edit className="w-4 h-4" />
                       </Button>

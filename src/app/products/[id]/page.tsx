@@ -73,7 +73,7 @@ const ProductPage = ({ params }: ProductPageProps) => {
 
     setIsAdding(true);
     addItem({
-      id: product.id,
+      id: product.id.toString(),
       name: product.name,
       price: product.price,
       image: product.image,

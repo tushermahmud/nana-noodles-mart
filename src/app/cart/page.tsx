@@ -12,11 +12,11 @@ import Link from 'next/link';
 const CartPage = () => {
   const { state, removeItem, updateQuantity, clearCart } = useCart();
 
-  const handleQuantityChange = (id: number, newQuantity: number) => {
+  const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity <= 0) {
-      removeItem(id);
+      removeItem(id.toString());
     } else {
-      updateQuantity(id, newQuantity);
+      updateQuantity(id.toString(), newQuantity);
     }
   };
 
@@ -137,7 +137,7 @@ const CartPage = () => {
                                       variant="outline"
                                       size="sm"
                                       onClick={() =>
-                                        handleQuantityChange(item.id, item.quantity - 1)
+                                        handleQuantityChange(item.id.toString(), item.quantity - 1)
                                       }
                                       className="w-8 h-8 p-0"
                                     >
@@ -150,7 +150,7 @@ const CartPage = () => {
                                       variant="outline"
                                       size="sm"
                                       onClick={() =>
-                                        handleQuantityChange(item.id, item.quantity + 1)
+                                        handleQuantityChange(item.id.toString(), item.quantity + 1)
                                       }
                                       className="w-8 h-8 p-0"
                                     >
@@ -164,7 +164,7 @@ const CartPage = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => removeItem(item.id)}
+                                onClick={() => removeItem(item.id.toString())}
                                 className="text-red-500 hover:text-red-700 hover:bg-red-50"
                               >
                                 <Trash2 className="w-4 h-4" />

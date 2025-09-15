@@ -80,19 +80,34 @@ const ProductsPage = () => {
     });
   }, [currentPage, filteredProducts, productsPerPage]);
 
-  // Infinite scroll handler
+  // Intersection Observer for infinite scroll
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !hasMore) return;
 
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight * 0.8) {
-        loadMoreProducts();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !loading) {
+            loadMoreProducts();
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px',
       }
-    };
+    );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadMoreProducts]);
+    // Find the sentinel element in the DOM
+    const sentinel = document.getElementById('infinite-scroll-sentinel');
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [loadMoreProducts, hasMore, loading]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -133,6 +148,9 @@ const ProductsPage = () => {
                 </motion.div>
               ))}
             </div>
+
+            {/* Intersection Observer Sentinel */}
+            {hasMore && <div id="infinite-scroll-sentinel" className="h-1 w-full" />}
 
             {/* Loading Indicator */}
             {loading && (

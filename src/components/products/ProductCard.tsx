@@ -30,7 +30,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const { addItem, state, removeItem, updateQuantity } = useCart();
   const [isAdding, setIsAdding] = useState(false);
 
-  const cartItem = state.items.find((item) => item.id === product.id);
+  const cartItem = state.items.find((item) => item.id === product.id.toString());
   const isInCart = !!cartItem;
 
   const handleAddToCart = () => {
@@ -38,7 +38,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
     setIsAdding(true);
     addItem({
-      id: product.id,
+      id: product.id.toString(),
       name: product.name,
       price: product.price,
       image: product.image,
@@ -163,13 +163,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
               </span>
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-pink-600 hover:text-pink-700 hover:bg-pink-100 rounded-full transition-all duration-300"
-          >
-            <Heart className="w-4 h-4" />
-          </Button>
         </div>
 
         {/* Action Buttons */}

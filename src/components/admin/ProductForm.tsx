@@ -45,6 +45,8 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
             .map((s: string) => s.trim())
             .filter(Boolean)
         : [''],
+    original_price: product?.original_price || '',
+    quantity: product?.quantity || '',
   });
 
   const [errors, setErrors] = useState<any>({});
@@ -99,6 +101,8 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
         description: formData.description,
         price: parseFloat(String(formData.price) || '0'),
         image: formData.image,
+        original_price: parseFloat(String(formData.original_price) || '0'),
+        quantity: parseFloat(String(formData.quantity) || '0'),
 
         // Optional fields omitted if not needed by backend
         spice_level: Number(formData.spiceLevel),
@@ -106,6 +110,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
         popular: !!formData.popular,
       } as any;
       updateProductSchema.parse(dataForValidation);
+      console.log(dataForValidation);
       setErrors({});
       return { ok: true, data: dataForValidation } as const;
     } catch (e) {
@@ -122,18 +127,28 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    debugger
     e.preventDefault();
     const result = validateForm();
     if (!result.ok) return;
-
+    console.log(errors);
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
       fd.append('categoryId', result.data.categoryId || '');
     fd.append('description', result.data.description);
     fd.append('price', String(result.data.price));
+    if (result.data.quantity !== undefined) {
+      fd.append('quantity', String(result.data.quantity));
+    }
+    if (result.data.original_price !== undefined) {
+      fd.append('original_price', String(result.data.original_price));
+    }
     if ((formData as any).quantity !== undefined) {
-      fd.append('quantity', String((formData as any).quantity));
+      fd.append('quantity', String(result.data.quantity));
+    }
+    if (result.data.original_price !== undefined) {
+      fd.append('original_price', String(result.data.original_price));
     }
     fd.append('spice_level', String(result.data.spice_level));
     if (result.data.features && (result.data.features as string[]).length > 0) {
@@ -268,12 +283,22 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 <input
                   type="number"
                   step="0.01"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange('originalPrice', e.target.value)}
+                  value={formData.original_price}
+                  onChange={(e) => handleInputChange('original_price', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   placeholder="0.00"
                 />
               </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Quantity *</label>
+              <input
+                type="number"
+                value={formData.quantity}
+                onChange={(e) => handleInputChange('quantity', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                placeholder="Enter quantity"
+              />
             </div>
 
             {/* Image Uploader */}

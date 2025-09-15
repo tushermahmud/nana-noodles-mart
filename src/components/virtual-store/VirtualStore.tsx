@@ -4,14 +4,15 @@ import { Star } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import productsData from '@/data/products.json';
 import { useVirtualStore } from './hooks/useVirtualStore';
-import { ShelfData, Product } from './types';
+import { ShelfData } from './types';
 import VirtualStoreHeader from './VirtualStoreHeader';
 import Shelf from './Shelf';
 import ProductModal from './modal/ProductModal';
 import CallToAction from './CallToAction';
+import { Product } from '@/types/products';
 
 interface VirtualStoreProps {
-  products?: Product[];
+  products: Product[];
   shelves?: ShelfData[];
 }
 
@@ -27,19 +28,19 @@ const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
       description: 'Our best-selling ramen varieties',
       icon: Star,
       color: 'from-pink-500 to-orange-500',
-      products: products || productsData.slice(0, 18),
+      products: products,
     },
   ];
 
   const shelvesToRender = shelves || defaultShelves;
 
   const handleAddToCart = (product: Product) => {
-    addItem({
+    addItem({ 
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image,
-      category: product.category,
+      image: product.imageUrl,
+      category: product.category?.name ?? '',
     });
   };
 
@@ -49,7 +50,7 @@ const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
         <VirtualStoreHeader />
 
         {/* Virtual Store Shelves */}
-        <div className="space-y-20 px-6 py-10 rounded-lg">
+        <div className="space-y-20 px-2 md:px-6 py-10 rounded-lg">
           {shelvesToRender.map((shelf, shelfIndex) => (
             <Shelf
               key={shelf.id}
