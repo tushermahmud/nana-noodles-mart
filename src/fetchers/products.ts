@@ -19,6 +19,18 @@ export async function getProducts() {
   return res;
 }
 
+export async function getAllProducts(params?: PaginationParams) {
+  const res = await performFetch<PaginatedAPIResponse<Product>>(
+    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_ALL_PRODUCTS, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getAllProducts'],
+      },
+    }
+  );
+  return res?.data;
+}
 
 export async function getProduct(id: string) {
   const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {

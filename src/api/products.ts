@@ -2,6 +2,7 @@ import { BASE_URL } from '@/config/env';
 
 export const PRODUCTS_ENDPOINTS = {
   GET_PRODUCTS: `${BASE_URL}/products`,
+  GET_ALL_PRODUCTS: `${BASE_URL}/product-page`,
   GET_PRODUCT: (id: string) => `${BASE_URL}/products/${id}`,
   SEARCH_PRODUCTS: `${BASE_URL}/products/search`,
   GET_FEATURED_PRODUCTS: `${BASE_URL}/products/featured`,

@@ -2,7 +2,6 @@
 
 import { Star } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import productsData from '@/data/products.json';
 import { useVirtualStore } from './hooks/useVirtualStore';
 import { ShelfData } from './types';
 import VirtualStoreHeader from './VirtualStoreHeader';
@@ -14,9 +13,10 @@ import { Product } from '@/types/products';
 interface VirtualStoreProps {
   products: Product[];
   shelves?: ShelfData[];
+  isProductsPage?: boolean;
 }
 
-const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
+const VirtualStore = ({ products, shelves, isProductsPage }: VirtualStoreProps) => {
   const { addItem } = useCart();
   const { selectedProduct, isModalOpen, openModal, closeModal } = useVirtualStore({});
 
@@ -60,8 +60,9 @@ const VirtualStore = ({ products, shelves }: VirtualStoreProps) => {
             />
           ))}
         </div>
-
-        <CallToAction />
+        {!isProductsPage && (
+          <CallToAction />
+        )}
       </div>
 
       {/* Product Modal */}

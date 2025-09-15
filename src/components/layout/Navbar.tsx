@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import UserAuth from '@/components/auth/UserAuth';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,9 +16,38 @@ const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
   const { state } = useCart();
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
     setIsClient(true);
+    const qFromUrl = searchParams.get('q') || '';
+    setSearchTerm(qFromUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const navigateToProducts = (value: string) => {
+    const params = new URLSearchParams();
+    if (value) params.set('q', value);
+    params.set('page', '1');
+    params.set('limit', '6');
+    router.push(`/products?${params.toString()}`);
+  };
+
+  const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      navigateToProducts(searchTerm.trim());
+    }
+  };
+
+  const onSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigateToProducts(searchTerm.trim());
+  };
 
   useEffect(() => {
     if (!isClient) return;
@@ -26,7 +56,6 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    // Set initial scroll state
     handleScroll();
 
     window.addEventListener('scroll', handleScroll);
@@ -93,14 +122,17 @@ const Navbar = () => {
           {/* Desktop Right Side */}
           <div className="hidden lg:flex items-center space-x-4">
             {/* Search */}
-            <motion.div whileHover={{ scale: 1.05 }} className="relative">
+            <motion.form whileHover={{ scale: 1.05 }} className="relative" onSubmit={onSearchSubmit}>
               <Search className="w-5 h-5 text-gray-600 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
                 type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={onSearchKeyDown}
                 placeholder="Search ramen..."
                 className="pl-10 pr-4 py-2 w-64 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               />
-            </motion.div>
+            </motion.form>
 
             {/* Cart */}
             <motion.a
@@ -179,14 +211,17 @@ const Navbar = () => {
 
                 {/* Mobile Search */}
                 <div className="px-3 py-2">
-                  <div className="relative">
+                  <form className="relative" onSubmit={onSearchSubmit}>
                     <Search className="w-5 h-5 text-gray-600 absolute left-3 top-1/2 transform -translate-y-1/2" />
                     <input
                       type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyDown={onSearchKeyDown}
                       placeholder="Search ramen..."
                       className="pl-10 pr-4 py-2 w-full rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                     />
-                  </div>
+                  </form>
                 </div>
 
                 {/* Mobile Cart */}
