@@ -21,6 +21,6 @@ export const CATEGORIES_ENDPOINTS = {
   GET_PRODUCTS_BY_CATEGORY: (categoryId: string) => `${BASE_URL}/categories/${categoryId}/products`,
   CREATE_CATEGORY: `${BASE_URL}/admin/product-category`,
   UPDATE_CATEGORY: (id: string) => `${BASE_URL}/admin/product-category/${id}`,
-  DELETE_CATEGORY: (id: string) => `${BASE_URL}/admin/categories/${id}`,
+  DELETE_CATEGORY: (id: string) => `${BASE_URL}/admin/product-category/${id}`,
   UPLOAD_CATEGORY_IMAGE: (categoryId: string) => `${BASE_URL}/categories/${categoryId}/image`,
 };
