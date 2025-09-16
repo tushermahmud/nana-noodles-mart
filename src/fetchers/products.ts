@@ -30,12 +30,26 @@ export async function getAllProducts(params?: PaginationParams) {
 }
 
 export async function getProduct(id: string) {
-  const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {
+  const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {
     method: 'GET',
     next: {
       tags: ['homeProduct', `homeProduct-${id}`],
     },
   });
+
+  return res;
+}
+
+export async function getRelatedProducts(id: string) {
+  const res = await performFetch<APIResponse<Product[]>>(
+    PRODUCTS_ENDPOINTS.GET_RELATED_PRODUCTS(id),
+    {
+      method: 'GET',
+      next: {
+        tags: ['relatedProducts', `relatedProducts-${id}`],
+      },
+    }
+  );
 
   return res;
 }
@@ -82,22 +96,6 @@ export async function getFeaturedProducts(limit?: number) {
       method: 'GET',
       next: {
         tags: ['getFeaturedProducts'],
-      },
-    }
-  );
-
-  return res;
-}
-
-export async function getRelatedProducts(productId: string, limit?: number) {
-  const params = limit ? { limit } : undefined;
-
-  const res = await performFetch<Product[]>(
-    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_RELATED_PRODUCTS(productId), params || {}),
-    {
-      method: 'GET',
-      next: {
-        tags: ['getRelatedProducts', `getRelatedProducts-${productId}`],
       },
     }
   );

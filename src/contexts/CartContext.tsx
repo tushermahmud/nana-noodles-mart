@@ -124,7 +124,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = async (id: string) => {
     dispatch({ type: 'OPTIMISTIC_REMOVE', payload: id });
     try {
-      await removeFromCartAction(id);
+      await removeFromCartAction(id, '324234234');
       await loadFromServer();
     } catch (e) {
       await loadFromServer();
@@ -134,7 +134,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const updateQuantity = async (id: string, quantity: number) => {
     dispatch({ type: 'OPTIMISTIC_UPDATE', payload: { id, quantity } });
     try {
-      await updateCartItemAction(id, quantity);
+      await updateCartItemAction(id, '324234234', quantity);
       await loadFromServer();
     } catch (e) {
       await loadFromServer();

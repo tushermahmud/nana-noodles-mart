@@ -31,14 +31,9 @@ type CartClientProps = {
 
 export default function CartClient({ cartDetails }: CartClientProps) {
   const numberOfCartItems = cartDetails?.cart?.length ?? 0;
-  const { state, removeItem, updateQuantity, clearCart, reload } = useCart();
-
-  useEffect(() => {
-    // Ensure client reflects server on mount
-    reload().catch(() => void 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const subTotalAmount =
+    cartDetails?.cart?.reduce((acc, item) => acc + item.product?.price * item.quantity, 0) ?? 0;
+  const taxPercentage = 0.08;
   const handleQuantityChange = async (id: string, newQuantity: number) => {
     try {
       const res = await updateCartItem({
@@ -69,6 +64,9 @@ export default function CartClient({ cartDetails }: CartClientProps) {
       console.error(error);
       toast.error(getErrorMessage(error));
     }
+  };
+  const clearCart = () => {
+    return;
   };
 
   if (numberOfCartItems === 0) {
@@ -120,7 +118,7 @@ export default function CartClient({ cartDetails }: CartClientProps) {
                 Shopping <span className="text-pink-600">Cart</span>
               </h1>
               <p className="text-lg text-gray-600">
-                {numberOfCartItems} items • Total: ${state.total.toFixed(2)}
+                {numberOfCartItems} items • Total: ${subTotalAmount?.toFixed(2)}
               </p>
             </div>
             <Link href="/products">
@@ -230,7 +228,7 @@ export default function CartClient({ cartDetails }: CartClientProps) {
               <div className="mt-6 text-right">
                 <Button
                   variant="outline"
-                  onClick={clearCart}
+                  onClick={() => clearCart()}
                   className="text-red-600 border-red-600 hover:bg-red-50"
                 >
                   Clear Cart
@@ -254,7 +252,7 @@ export default function CartClient({ cartDetails }: CartClientProps) {
                 <div className="space-y-3">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal ({numberOfCartItems} items)</span>
-                    <span>${state.total.toFixed(2)}</span>
+                    <span>${subTotalAmount?.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
@@ -262,12 +260,12 @@ export default function CartClient({ cartDetails }: CartClientProps) {
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Tax</span>
-                    <span>${(state.total * 0.08).toFixed(2)}</span>
+                    <span>${(subTotalAmount * taxPercentage).toFixed(2)}</span>
                   </div>
                   <div className="border-t border-gray-200 pt-3">
                     <div className="flex justify-between text-xl font-bold text-gray-900">
                       <span>Total</span>
-                      <span>${(state.total + state.total * 0.08).toFixed(2)}</span>
+                      <span>${(subTotalAmount + subTotalAmount * taxPercentage).toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

@@ -6,7 +6,7 @@ export const PRODUCTS_ENDPOINTS = {
   GET_PRODUCT: (id: string) => `${BASE_URL}/products/${id}`,
   SEARCH_PRODUCTS: `${BASE_URL}/products/search`,
   GET_FEATURED_PRODUCTS: `${BASE_URL}/products/featured`,
-  GET_RELATED_PRODUCTS: (productId: string) => `${BASE_URL}/products/${productId}/related`,
+  GET_RELATED_PRODUCTS: (productId: string) => `${BASE_URL}/products/related/${productId}`,
   CREATE_PRODUCT: `${BASE_URL}/admin/products/add-product`,
   UPDATE_PRODUCT: (id: string) => `${BASE_URL}/admin/products/${id}`,
   DELETE_PRODUCT: (id: string) => `${BASE_URL}/admin/products/${id}`,

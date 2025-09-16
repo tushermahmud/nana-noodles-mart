@@ -110,7 +110,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
         popular: !!formData.popular,
       } as any;
       updateProductSchema.parse(dataForValidation);
-      console.log(dataForValidation);
       setErrors({});
       return { ok: true, data: dataForValidation } as const;
     } catch (e) {
@@ -131,7 +130,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     e.preventDefault();
     const result = validateForm();
     if (!result.ok) return;
-    console.log(errors);
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);

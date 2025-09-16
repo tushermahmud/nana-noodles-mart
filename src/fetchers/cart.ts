@@ -11,7 +11,6 @@ export async function getCart(cartId: string) {
       tags: ['getCart'],
     },
   });
-  console.log('🔄 GET_CART: Response:', res);
 
   return res;
 }
@@ -43,7 +42,6 @@ export async function addToCart(payload: { productId: string; quantity: number }
     method: 'POST',
     body: payload,
   });
-  console.log('🔄 ADD_TO_CART: Response:', res);
   return res;
 }
 

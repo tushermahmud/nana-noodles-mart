@@ -45,7 +45,6 @@ export async function forgotPassword(email: string) {
     body: { email },
     includeAuthorization: false,
   });
-  console.log('🔄 AUTH_MAIN: Forgot password response:', res);
   if (res && res?.isSuccess) {
     return res;
   }
@@ -157,7 +156,6 @@ export async function refreshAccessToken() {
     });
 
     const res = await refreshPromise;
-    console.log('🔄 AUTH_MAIN: Refresh response:', res);
     if (res && res?.isSuccess && res?.data) {
       console.log('✅ AUTH_MAIN: Token refresh successful!');
       console.log(

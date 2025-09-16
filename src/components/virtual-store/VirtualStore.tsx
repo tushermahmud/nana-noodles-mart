@@ -29,7 +29,6 @@ const VirtualStore = ({
   cartId,
   loggedInUser,
 }: VirtualStoreProps) => {
-  console.log('🔄 VIRTUAL_STORE: Cart ID:', cartId);
   const { selectedProduct, isModalOpen, openModal, closeModal } = useVirtualStore({});
   const router = useRouter();
   // Default shelves configuration
@@ -48,7 +47,7 @@ const VirtualStore = ({
 
   const handleAddToCart = async (product: Product) => {
     try {
-      if (loggedInUser) {
+      if (loggedInUser?.cart_id) {
         const res = await addToCart({
           cartId: cartId,
           product_id: product.id,

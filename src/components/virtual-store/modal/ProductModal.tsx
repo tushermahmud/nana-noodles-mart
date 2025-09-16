@@ -21,8 +21,6 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
     onClose();
   };
 
-  console.log(product);
-
   // Normalize features to an array (supports CSV strings or arrays)
   const features: string[] = Array.isArray((product as any).features)
     ? ((product as any).features as string[])

@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import UserAuth from '@/components/auth/UserAuth';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Cart } from '@/types/cart';
 
 type Props = {
@@ -17,15 +17,13 @@ type Props = {
   cartDetails?: Cart;
 };
 
-export default function NavbarClient({ user, initialCartCount = 0, cartDetails }: Props) {
+export default function NavbarClient({ initialCartCount = 0, cartDetails }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { state } = useCart();
   const numberOfCartItems = cartDetails?.cart?.length ?? 0;
-  console.log('🔄 NAVBAR_CLIENT: Cart details:', cartDetails);
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,7 +32,6 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
     setIsClient(true);
     const qFromUrl = searchParams.get('q') || '';
     setSearchTerm(qFromUrl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navigateToProducts = (value: string) => {
@@ -69,8 +66,6 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isClient]);
-
-  const cartCount = state.itemCount || initialCartCount || 0;
 
   return (
     <motion.nav
