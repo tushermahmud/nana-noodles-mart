@@ -7,7 +7,11 @@ import { CartItem, Cart } from '@/types/cart';
 import { Product } from '@/types/products';
 import { performFetch } from '@/lib/apiUtils';
 
-export async function addToCart(data: { cartId: string; product_id: string; product_quantity: number }) {
+export async function addToCart(data: {
+  cartId: string;
+  product_id: string;
+  product_quantity: number;
+}) {
   const res = await performFetch<APIResponse<Cart>>(CART_ENDPOINTS.ADD_TO_CART(data.cartId), {
     method: 'POST',
     body: data,
@@ -21,7 +25,11 @@ export async function addToCart(data: { cartId: string; product_id: string; prod
   return res;
 }
 
-export async function updateCartItem(data: { cartId: string; product_id: string; product_quantity: number }) {
+export async function updateCartItem(data: {
+  cartId: string;
+  product_id: string;
+  product_quantity: number;
+}) {
   const res = await performFetch<Cart>(CART_ENDPOINTS.UPDATE_CART_ITEM(data.cartId), {
     method: 'PUT',
     body: data,

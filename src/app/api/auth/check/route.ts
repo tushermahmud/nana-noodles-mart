@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     // Direct session access without triggering any API calls
     const cookieStore = await cookies();
     const session = await getIronSession(cookieStore, sessionOptions);
-    
+
     return NextResponse.json({
       isLoggedIn: session.isLoggedIn || false,
       username: session.username || null,

@@ -61,7 +61,6 @@ const CategoriesClient = ({ categories }: CategoriesClientProps) => {
     return ColorComponent?.bg || 'from-pink-500 to-orange-500';
   };
 
-
   const handleEditItem = (item: any) => {
     setEditingItem(item);
     setShowAddModal(true);

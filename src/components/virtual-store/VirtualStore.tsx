@@ -1,7 +1,6 @@
 'use client';
 
 import { Star } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
 import { useVirtualStore } from './hooks/useVirtualStore';
 import { ShelfData } from './types';
 import VirtualStoreHeader from './VirtualStoreHeader';
@@ -11,19 +10,28 @@ import CallToAction from './CallToAction';
 import { Product } from '@/types/products';
 import { addToCart } from '@/actions/cart';
 import { toast } from 'sonner';
+import { User } from '@/types/auth';
+import { getErrorMessage } from '@/lib/errorUtils';
+import { useRouter } from 'next/navigation';
 
 interface VirtualStoreProps {
   products: Product[];
   shelves?: ShelfData[];
   isProductsPage?: boolean;
   cartId: string;
+  loggedInUser?: User | null;
 }
 
-const VirtualStore = ({ products, shelves, isProductsPage, cartId }: VirtualStoreProps) => {
+const VirtualStore = ({
+  products,
+  shelves,
+  isProductsPage,
+  cartId,
+  loggedInUser,
+}: VirtualStoreProps) => {
   console.log('🔄 VIRTUAL_STORE: Cart ID:', cartId);
-  const { addItem } = useCart();
   const { selectedProduct, isModalOpen, openModal, closeModal } = useVirtualStore({});
-
+  const router = useRouter();
   // Default shelves configuration
   const defaultShelves: ShelfData[] = [
     {
@@ -39,15 +47,24 @@ const VirtualStore = ({ products, shelves, isProductsPage, cartId }: VirtualStor
   const shelvesToRender = shelves || defaultShelves;
 
   const handleAddToCart = async (product: Product) => {
-    const res = await addToCart({
-      cartId: cartId,
-      product_id: product.id,
-      product_quantity: 1,
-    });
-    if (res?.isSuccess) {
-      toast.success(res?.message ?? 'Product added to cart');
-    } else {
-      toast.error(res?.message ?? 'Failed to add product to cart');
+    try {
+      if (loggedInUser) {
+        const res = await addToCart({
+          cartId: cartId,
+          product_id: product.id,
+          product_quantity: 1,
+        });
+        if (res?.isSuccess) {
+          toast.success(res?.message ?? 'Product added to cart');
+        } else {
+          toast.error(res?.message ?? 'Failed to add product to cart');
+        }
+      } else {
+        router.push(`/login?next=${encodeURIComponent('/products')}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(getErrorMessage(error));
     }
   };
 
@@ -67,9 +84,7 @@ const VirtualStore = ({ products, shelves, isProductsPage, cartId }: VirtualStor
             />
           ))}
         </div>
-        {!isProductsPage && (
-          <CallToAction />
-        )}
+        {!isProductsPage && <CallToAction />}
       </div>
 
       {/* Product Modal */}

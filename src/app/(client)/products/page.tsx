@@ -2,6 +2,9 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ProductsClient from '@/components/products/ProductsClient';
 import { getAllProducts, getProducts } from '@/fetchers/products';
+import { getCurrentUser } from '@/fetchers/auth';
+import { getCart } from '@/fetchers/cart';
+import { Cart } from '@/types/cart';
 
 type Props = {
   searchParams?: Promise<{ page?: string; limit?: string; q?: string }>;
@@ -14,15 +17,22 @@ export default async function ProductsPage({ searchParams }: Props) {
   const q = params.q || '';
 
   const initialRes = await getAllProducts({ page, limit, q: q });
-  console.log(initialRes);
   const initialProducts = initialRes?.data?.rows ?? [];
-  console.log(initialProducts);
   const totalCount = initialRes?.data?.count ?? 0;
+  const loggedInUserRes = await getCurrentUser();
+  const loggedInUser = loggedInUserRes?.data?.data ?? null;
+  const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
+  const getCartDetails = getCartDetailsRes?.data?.data ?? {};
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
-      <ProductsClient initialProducts={initialProducts} totalCount={totalCount} pageSize={limit} initialQuery={q} />
+      <ProductsClient
+        initialProducts={initialProducts}
+        totalCount={totalCount}
+        pageSize={limit}
+        initialQuery={q}
+        cartDetails={getCartDetails as Cart}
+      />
       <Footer />
     </div>
   );

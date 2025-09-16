@@ -7,18 +7,26 @@ import Footer from '@/components/layout/Footer';
 import { getProducts } from '@/fetchers/products';
 import { Product } from '@/types/products';
 import { getCurrentUser } from '@/fetchers/auth';
+import { getCart } from '@/fetchers/cart';
+import { Cart } from '@/types/cart';
 
 export default async function Home() {
   const productsRes = await getProducts();
   const products = productsRes?.data?.data ?? [];
   const loggedInUserRes = await getCurrentUser();
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
+  const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
+  const getCartDetails = getCartDetailsRes?.data?.data ?? {};
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-pink-50/40 to-black/5">
-      <Navbar />
+      <Navbar cartDetails={getCartDetails as Cart} />
       <Hero />
       <Categories />
-      <VirtualStore products={products as Product[]} cartId={loggedInUser?.cart_id ?? ""} />
+      <VirtualStore
+        products={products as Product[]}
+        cartId={loggedInUser?.cart_id ?? ''}
+        loggedInUser={loggedInUser}
+      />
       <AboutSection />
       <Footer />
     </div>

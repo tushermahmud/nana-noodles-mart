@@ -90,7 +90,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
-        original_price: parseFloat(formData.original_price) || 0
+        original_price: parseFloat(formData.original_price) || 0,
       };
 
       createProductSchema.parse(validationData);
@@ -127,7 +127,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
-        original_price: parseFloat(formData.original_price ?? '0') || 0
+        original_price: parseFloat(formData.original_price ?? '0') || 0,
       };
 
       const validatedData = createProductSchema.parse(validationData);
@@ -225,7 +225,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                   </option>
                 ))}
               </select>
-              {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>}
+              {errors.categoryId && (
+                <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>
+              )}
             </div>
           </div>
 
@@ -264,7 +266,9 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Original Price (optional)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Original Price (optional)
+              </label>
               <input
                 type="number"
                 step="0.01"

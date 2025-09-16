@@ -100,14 +100,8 @@ const Categories = ({ onCategorySelect, selectedCategory }: CategoriesProps) => 
   };
 
   return (
-    <section
-      id="categories"
-      className="py-20 relative overflow-hidden"
-    >
-      
-
+    <section id="categories" className="py-20 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
         {/* Categories Grid with enhanced layout */}
         <div className="relative">
           {/* Interactive store container */}
@@ -207,8 +201,6 @@ const Categories = ({ onCategorySelect, selectedCategory }: CategoriesProps) => 
                   </motion.div>
                 ))}
               </div>
-
-              
             </div>
           </div>
         </div>

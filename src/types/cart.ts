@@ -1,7 +1,7 @@
-import { Product } from "./products";
+import { Product } from './products';
 
 export interface CartItem {
-  cart_id: string;  
+  cart_id: string;
   created_at: string;
   id: string;
   product_id: string;
@@ -14,6 +14,3 @@ export interface CartItem {
 export interface Cart {
   cart: CartItem[];
 }
-
-
-

@@ -4,7 +4,8 @@ export const CART_ENDPOINTS = {
   GET_CART: (cartId: string) => `${BASE_URL}/cart/${cartId}`,
   ADD_TO_CART: (cartId: string) => `${BASE_URL}/cart/${cartId}`,
   UPDATE_CART_ITEM: (cartId: string) => `${BASE_URL}/cart/${cartId}`,
-  REMOVE_FROM_CART: (product_id: string, cartId: string) => `${BASE_URL}/cart/${cartId}/${product_id}`,
+  REMOVE_FROM_CART: (product_id: string, cartId: string) =>
+    `${BASE_URL}/cart/${cartId}/${product_id}`,
   CLEAR_CART: `${BASE_URL}/cart`,
   GET_CART_COUNT: `${BASE_URL}/cart/count`,
   APPLY_DISCOUNT: `${BASE_URL}/cart/discount`,

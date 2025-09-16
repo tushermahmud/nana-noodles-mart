@@ -4,7 +4,15 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AUTH_ENDPOINTS } from '@/api/auth';
-import { LoginResponse, LoginRequest, RegisterRequest, RegisterResponse, User, ForgotPasswordRequest, ForgotPasswordResponse } from '@/types/auth';
+import {
+  LoginResponse,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResponse,
+  User,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+} from '@/types/auth';
 import { performFetch } from '@/lib/apiUtils';
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
@@ -16,7 +24,6 @@ export async function loginUser(data: LoginRequest) {
     includeAuthorization: false,
   });
 
-
   if (res && res?.isSuccess && res?.data) {
     const cookieStore = await cookies();
     const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
@@ -24,7 +31,7 @@ export async function loginUser(data: LoginRequest) {
     session.accessToken = res.data.data?.token;
     session.refreshToken = res.data.data?.refreshToken;
     session.user_id = res.data.data?.user?.id;
-	session.role = res.data.data?.user?.type ?? "user"
+    session.role = res.data.data?.user?.type ?? 'user';
     await session.save();
     revalidateTag('getCurrentUser');
   }
@@ -32,18 +39,17 @@ export async function loginUser(data: LoginRequest) {
   return res;
 }
 
-
 export async function forgotPassword(email: string) {
-	const res = await performFetch<ForgotPasswordResponse>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
-	  method: 'POST',
-	  body: { email },
-	  includeAuthorization: false,
-	});
-	console.log('🔄 AUTH_MAIN: Forgot password response:', res);
-	if (res && res?.isSuccess) {
-		return res;
-	}
+  const res = await performFetch<ForgotPasswordResponse>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+    method: 'POST',
+    body: { email },
+    includeAuthorization: false,
+  });
+  console.log('🔄 AUTH_MAIN: Forgot password response:', res);
+  if (res && res?.isSuccess) {
+    return res;
   }
+}
 
 export async function registerUser(data: RegisterRequest) {
   const res = await performFetch<RegisterResponse>(AUTH_ENDPOINTS.REGISTER, {
@@ -96,8 +102,6 @@ export async function changePassword(data: { currentPassword: string; newPasswor
   return res;
 }
 
-
-
 export async function resetPassword(data: { email: string; token: string; newPassword: string }) {
   const res = await performFetch<void>(AUTH_ENDPOINTS.RESET_PASSWORD, {
     method: 'POST',
@@ -133,14 +137,17 @@ export async function refreshAccessToken() {
   try {
     const cookieStore = await cookies();
     const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
-	console.log('session', session);
+    console.log('session', session);
     if (!session?.refreshToken) {
       console.log('❌ No refresh token available');
       return { success: false, message: 'No refresh token available' };
     }
 
     console.log('🔄 AUTH_MAIN: Attempting to refresh token...');
-    console.log('🔄 AUTH_MAIN: Current refresh token (first 20 chars):', session.refreshToken.substring(0, 20) + '...');
+    console.log(
+      '🔄 AUTH_MAIN: Current refresh token (first 20 chars):',
+      session.refreshToken.substring(0, 20) + '...'
+    );
     console.log('🔄 AUTH_MAIN: User ID:', session.user_id);
 
     const refreshPromise = performFetch<LoginResponse>(AUTH_ENDPOINTS.REFRESH_TOKEN, {
@@ -150,20 +157,26 @@ export async function refreshAccessToken() {
     });
 
     const res = await refreshPromise;
-	console.log('🔄 AUTH_MAIN: Refresh response:', res);
+    console.log('🔄 AUTH_MAIN: Refresh response:', res);
     if (res && res?.isSuccess && res?.data) {
       console.log('✅ AUTH_MAIN: Token refresh successful!');
-      console.log('✅ AUTH_MAIN: New access token (first 20 chars):', res.data.data?.token?.substring(0, 20) + '...');
-      console.log('✅ AUTH_MAIN: New refresh token (first 20 chars):', res.data.data?.refreshToken?.substring(0, 20) + '...');
+      console.log(
+        '✅ AUTH_MAIN: New access token (first 20 chars):',
+        res.data.data?.token?.substring(0, 20) + '...'
+      );
+      console.log(
+        '✅ AUTH_MAIN: New refresh token (first 20 chars):',
+        res.data.data?.refreshToken?.substring(0, 20) + '...'
+      );
       // Update session with new tokens
       session.accessToken = res.data.data?.token;
       session.refreshToken = res.data.data?.refreshToken;
       await session.save();
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         accessToken: session.accessToken,
-        refreshToken: session.refreshToken 
+        refreshToken: session.refreshToken,
       };
     }
 

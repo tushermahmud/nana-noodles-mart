@@ -113,7 +113,6 @@ const CategoryPage = ({ params }: CategoryPageProps) => {
   if (!category) {
     return (
       <div className="min-h-screen bg-white">
-        <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center pt-32">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Category not found</h2>

@@ -1,7 +1,11 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useMemo, useReducer, useState } from 'react';
-import { addToCart as addToCartAction, updateCartItem as updateCartItemAction, clearCart as clearCartAction } from '@/actions/cart';
+import {
+  addToCart as addToCartAction,
+  updateCartItem as updateCartItemAction,
+  clearCart as clearCartAction,
+} from '@/actions/cart';
 import { getCart as getCartAction } from '@/fetchers/cart';
 import { removeCartItem as removeFromCartAction } from '@/actions/cart';
 export interface CartItem {
@@ -45,7 +49,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case 'OPTIMISTIC_ADD': {
       const existing = state.items.find((i) => i.id === action.payload.id);
       const items = existing
-        ? state.items.map((i) => (i.id === action.payload.id ? { ...i, quantity: i.quantity + 1 } : i))
+        ? state.items.map((i) =>
+            i.id === action.payload.id ? { ...i, quantity: i.quantity + 1 } : i
+          )
         : [...state.items, { ...action.payload, quantity: 1 }];
       return recalc(items);
     }
@@ -55,7 +61,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
     case 'OPTIMISTIC_UPDATE': {
       const items = state.items
-        .map((i) => (i.id === action.payload.id ? { ...i, quantity: Math.max(0, action.payload.quantity) } : i))
+        .map((i) =>
+          i.id === action.payload.id ? { ...i, quantity: Math.max(0, action.payload.quantity) } : i
+        )
         .filter((i) => i.quantity > 0);
       return recalc(items);
     }
@@ -83,7 +91,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const loadFromServer = async () => {
     try {
-      const res: any = await getCartAction("324234234");
+      const res: any = await getCartAction('324234234');
       const data = res?.data || res?.data?.data || res; // accept multiple shapes
       const items: CartItem[] = (data?.items || []).map((it: any) => ({
         id: it.id || it.productId,

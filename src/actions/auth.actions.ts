@@ -14,7 +14,7 @@ export async function getSession(): Promise<SessionData> {
   try {
     const cookieStore = await cookies();
     const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
-    
+
     return {
       isLoggedIn: session.isLoggedIn || false,
       user_id: session.user_id,
@@ -46,7 +46,7 @@ export async function renewSession(): Promise<SessionData> {
       hasRefreshToken: !!session.refreshToken,
       hasUserId: !!session.user_id,
       refreshToken: session.refreshToken?.substring(0, 20) + '...',
-      userId: session.user_id
+      userId: session.user_id,
     });
 
     if (!session?.refreshToken) {
@@ -55,7 +55,10 @@ export async function renewSession(): Promise<SessionData> {
     }
 
     console.log('🔄 AUTH_ACTIONS: Attempting to refresh token...');
-    console.log('🔄 AUTH_ACTIONS: Current refresh token (first 20 chars):', session.refreshToken.substring(0, 20) + '...');
+    console.log(
+      '🔄 AUTH_ACTIONS: Current refresh token (first 20 chars):',
+      session.refreshToken.substring(0, 20) + '...'
+    );
     console.log('🔄 AUTH_ACTIONS: User ID:', session.user_id);
 
     // Call the refresh endpoint directly
@@ -63,7 +66,7 @@ export async function renewSession(): Promise<SessionData> {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.refreshToken}`,
+        Authorization: `Bearer ${session.refreshToken}`,
       },
     });
 
@@ -85,9 +88,15 @@ export async function renewSession(): Promise<SessionData> {
 
     if (data?.execStatus && data?.data) {
       console.log('✅ AUTH_ACTIONS: Token refresh successful!');
-      console.log('✅ AUTH_ACTIONS: New access token (first 20 chars):', data.data.token.substring(0, 20) + '...');
-      console.log('✅ AUTH_ACTIONS: New refresh token (first 20 chars):', data.data.refreshToken.substring(0, 20) + '...');
-      
+      console.log(
+        '✅ AUTH_ACTIONS: New access token (first 20 chars):',
+        data.data.token.substring(0, 20) + '...'
+      );
+      console.log(
+        '✅ AUTH_ACTIONS: New refresh token (first 20 chars):',
+        data.data.refreshToken.substring(0, 20) + '...'
+      );
+
       // Update session with new tokens
       const updatedSession: SessionData = {
         isLoggedIn: true,
@@ -109,7 +118,7 @@ export async function renewSession(): Promise<SessionData> {
     throw new Error('Invalid refresh response');
   } catch (error) {
     console.error('❌ AUTH_ACTIONS: Token refresh error:', error);
-    
+
     // Return empty session on error
     return {
       isLoggedIn: false,

@@ -8,8 +8,8 @@ export interface APIResponse<T = any> {
 }
 
 export type PaginatedAPIResponse<T> = APIResponse<{
-	rows: T[];
-	count: number;
+  rows: T[];
+  count: number;
 }>;
 
 export interface Pagination {

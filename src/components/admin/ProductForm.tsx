@@ -127,7 +127,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    debugger
+    debugger;
     e.preventDefault();
     const result = validateForm();
     if (!result.ok) return;
@@ -135,7 +135,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
-      fd.append('categoryId', result.data.categoryId || '');
+    fd.append('categoryId', result.data.categoryId || '');
     fd.append('description', result.data.description);
     fd.append('price', String(result.data.price));
     if (result.data.quantity !== undefined) {
@@ -165,7 +165,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     }
     try {
       const res = await updateProduct(String(formData.id), fd);
-      debugger
+      debugger;
       if (res?.isSuccess) {
         onSave({ ...formData, ...result.data } as unknown as Product);
         toast.success(res?.message ?? 'Product updated successfully');
@@ -238,7 +238,9 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                     </option>
                   ))}
                 </select>
-                {errors.categoryId && <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>}
+                {errors.categoryId && (
+                  <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>
+                )}
               </div>
             </div>
 

@@ -24,7 +24,7 @@ export const createProductSchema = z.object({
     .min(0.01, 'Price must be at least $0.01')
     .max(9999.99, 'Price must be less than $10,000'),
 
-    original_price: z
+  original_price: z
     .number()
     .positive('Price must be a positive number')
     .min(0.01, 'Price must be at least $0.01')

@@ -87,7 +87,10 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/">
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center space-x-3 cursor-pointer">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center space-x-3 cursor-pointer"
+            >
               <div className="relative">
                 <Image src="/logo.png" alt="Nana's Noodle Mart Logo" width={200} height={100} />
               </div>
@@ -96,16 +99,32 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <motion.a href="#categories" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">
+            <motion.a
+              href="#categories"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
               Categories
             </motion.a>
-            <motion.a href="/products" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">
+            <motion.a
+              href="/products"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
               Products
             </motion.a>
-            <motion.a href="#about" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">
+            <motion.a
+              href="#about"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
               About
             </motion.a>
-            <motion.a href="#contact" whileHover={{ y: -2 }} className="text-gray-700 hover:text-pink-600 font-semibold transition-colors">
+            <motion.a
+              href="#contact"
+              whileHover={{ y: -2 }}
+              className="text-gray-700 hover:text-pink-600 font-semibold transition-colors"
+            >
               Contact
             </motion.a>
           </div>
@@ -113,7 +132,11 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
           {/* Desktop Right Side */}
           <div className="hidden lg:flex items-center space-x-4">
             {/* Search */}
-            <motion.form whileHover={{ scale: 1.05 }} className="relative" onSubmit={onSearchSubmit}>
+            <motion.form
+              whileHover={{ scale: 1.05 }}
+              className="relative"
+              onSubmit={onSearchSubmit}
+            >
               <Search className="w-5 h-5 text-gray-600 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
                 type="text"
@@ -126,10 +149,18 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
             </motion.form>
 
             {/* Cart */}
-            <motion.a href="/cart" whileHover={{ scale: 1.05 }} className="relative p-3 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors">
+            <motion.a
+              href="/cart"
+              whileHover={{ scale: 1.05 }}
+              className="relative p-3 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"
+            >
               <ShoppingCart className="w-6 h-6 text-pink-600" />
               {numberOfCartItems > 0 && (
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-2 -right-2 w-6 h-6 bg-pink-600 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-pink-600 text-white text-xs rounded-full flex items-center justify-center font-bold"
+                >
                   {numberOfCartItems > 99 ? '99+' : numberOfCartItems}
                 </motion.div>
               )}
@@ -141,7 +172,12 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2"
+            >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </Button>
           </div>
@@ -158,16 +194,32 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
               className="lg:hidden border-t border-gray-200 bg-white/95 backdrop-blur-md"
             >
               <div className="py-4 space-y-2">
-                <motion.a href="#categories" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors" whileHover={{ x: 5 }}>
+                <motion.a
+                  href="#categories"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                  whileHover={{ x: 5 }}
+                >
                   Categories
                 </motion.a>
-                <motion.a href="/products" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors" whileHover={{ x: 5 }}>
+                <motion.a
+                  href="/products"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                  whileHover={{ x: 5 }}
+                >
                   Products
                 </motion.a>
-                <motion.a href="#about" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors" whileHover={{ x: 5 }}>
+                <motion.a
+                  href="#about"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                  whileHover={{ x: 5 }}
+                >
                   About
                 </motion.a>
-                <motion.a href="#contact" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors" whileHover={{ x: 5 }}>
+                <motion.a
+                  href="#contact"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                  whileHover={{ x: 5 }}
+                >
                   Contact
                 </motion.a>
 
@@ -187,10 +239,16 @@ export default function NavbarClient({ user, initialCartCount = 0, cartDetails }
                 </div>
 
                 {/* Mobile Cart */}
-                <motion.a href="/cart" className="flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors" whileHover={{ x: 5 }}>
+                <motion.a
+                  href="/cart"
+                  className="flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-md transition-colors"
+                  whileHover={{ x: 5 }}
+                >
                   <span>Cart</span>
                   {numberOfCartItems && (
-                    <span className="bg-pink-600 text-white text-xs rounded-full px-2 py-1 font-bold">{numberOfCartItems > 99 ? '99+' : numberOfCartItems}</span>
+                    <span className="bg-pink-600 text-white text-xs rounded-full px-2 py-1 font-bold">
+                      {numberOfCartItems > 99 ? '99+' : numberOfCartItems}
+                    </span>
                   )}
                 </motion.a>
 

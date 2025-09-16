@@ -47,12 +47,12 @@ export function isTokenExpired(token: string): boolean {
     const tokenExp = decoded.exp;
     const timeUntilExpiry = tokenExp - currentTime;
     const isExpired = tokenExp < currentTime;
-    
+
     console.log(`🔍 TOKEN_UTILS: Token expires at: ${new Date(tokenExp * 1000).toLocaleString()}`);
     console.log(`🔍 TOKEN_UTILS: Current time: ${new Date(currentTime * 1000).toLocaleString()}`);
     console.log(`🔍 TOKEN_UTILS: Time until expiry: ${Math.round(timeUntilExpiry)} seconds`);
     console.log(`🔍 TOKEN_UTILS: Is expired: ${isExpired}`);
-    
+
     return isExpired;
   } catch (error) {
     console.error('🔍 TOKEN_UTILS: Error checking token expiration:', error);
@@ -86,7 +86,7 @@ export function getTokenExpiration(token: string): number | null {
 export function getTimeUntilExpiration(token: string): number {
   const expiration = getTokenExpiration(token);
   if (!expiration) return 0;
-  
+
   const now = Date.now();
   return Math.max(0, expiration - now);
 }

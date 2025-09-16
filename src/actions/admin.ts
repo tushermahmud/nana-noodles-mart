@@ -43,7 +43,6 @@ export async function deleteCategory(id: string) {
   return res;
 }
 
-
 /* export async function updatePaymentStatus(paymentId: string, status: string) {
   const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_PAYMENT_STATUS(paymentId), {
     method: 'PATCH',

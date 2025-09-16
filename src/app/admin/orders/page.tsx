@@ -142,7 +142,11 @@ const OrdersPage = () => {
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => handleViewOrder(order as unknown as Order)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleViewOrder(order as unknown as Order)}
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="sm">

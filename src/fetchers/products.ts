@@ -6,15 +6,12 @@ import { getQueryEndpoint } from '@/lib/utils';
 
 // Product Fetchers
 export async function getProducts() {
-  const res = await performFetch<APIResponse<Product[]>>(
-    PRODUCTS_ENDPOINTS.GET_PRODUCTS,
-    {
-      method: 'GET',
-      next: {
-        tags: ['homeProducts'],
-      },
-    }
-  );
+  const res = await performFetch<APIResponse<Product[]>>(PRODUCTS_ENDPOINTS.GET_PRODUCTS, {
+    method: 'GET',
+    next: {
+      tags: ['homeProducts'],
+    },
+  });
 
   return res;
 }

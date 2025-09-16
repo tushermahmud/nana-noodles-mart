@@ -6,6 +6,8 @@ import Categories from '@/components/sections/Categories-backup';
 import { VirtualStore } from '@/components/virtual-store';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { BASE_URL } from '@/config/env';
+import { Cart } from '@/types/cart';
+import { User } from '@/types/auth';
 
 type Product = any;
 
@@ -14,11 +16,18 @@ type Props = {
   totalCount: number;
   pageSize?: number;
   initialQuery?: string;
+  cartDetails?: Cart;
+  loggedInUser?: User;
 };
 
-export default function ProductsClient({ initialProducts, totalCount, pageSize = 12, initialQuery = '' }: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
+export default function ProductsClient({
+  initialProducts,
+  totalCount,
+  pageSize = 12,
+  initialQuery = '',
+  cartDetails,
+  loggedInUser,
+}: Props) {
   const searchParams = useSearchParams();
 
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -29,7 +38,13 @@ export default function ProductsClient({ initialProducts, totalCount, pageSize =
 
   // Read q from URL (Navbar controls it)
   const q = searchParams.get('q') || initialQuery;
-
+  const cartId =
+    cartDetails &&
+    cartDetails?.cart &&
+    cartDetails?.cart.length > 0 &&
+    cartDetails?.cart[0]?.cart_id
+      ? cartDetails?.cart[0]?.cart_id
+      : '';
   // Prevent rapid duplicate loads
   const loadingRef = useRef(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -54,7 +69,9 @@ export default function ProductsClient({ initialProducts, totalCount, pageSize =
       const nextPage = currentPage + 1;
       const params = new URLSearchParams({ page: String(nextPage), limit: String(pageSize) });
       if (q) params.set('q', q);
-      const res = await fetch(`${BASE_URL}/product-page?${params.toString()}`, { cache: 'no-store' });
+      const res = await fetch(`${BASE_URL}/product-page?${params.toString()}`, {
+        cache: 'no-store',
+      });
       const data = await res.json();
       const newRows = data?.data?.rows || [];
       const newCount = data?.data?.count ?? totalCount;
@@ -96,24 +113,45 @@ export default function ProductsClient({ initialProducts, totalCount, pageSize =
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Categories onCategorySelect={setSelectedCategory} selectedCategory={selectedCategory} />
 
-          <VirtualStore products={filteredProducts} isProductsPage={true} />
+          <VirtualStore
+            products={filteredProducts}
+            isProductsPage={true}
+            cartId={cartId}
+            loggedInUser={loggedInUser}
+          />
 
-          {hasMore && <div ref={sentinelRef} id="infinite-scroll-sentinel" className="h-1 w-full" />}
+          {hasMore && (
+            <div ref={sentinelRef} id="infinite-scroll-sentinel" className="h-1 w-full" />
+          )}
 
           {loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-center mt-12">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-center mt-12"
+            >
               <div className="w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
             </motion.div>
           )}
 
           {!hasMore && filteredProducts.length > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mt-12">
-              <p className="text-gray-600">You've reached the end of our delicious collection! 🍜</p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mt-12"
+            >
+              <p className="text-gray-600">
+                You've reached the end of our delicious collection! 🍜
+              </p>
             </motion.div>
           )}
 
           {filteredProducts.length === 0 && !loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mt-12">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mt-12"
+            >
               <div className="text-6xl mb-4">🍜</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">No products found</h3>
               <p className="text-gray-600">Try another search or category.</p>

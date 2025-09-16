@@ -23,15 +23,15 @@ const UserAuth = ({ isMobile = false }: UserAuthProps) => {
         // Add timeout to prevent hanging
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-        
+
         const response = await fetch('/api/auth/check', {
           method: 'GET',
           credentials: 'include',
           signal: controller.signal,
         });
-        
+
         clearTimeout(timeoutId);
-        
+
         if (response.ok) {
           const data = await response.json();
           setIsLoggedIn(data.isLoggedIn || false);
@@ -54,7 +54,7 @@ const UserAuth = ({ isMobile = false }: UserAuthProps) => {
       setIsLoading(true);
       // Just call logoutUser - it handles session cleanup
       const result = await logoutUser();
-      
+
       if (result?.isSuccess) {
         toast.success('Logged out successfully');
         setIsLoggedIn(false);
@@ -85,7 +85,7 @@ const UserAuth = ({ isMobile = false }: UserAuthProps) => {
         <Button
           onClick={handleLogout}
           variant="outline"
-          size={isMobile ? "default" : "sm"}
+          size={isMobile ? 'default' : 'sm'}
           className={`border-2 border-red-200 hover:border-red-300 text-red-600 hover:text-red-700 ${
             isMobile ? 'w-full' : ''
           }`}
@@ -103,7 +103,7 @@ const UserAuth = ({ isMobile = false }: UserAuthProps) => {
       <Link href="/login">
         <Button
           variant="outline"
-          size={isMobile ? "default" : "sm"}
+          size={isMobile ? 'default' : 'sm'}
           className={`border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700 ${
             isMobile ? 'w-full' : ''
           }`}
@@ -114,7 +114,7 @@ const UserAuth = ({ isMobile = false }: UserAuthProps) => {
       </Link>
       <Link href="/register">
         <Button
-          size={isMobile ? "default" : "sm"}
+          size={isMobile ? 'default' : 'sm'}
           className={`bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white ${
             isMobile ? 'w-full' : ''
           }`}

@@ -12,7 +12,7 @@ export interface User extends BaseEntity {
   cart_id: string | null;
   username: string | null;
   name: string | null;
-  first_name: string;   
+  first_name: string;
   last_name: string;
   password: string;
   domain: string | null;
@@ -31,7 +31,7 @@ export interface User extends BaseEntity {
   is_two_factor_enabled?: number;
   two_factor_secret?: string | null;
   role_users?: string[];
-} 
+}
 
 export interface LoginRequest {
   email: string;

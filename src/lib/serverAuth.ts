@@ -8,15 +8,15 @@ import { redirect } from 'next/navigation';
  */
 export async function requireAdmin() {
   const session = await getSession();
-  
+
   if (!session.isLoggedIn) {
     redirect('/login');
   }
-  
+
   if (!isAdmin(session)) {
     redirect('/');
   }
-  
+
   return session;
 }
 
@@ -26,11 +26,11 @@ export async function requireAdmin() {
  */
 export async function requireAuth() {
   const session = await getSession();
-  
+
   if (!session.isLoggedIn) {
     redirect('/login');
   }
-  
+
   return session;
 }
 

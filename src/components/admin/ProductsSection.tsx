@@ -17,17 +17,12 @@ type ProductsSectionProps = {
   categories: Category[];
 };
 
-export const ProductsSection = ({
-  filteredProducts,
-  count,
-  categories,
-}: ProductsSectionProps) => {
+export const ProductsSection = ({ filteredProducts, count, categories }: ProductsSectionProps) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingItem, setEditingItem] = useState<Product | null>(null);
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-
 
   const handleSaveProduct = (productData: any) => {
     // TODO: trigger a revalidation/fetch from parent if needed
@@ -107,7 +102,9 @@ export const ProductsSection = ({
                     <span className="font-medium text-gray-900">${product?.price ?? 0}</span>
                   </td>
                   <td className="py-4 px-4 text-center">
-                    <span className="font-medium text-gray-900">${product?.original_price ?? 0}</span>
+                    <span className="font-medium text-gray-900">
+                      ${product?.original_price ?? 0}
+                    </span>
                   </td>
                   <td className="py-4 px-4">
                     <span
@@ -117,7 +114,7 @@ export const ProductsSection = ({
                           : 'bg-red-100 text-red-800'
                       }`}
                     >
-                      {product?.quantity ?? 0 > 0 ? 'In Stock' : 'Out of Stock'}
+                      {(product?.quantity ?? 0 > 0) ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </td>
                   <td className="py-4 px-4">

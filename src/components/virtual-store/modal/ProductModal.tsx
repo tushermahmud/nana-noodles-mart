@@ -49,7 +49,9 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
               <div className="flex items-center space-x-2">
                 <span className="text-2xl font-black text-pink-600">${product.price}</span>
                 {product?.original_price && product.original_price > product.price && (
-                  <span className="text-lg text-gray-400 line-through">${product.original_price}</span>
+                  <span className="text-lg text-gray-400 line-through">
+                    ${product.original_price}
+                  </span>
                 )}
               </div>
             </div>
@@ -108,7 +110,9 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
           {/* Spice Level */}
           <div className="flex items-center mb-6 p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-100">
             <Flame className="w-4 h-4 text-red-500 mr-2" />
-            <span className="text-sm text-gray-700 font-semibold">Spice Level: {product.spice_level}/5</span>
+            <span className="text-sm text-gray-700 font-semibold">
+              Spice Level: {product.spice_level}/5
+            </span>
             <div className="ml-auto flex space-x-1">
               {[...Array(5)].map((_, i) => (
                 <div
@@ -119,15 +123,16 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
             </div>
           </div>
           <div className="flex items-center mb-8 p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-100">
-
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl font-black text-pink-600 anime-title">${product.price}</span>
-            {product.original_price && product.original_price > product.price && (
-              <span className="text-lg text-gray-400 line-through pop-text">
-                ${product.original_price}
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl font-black text-pink-600 anime-title">
+                ${product.price}
               </span>
-            )}
-          </div>
+              {product.original_price && product.original_price > product.price && (
+                <span className="text-lg text-gray-400 line-through pop-text">
+                  ${product.original_price}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Actions */}
@@ -147,7 +152,6 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
                 View Product
               </Button>
             </Link>
-            
           </div>
         </div>
       </motion.div>

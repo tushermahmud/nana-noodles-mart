@@ -27,7 +27,9 @@ export default function ForgotPasswordPage() {
     try {
       const res = await forgotPassword(email);
       if (res?.isSuccess) {
-        toast.success(res?.message ?? 'If an account exists, a reset code has been sent to your email');
+        toast.success(
+          res?.message ?? 'If an account exists, a reset code has been sent to your email'
+        );
         setShowReset(true);
       } else {
         toast.message(res?.message ?? 'Check your inbox if the email exists in our records');
@@ -82,38 +84,11 @@ export default function ForgotPasswordPage() {
 
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200">
             {!showReset ? (
-            <form onSubmit={onSubmit} className="p-8 space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  placeholder="you@example.com"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white disabled:opacity-50"
-              >
-                {isSubmitting ? 'Sending...' : 'Send Reset Link'}
-              </Button>
-
-              <div className="text-center text-sm text-gray-600">
-                Remembered?{' '}
-                <Link href="/login" className="text-pink-600 hover:text-pink-700 font-semibold">
-                  Back to Login
-                </Link>
-              </div>
-            </form>
-            ) : (
-            <form onSubmit={onResetSubmit} className="p-8 space-y-6">
-              <div className="grid grid-cols-1 gap-4">
+              <form onSubmit={onSubmit} className="p-8 space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email address
+                  </label>
                   <input
                     type="email"
                     value={email}
@@ -122,50 +97,89 @@ export default function ForgotPasswordPage() {
                     placeholder="you@example.com"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">OTP</label>
-                  <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    placeholder="Enter the code you received"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    placeholder="Enter new password"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                    placeholder="Re-enter new password"
-                  />
-                </div>
-              </div>
 
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white disabled:opacity-50"
-              >
-                {isSubmitting ? 'Resetting...' : 'Reset Password'}
-              </Button>
-              <div className="text-center text-sm text-gray-600">
-                Didn’t get a code?{' '}
-                <button type="button" onClick={() => setShowReset(false)} className="text-pink-600 hover:text-pink-700 font-semibold">Resend</button>
-              </div>
-            </form>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Reset Link'}
+                </Button>
+
+                <div className="text-center text-sm text-gray-600">
+                  Remembered?{' '}
+                  <Link href="/login" className="text-pink-600 hover:text-pink-700 font-semibold">
+                    Back to Login
+                  </Link>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={onResetSubmit} className="p-8 space-y-6">
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">OTP</label>
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="Enter the code you received"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="Enter new password"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="Re-enter new password"
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Resetting...' : 'Reset Password'}
+                </Button>
+                <div className="text-center text-sm text-gray-600">
+                  Didn’t get a code?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setShowReset(false)}
+                    className="text-pink-600 hover:text-pink-700 font-semibold"
+                  >
+                    Resend
+                  </button>
+                </div>
+              </form>
             )}
           </div>
         </div>
@@ -175,5 +189,3 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
-
-

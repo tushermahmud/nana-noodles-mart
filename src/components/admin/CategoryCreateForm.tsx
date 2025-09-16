@@ -25,8 +25,22 @@ const CATEGORY_COLORS = [
 
 // Static icon options for categories
 const CATEGORY_ICONS = [
-  'Utensils', 'Coffee', 'Pizza', 'IceCream', 'Cake', 'Apple', 'Beef', 'Fish',
-  'Wheat', 'Carrot', 'Cherry', 'Cookie', 'Egg', 'Grape', 'Lemon', 'Milk'
+  'Utensils',
+  'Coffee',
+  'Pizza',
+  'IceCream',
+  'Cake',
+  'Apple',
+  'Beef',
+  'Fish',
+  'Wheat',
+  'Carrot',
+  'Cherry',
+  'Cookie',
+  'Egg',
+  'Grape',
+  'Lemon',
+  'Milk',
 ];
 
 export const CategoryCreateForm = () => {
@@ -153,7 +167,9 @@ export const CategoryCreateForm = () => {
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category Name *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category Name *
+              </label>
               <input
                 type="text"
                 value={formData.name}
