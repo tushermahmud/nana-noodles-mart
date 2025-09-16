@@ -5,23 +5,14 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useCart } from '@/contexts/CartContext';
 
-// Dynamically import Stripe components to avoid hydration issues
-const StripeCheckoutForm = dynamic(() => import('../../components/checkout/StripeCheckoutForm'), {
-  ssr: false,
-  loading: () => (
-    <div className="space-y-4">
-      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-      <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-    </div>
-  ),
-}) as any;
+
 
 interface CheckoutForm {
   firstName: string;
@@ -351,13 +342,7 @@ const CheckoutPage = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <StripeCheckoutForm
-                        amount={total}
-                        onSuccess={handlePaymentSuccess}
-                        onError={handlePaymentError}
-                        isProcessing={isProcessing}
-                        setIsProcessing={setIsProcessing}
-                      />
+                      
                     </CardContent>
                   </Card>
                 </div>

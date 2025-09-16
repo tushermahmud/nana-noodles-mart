@@ -7,10 +7,10 @@ import { CartItem, Cart } from '@/types/cart';
 import { Product } from '@/types/products';
 import { performFetch } from '@/lib/apiUtils';
 
-export async function addToCart(data: { productId: string; quantity: number }) {
-  const res = await performFetch<CartItem>(CART_ENDPOINTS.ADD_TO_CART, {
+export async function addToCart(data: { cartId: string; product_id: string; product_quantity: number }) {
+  const res = await performFetch<APIResponse<Cart>>(CART_ENDPOINTS.ADD_TO_CART(data.cartId), {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
 
   if (res?.isSuccess) {
@@ -21,10 +21,10 @@ export async function addToCart(data: { productId: string; quantity: number }) {
   return res;
 }
 
-export async function updateCartItem(itemId: string, quantity: number) {
-  const res = await performFetch<CartItem>(CART_ENDPOINTS.UPDATE_CART_ITEM(itemId), {
-    method: 'PATCH',
-    body: JSON.stringify({ quantity }),
+export async function updateCartItem(data: { cartId: string; product_id: string; product_quantity: number }) {
+  const res = await performFetch<Cart>(CART_ENDPOINTS.UPDATE_CART_ITEM(data.cartId), {
+    method: 'PUT',
+    body: data,
   });
 
   if (res?.isSuccess) {
@@ -35,16 +35,14 @@ export async function updateCartItem(itemId: string, quantity: number) {
   return res;
 }
 
-export async function removeFromCart(itemId: string) {
-  const res = await performFetch<void>(CART_ENDPOINTS.REMOVE_FROM_CART(itemId), {
+export async function removeCartItem(product_id: string, cartId: string) {
+  const res = await performFetch<Cart>(CART_ENDPOINTS.REMOVE_FROM_CART(product_id, cartId), {
     method: 'DELETE',
   });
-
   if (res?.isSuccess) {
     revalidateTag('getCart');
     revalidateTag('getCartCount');
   }
-
   return res;
 }
 

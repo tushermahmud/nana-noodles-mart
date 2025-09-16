@@ -9,14 +9,18 @@ import Shelf from './Shelf';
 import ProductModal from './modal/ProductModal';
 import CallToAction from './CallToAction';
 import { Product } from '@/types/products';
+import { addToCart } from '@/actions/cart';
+import { toast } from 'sonner';
 
 interface VirtualStoreProps {
   products: Product[];
   shelves?: ShelfData[];
   isProductsPage?: boolean;
+  cartId: string;
 }
 
-const VirtualStore = ({ products, shelves, isProductsPage }: VirtualStoreProps) => {
+const VirtualStore = ({ products, shelves, isProductsPage, cartId }: VirtualStoreProps) => {
+  console.log('🔄 VIRTUAL_STORE: Cart ID:', cartId);
   const { addItem } = useCart();
   const { selectedProduct, isModalOpen, openModal, closeModal } = useVirtualStore({});
 
@@ -34,14 +38,17 @@ const VirtualStore = ({ products, shelves, isProductsPage }: VirtualStoreProps) 
 
   const shelvesToRender = shelves || defaultShelves;
 
-  const handleAddToCart = (product: Product) => {
-    addItem({ 
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.imageUrl,
-      category: product.category?.name ?? '',
+  const handleAddToCart = async (product: Product) => {
+    const res = await addToCart({
+      cartId: cartId,
+      product_id: product.id,
+      product_quantity: 1,
     });
+    if (res?.isSuccess) {
+      toast.success(res?.message ?? 'Product added to cart');
+    } else {
+      toast.error(res?.message ?? 'Failed to add product to cart');
+    }
   };
 
   return (
