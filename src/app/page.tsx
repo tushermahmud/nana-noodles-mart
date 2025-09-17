@@ -4,7 +4,7 @@ import Categories from '@/components/sections/Categories';
 import { VirtualStore } from '@/components/virtual-store';
 import AboutSection from '@/components/sections/AboutSection';
 import Footer from '@/components/layout/Footer';
-import { getProducts } from '@/fetchers/products';
+import { getPublicCategories, getProducts } from '@/fetchers/products';
 import { Product } from '@/types/products';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getCart } from '@/fetchers/cart';
@@ -17,11 +17,13 @@ export default async function Home() {
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
   const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
   const getCartDetails = getCartDetailsRes?.data?.data ?? {};
+  const publicCategoriesRes = await getPublicCategories();
+  const publicCategories = publicCategoriesRes?.data?.data ?? [];
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-pink-50/40 to-black/5">
       <Navbar cartDetails={getCartDetails as Cart} />
       <Hero />
-      <Categories />
+      <Categories categories={publicCategories} />
       <VirtualStore
         products={products as Product[]}
         cartId={loggedInUser?.cart_id ?? ''}

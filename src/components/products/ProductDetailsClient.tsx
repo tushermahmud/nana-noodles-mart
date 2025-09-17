@@ -33,7 +33,6 @@ export default function ProductDetailsClient({
   const cartItems = cartDetails?.cart ?? null;
   const productInStock = product?.quantity > 0;
   const features = product?.features?.split(',') ?? [];
-  const isRelatedProducts = relatedProducts.length > 0;
   const router = useRouter();
   const [isAdding, setIsAdding] = useState(false);
   const resolveImageUrl = (url?: string) => {
@@ -129,7 +128,7 @@ export default function ProductDetailsClient({
                 </motion.div>
               )}
               <div className="absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-bold">
-                {product.category?.name ?? 'Uncategorized'}
+                {product?.category?.name ?? 'Uncategorized'}
               </div>
               {!productInStock && (
                 <div className="absolute top-16 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
@@ -149,7 +148,7 @@ export default function ProductDetailsClient({
                 <div className="relative w-20 h-20">
                   <Image
                     src={resolveImageUrl((product as any).imageUrl || (product as any).image)}
-                    alt={product.name}
+                    alt={product?.name}
                     fill
                     className="object-cover"
                     sizes="80px"
@@ -166,12 +165,14 @@ export default function ProductDetailsClient({
             className="space-y-6"
           >
             <div>
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">{product.name}</h1>
+              <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                {product?.name}
+              </h1>
               <div className="flex items-center space-x-4 mb-4">
                 <span className="text-3xl font-black text-pink-600">${product.price}</span>
                 {product?.original_price > product?.price && (
                   <span className="text-xl text-gray-400 line-through">
-                    ${product.original_price}
+                    ${product?.original_price}
                   </span>
                 )}
                 {product?.original_price > product?.price && (

@@ -1,7 +1,7 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ProductsClient from '@/components/products/ProductsClient';
-import { getAllProducts, getProducts } from '@/fetchers/products';
+import { getAllProducts, getProducts, getPublicCategories } from '@/fetchers/products';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getCart } from '@/fetchers/cart';
 import { Cart } from '@/types/cart';
@@ -23,15 +23,24 @@ export default async function ProductsPage({ searchParams }: Props) {
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
   const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
   const getCartDetails = getCartDetailsRes?.data?.data ?? {};
+  const publicCategoriesRes = await getPublicCategories();
+  const publicCategories = publicCategoriesRes?.data?.data ?? [];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div
+      className="min-h-screen"
+      style={{
+        background:
+          'linear-gradient(180deg, #FD7399 0%, rgba(253, 115, 153, 0.15) 35%, #FD7399 100%)',
+      }}
+    >
       <ProductsClient
         initialProducts={initialProducts}
         totalCount={totalCount}
         pageSize={limit}
         initialQuery={q}
         cartDetails={getCartDetails as Cart}
+        categories={publicCategories}
       />
       <Footer />
     </div>

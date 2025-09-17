@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
 
 // Static color options for categories
-const CATEGORY_COLORS = [
+export const CATEGORY_COLORS = [
   { label: 'Pink', bg: 'from-pink-500 to-pink-600', color: '#EC4899' },
   { label: 'Orange', bg: 'from-orange-500 to-orange-600', color: '#F97316' },
   { label: 'Red', bg: 'from-red-500 to-red-600', color: '#EF4444' },

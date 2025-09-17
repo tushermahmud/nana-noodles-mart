@@ -1,14 +1,21 @@
 import CategoryDetailsClient from '@/components/categories/CategoryDetailsClient';
-import categoriesData from '@/data/categories.json';
-import productsData from '@/data/products.json';
+import { getCurrentUser } from '@/fetchers/auth';
+import { getCart } from '@/fetchers/cart';
+import { getProductsByCategory } from '@/fetchers/products';
 
 type CategoryPageProps = {
   params: { id: string };
 };
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const categoryId = parseInt(params.id);
-  const category = categoriesData.find((c) => c.id === categoryId) || null;
+  const productsByCategoryRes = await getProductsByCategory(params.id);
+  const category = productsByCategoryRes?.data?.data?.category ?? null;
+  const productsByCategory = productsByCategoryRes?.data?.data?.productsWithImageUrl ?? [];
+  const loggedInUserRes = await getCurrentUser();
+  const loggedInUser = loggedInUserRes?.data?.data ?? null;
+  const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
+  const cartDetails = getCartDetailsRes?.data?.data ?? null;
+  console.log('🔄 CART DETAILS: Cart details:', productsByCategory);
   if (!category) {
     return (
       <div className="min-h-screen bg-white">
@@ -29,7 +36,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <CategoryDetailsClient category={category} products={productsData as any[]} />
+      <CategoryDetailsClient
+        category={category}
+        products={productsByCategory}
+        cartDetails={cartDetails}
+        loggedInUser={loggedInUser}
+      />
     </div>
   );
 }

@@ -1,5 +1,11 @@
 import { PRODUCTS_ENDPOINTS, CATEGORIES_ENDPOINTS } from '@/api/products';
-import { Product, Category, SearchParams, ProductFilters } from '@/types/products';
+import {
+  Product,
+  Category,
+  SearchParams,
+  ProductFilters,
+  ProductByCategory,
+} from '@/types/products';
 import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
@@ -73,20 +79,6 @@ export async function searchProducts(searchTerm: string, filters?: ProductFilter
   return res;
 }
 
-export async function getProductsByCategory(categoryId: string, params?: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<Product>>(
-    getQueryEndpoint(CATEGORIES_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY(categoryId), params || {}),
-    {
-      method: 'GET',
-      next: {
-        tags: ['getProductsByCategory', `getProductsByCategory-${categoryId}`],
-      },
-    }
-  );
-
-  return res;
-}
-
 export async function getFeaturedProducts(limit?: number) {
   const params = limit ? { limit } : undefined;
 
@@ -114,6 +106,35 @@ export async function getCategories(params?: PaginationParams) {
       },
     }
   );
+
+  return res;
+}
+
+export async function getPublicCategories(params?: PaginationParams) {
+  const res = await performFetch<APIResponse<Category[]>>(
+    getQueryEndpoint(CATEGORIES_ENDPOINTS.GET_PUBLIC_CATEGORIES, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getPublicCategories'],
+      },
+    }
+  );
+
+  return res;
+}
+
+export async function getProductsByCategory(categoryId: string) {
+  const res = await performFetch<APIResponse<ProductByCategory>>(
+    CATEGORIES_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY(categoryId),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getProductsByCategory', `getProductsByCategory-${categoryId}`],
+      },
+    }
+  );
+  console.log('🔄 PRODUCTS BY CATEGORY: Products by category:', res);
 
   return res;
 }

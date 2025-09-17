@@ -1,81 +1,30 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Flame, ChefHat, Leaf, Fish, Crown, Star } from 'lucide-react';
 import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
+import { Category, Product } from '@/types/products';
+import { Cart } from '@/types/cart';
+import { User } from '@/types/auth';
+import { CATEGORY_COLORS } from '@/components/admin/CategoryCreateForm';
 
 const iconMap = { ChefHat, Flame, Leaf, Fish, Crown, Star } as const;
 
 type CategoryDetailsClientProps = {
-  category: any;
-  products: any[];
+  category: Category;
+  products: Product[];
+  cartDetails: Cart | null;
+  loggedInUser: User | null;
 };
 
-export default function CategoryDetailsClient({ category, products }: CategoryDetailsClientProps) {
-  const [displayedProducts, setDisplayedProducts] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const productsPerPage = 6;
-
-  const filteredProducts = useMemo(() => {
-    if (!category) return [];
-    // If incoming products already filtered, use them; else filter
-    const isFiltered = products.every((p) => p.category_id === category.id);
-    return isFiltered ? products : products.filter((p) => p.category_id === category.id);
-  }, [category, products]);
-
-  useEffect(() => {
-    if (!category) return;
-    setDisplayedProducts([]);
-    setCurrentPage(1);
-    setHasMore(true);
-    setLoading(false);
-    const initialProducts = filteredProducts.slice(0, productsPerPage);
-    setDisplayedProducts(initialProducts);
-    setCurrentPage(2);
-  }, [category, filteredProducts]);
-
-  const loadMoreProducts = useCallback(() => {
-    setLoading((prevLoading) => {
-      if (prevLoading) return prevLoading;
-      setLoading(true);
-      setTimeout(() => {
-        const startIndex = (currentPage - 1) * productsPerPage;
-        const endIndex = startIndex + productsPerPage;
-        const newProducts = filteredProducts.slice(startIndex, endIndex);
-        if (newProducts.length === 0) {
-          setHasMore(false);
-        } else {
-          setDisplayedProducts((prev) => {
-            const existingIds = new Set(prev.map((p) => p.id));
-            const uniqueNewProducts = newProducts.filter((p) => !existingIds.has(p.id));
-            return [...prev, ...uniqueNewProducts];
-          });
-          setCurrentPage((prev) => prev + 1);
-        }
-        setLoading(false);
-      }, 500);
-      return true;
-    });
-  }, [currentPage, filteredProducts]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight * 0.8) {
-        loadMoreProducts();
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadMoreProducts]);
-
-  if (!category) return null;
-
-  const CategoryIcon = iconMap[category.icon as keyof typeof iconMap];
+export default function CategoryDetailsClient({
+  category,
+  products,
+  cartDetails,
+  loggedInUser,
+}: CategoryDetailsClientProps) {
+  const CategoryIcon = iconMap[category?.icon as keyof typeof iconMap];
 
   return (
     <>
@@ -88,7 +37,7 @@ export default function CategoryDetailsClient({ category, products }: CategoryDe
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.6 }}
-                className={`w-24 h-24 bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center shadow-2xl`}
+                className={`w-24 h-24 bg-gradient-to-r ${CATEGORY_COLORS.find((c) => c.label === category?.color)?.bg ?? 'from-pink-500 to-pink-600'} rounded-full flex items-center justify-center shadow-2xl`}
               >
                 {CategoryIcon && <CategoryIcon className="w-12 h-12 text-white" />}
               </motion.div>
@@ -107,13 +56,8 @@ export default function CategoryDetailsClient({ category, products }: CategoryDe
                 </p>
                 <div className="flex items-center space-x-4 mt-4">
                   <span className="text-lg text-gray-700 font-semibold">
-                    {category.count} items available
+                    {category?.totalCount} items available
                   </span>
-                  {category.popular && (
-                    <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold">
-                      Popular Category
-                    </span>
-                  )}
                 </div>
               </motion.div>
             </div>
@@ -130,65 +74,25 @@ export default function CategoryDetailsClient({ category, products }: CategoryDe
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 anime-title">
-              {category.name} Collection
+              {category?.name ?? ''} Collection
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto pop-text">
-              Explore our complete collection of {category.name?.toLowerCase?.()}. Each dish is
+              Explore our complete collection of {category?.name?.toLowerCase?.()}. Each dish is
               crafted with care and premium ingredients.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayedProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ProductCard product={product} />
+            {products.map((product, index) => (
+              <motion.div key={product.id}>
+                <ProductCard
+                  product={product}
+                  cartDetails={cartDetails}
+                  loggedInUser={loggedInUser}
+                />
               </motion.div>
             ))}
           </div>
-
-          {loading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-center mt-12"
-            >
-              <div className="w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
-            </motion.div>
-          )}
-
-          {!hasMore && displayedProducts.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center mt-12"
-            >
-              <p className="text-gray-600 pop-text">
-                You've reached the end of our {category.name?.toLowerCase?.()} collection! 🍜
-              </p>
-            </motion.div>
-          )}
-
-          {displayedProducts.length === 0 && !loading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center mt-12"
-            >
-              <div className="text-6xl mb-4">🍜</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2 anime-title">
-                No products found
-              </h3>
-              <p className="text-gray-600 pop-text">
-                This category is currently empty. Check back later!
-              </p>
-            </motion.div>
-          )}
         </div>
       </div>
 

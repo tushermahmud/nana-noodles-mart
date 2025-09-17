@@ -8,12 +8,14 @@ import AdminTabs from '@/components/admin/AdminTabs';
 import productsData from '@/data/products.json';
 import categoriesData from '@/data/categories.json';
 import tabsData from '@/data/tabs.json';
+import { DashboardStats } from '@/types/admin';
 
 type AdminLayoutClientProps = {
   children: ReactNode;
+  dashboardStats: DashboardStats | null;
 };
 
-export default function AdminLayoutClient({ children }: AdminLayoutClientProps) {
+export default function AdminLayoutClient({ children, dashboardStats }: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [products] = useState(productsData);
@@ -64,6 +66,7 @@ export default function AdminLayoutClient({ children }: AdminLayoutClientProps) 
   const tabs = tabsData.map((tab) => ({
     ...tab,
     icon: iconMap[tab.icon as keyof typeof iconMap],
+    total: tab.total as keyof DashboardStats,
     count:
       tab.id === 'products'
         ? products.length
@@ -98,7 +101,7 @@ export default function AdminLayoutClient({ children }: AdminLayoutClientProps) 
                 <div>
                   <p className="text-sm font-medium text-gray-600">{tab.label}</p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {tab.count !== null ? tab.count : '—'}
+                    {dashboardStats?.[tab.total] !== null ? dashboardStats?.[tab.total] : '—'}
                   </p>
                 </div>
                 <div
@@ -119,7 +122,12 @@ export default function AdminLayoutClient({ children }: AdminLayoutClientProps) 
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
-          <AdminTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+          <AdminTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            dashboardStats={dashboardStats}
+          />
 
           <main className="p-6">{children}</main>
         </div>

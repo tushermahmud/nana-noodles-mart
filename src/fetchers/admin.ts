@@ -1,5 +1,5 @@
 import { ADMIN_ENDPOINTS } from '@/api/admin';
-import { AdminPledge, ProductRow, AdminStats, CategoryRow } from '@/types/admin';
+import { ProductRow, DashboardStats } from '@/types/admin';
 import { UserInfo } from '@/types/auth';
 import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
@@ -30,6 +30,16 @@ export async function getAdminProducts(params: PaginationParams) {
       },
     }
   );
+  return res?.data;
+}
+
+export async function getDashboardStats() {
+  const res = await performFetch<APIResponse<DashboardStats>>(ADMIN_ENDPOINTS.GET_DASHBOARD_STATS, {
+    method: 'GET',
+    next: {
+      tags: ['getDashboardStats'],
+    },
+  });
   return res?.data;
 }
 
@@ -72,7 +82,7 @@ export async function getAdminPayments(params: PaginationParams) {
 }
 
 export async function getAdminStats() {
-  const res = await performFetch<AdminStats>(ADMIN_ENDPOINTS.GET_ADMIN_STATS, {
+  const res = await performFetch<DashboardStats>(ADMIN_ENDPOINTS.GET_ADMIN_STATS, {
     method: 'GET',
     next: {
       tags: ['getAdminStats'],

@@ -8,6 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { BASE_URL } from '@/config/env';
 import { Cart } from '@/types/cart';
 import { User } from '@/types/auth';
+import { Category } from '@/types/products';
 
 type Product = any;
 
@@ -18,6 +19,7 @@ type Props = {
   initialQuery?: string;
   cartDetails?: Cart;
   loggedInUser?: User;
+  categories: Category[];
 };
 
 export default function ProductsClient({
@@ -27,6 +29,7 @@ export default function ProductsClient({
   initialQuery = '',
   cartDetails,
   loggedInUser,
+  categories,
 }: Props) {
   const searchParams = useSearchParams();
 
@@ -111,7 +114,7 @@ export default function ProductsClient({
     <div className="min-h-screen bg-gradient-to-br from-white via-pink-50 to-orange-50">
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Categories onCategorySelect={setSelectedCategory} selectedCategory={selectedCategory} />
+          <Categories categories={categories} />
 
           <VirtualStore
             products={filteredProducts}

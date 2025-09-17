@@ -34,6 +34,13 @@ export interface Category {
   color?: string;
   features?: string[];
   products?: Product[];
+  productsCount?: number;
+  totalCount?: number;
+}
+
+export interface ProductByCategory {
+  category: Category;
+  productsWithImageUrl: Product[];
 }
 
 export interface ProductFilters {

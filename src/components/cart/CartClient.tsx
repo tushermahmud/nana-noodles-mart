@@ -16,17 +16,6 @@ import { removeCartItem } from '@/actions/cart';
 
 type CartClientProps = {
   cartDetails?: Cart;
-  // Optional: can hydrate quickly from server
-  initial?: {
-    items?: Array<{
-      id: string;
-      name: string;
-      price: number;
-      image: string;
-      quantity: number;
-      category?: string;
-    }>;
-  };
 };
 
 export default function CartClient({ cartDetails }: CartClientProps) {
@@ -101,6 +90,7 @@ export default function CartClient({ cartDetails }: CartClientProps) {
       </div>
     );
   }
+  console.log(cartDetails);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-20">
