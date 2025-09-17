@@ -1,7 +1,7 @@
 import { BASE_URL } from '@/config/env';
 
 export const PAYMENTS_ENDPOINTS = {
-  CREATE_PAYMENT_INTENT: `${BASE_URL}/payments/create-intent`,
+  CREATE_PAYMENT_INTENT: `${BASE_URL}/payment/stripe/create-payment`,
   CONFIRM_PAYMENT: `${BASE_URL}/payments/confirm`,
   PROCESS_REFUND: `${BASE_URL}/payments/refund`,
   GET_PAYMENT_METHODS: `${BASE_URL}/payments/methods`,

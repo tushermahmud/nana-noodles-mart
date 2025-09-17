@@ -25,6 +25,7 @@ export default async function AdminProducts({ searchParams }: Props) {
   });
   const filteredProducts = productsRes?.data?.rows ?? [];
   const pagination = productsRes?.data?.count;
+  console.log(q);
   return (
     <>
       {/* Search and Actions */}

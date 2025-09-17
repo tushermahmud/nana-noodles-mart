@@ -9,6 +9,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import { Cart } from '@/types/cart';
+import { BASE_URL } from '@/config/env';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/errorUtils';
+import { checkoutSchema, type CheckoutInput } from '@/schemas/checkout.schema';
+import { createPaymentIntent } from '@/actions/payments';
+import { z } from 'zod';
 
 interface CheckoutForm {
   firstName: string;
@@ -24,11 +30,11 @@ interface CheckoutForm {
 
 export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
   const { state, clearCart } = useCart();
-
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState<CheckoutForm>({
     firstName: '',
     lastName: '',
@@ -63,6 +69,18 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
 
   const handleInputChange = (field: keyof CheckoutForm, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear field error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  const getFieldError = (field: string) => {
+    return fieldErrors[field] || null;
   };
 
   const handlePaymentSuccess = () => {
@@ -70,7 +88,6 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
     setPaymentError(null);
     setTimeout(() => {
       clearCart();
-      router.push('/');
     }, 2000);
   };
 
@@ -79,11 +96,73 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
     setIsProcessing(false);
   };
 
-  const subtotal = state.total;
+  const subtotal =
+  cartDetails?.cart?.reduce((acc, item) => acc + item.product?.price * item.quantity, 0) ?? 0;
   const shipping = shippingMethods.find((m) => m.id === shippingMethod)?.price || 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
   const numberOfCartItems = cartDetails?.cart?.length < 1;
+
+
+  const buildPayload = (): CheckoutInput => {
+    const selected = shippingMethods.find((m) => m.id === shippingMethod);
+    const payload: CheckoutInput = {
+       products: cartDetails?.cart?.map((item) => ({
+         name: item.product.name,
+         price: Number(item.product.price),
+         quantity: Number(item.quantity),
+         description: item.product.description,
+         product_id: item.product.id,
+       })),
+      contact_first_name: formData.firstName,
+      contact_last_name: formData.lastName,
+      contact_email: formData.email,
+      contact_phone: formData.phone,
+      shipping_address: formData.address,
+      shipping_city: formData.city,
+      shipping_state: formData.state,
+      shipping_zip_code: formData.zipCode,
+      shipping_method: shippingMethod,
+      shipping_cost: selected?.price ?? 0,
+      shipping_days: selected?.time ?? '',
+    };
+    return payload;
+  };
+
+  const submitPayment = async () => {
+    try {
+      setIsProcessing(true);
+      setFieldErrors({});
+      setPaymentError(null);
+      
+      const payload = buildPayload();
+      const parsed = checkoutSchema.parse(payload);
+      const res = await createPaymentIntent(parsed);
+      console.log(res);
+      if (!res?.isSuccess) {
+        throw new Error(res?.message || 'Failed to create payment');
+      }
+      toast.success(res?.message || 'Payment created successfully');
+      window.location.href = res?.data?.data?.data?.url ?? '';
+      handlePaymentSuccess();
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const errors: Record<string, string> = {};
+        err.issues.forEach((issue) => {
+          const path = issue.path.join('.');
+          errors[path] = issue.message;
+        });
+        setFieldErrors(errors);
+        toast.error('Please fix the form errors below');
+      } else {
+        const msg = getErrorMessage(err);
+        setPaymentError(msg);
+        toast.error(msg);
+      }
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (numberOfCartItems) {
     return (
@@ -162,8 +241,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.firstName}
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('contact_first_name') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('contact_first_name') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_first_name')}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -174,8 +258,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.lastName}
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('contact_last_name') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('contact_last_name') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_last_name')}</p>
+                        )}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -188,8 +277,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.email}
                           onChange={(e) => handleInputChange('email', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('contact_email') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('contact_email') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_email')}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -200,8 +294,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.phone}
                           onChange={(e) => handleInputChange('phone', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('contact_phone') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('contact_phone') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_phone')}</p>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -224,8 +323,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                         required
                         value={formData.address}
                         onChange={(e) => handleInputChange('address', e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                          getFieldError('shipping_address') ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {getFieldError('shipping_address') && (
+                        <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_address')}</p>
+                      )}
                     </div>
                     <div className="grid md:grid-cols-3 gap-4">
                       <div>
@@ -237,8 +341,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.city}
                           onChange={(e) => handleInputChange('city', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('shipping_city') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('shipping_city') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_city')}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -249,8 +358,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.state}
                           onChange={(e) => handleInputChange('state', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('shipping_state') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('shipping_state') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_state')}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -261,8 +375,13 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           required
                           value={formData.zipCode}
                           onChange={(e) => handleInputChange('zipCode', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
+                            getFieldError('shipping_zip_code') ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         />
+                        {getFieldError('shipping_zip_code') && (
+                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_zip_code')}</p>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -315,19 +434,15 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {/* Integrate payment form here */}
                     <div className="flex gap-3">
                       <Button
                         disabled={isProcessing}
-                        onClick={() => handlePaymentSuccess()}
+                        onClick={submitPayment}
                         className="bg-pink-600 hover:bg-pink-700 text-white"
                       >
-                        Mock Pay
+                        {isProcessing ? 'Processing...' : 'Pay Now'}
                       </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => handlePaymentError('Payment failed. Try again.')}
-                      >
+                      <Button variant="outline" onClick={() => handlePaymentError('Payment failed. Try again.')}>
                         Simulate Error
                       </Button>
                     </div>
@@ -349,22 +464,22 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-gray-900">Items ({state.itemCount})</h3>
-                  {state.items.map((item) => (
+                  <h3 className="font-semibold text-gray-900">Items ({cartDetails?.cart?.length})</h3>
+                  {cartDetails?.cart?.map((item) => (
                     <div key={item.id} className="flex items-center space-x-3">
                       <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                         <img
-                          src={item.image}
-                          alt={item.name}
+                          src={item.product.image}
+                          alt={item.product.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-900 truncate">{item.name}</h4>
-                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <h4 className="text-sm font-medium text-gray-900 truncate">{item.product.name}</h4>
+                        <p className="text-sm text-gray-600">Qty: {item.product.quantity}</p>
                       </div>
                       <span className="text-sm font-semibold text-gray-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ${(item.product.price * item.product.quantity).toFixed(2)}
                       </span>
                     </div>
                   ))}
@@ -418,6 +533,27 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                       <span className="text-red-800 font-medium">Payment Failed</span>
                     </div>
                     <p className="text-red-700 text-sm mt-1">{paymentError}</p>
+                  </motion.div>
+                )}
+
+                {/* Product validation errors */}
+                {Object.keys(fieldErrors).some(key => key.startsWith('products')) && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-red-50 border border-red-200 rounded-lg p-4"
+                  >
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircle className="w-5 h-5 text-red-600" />
+                      <span className="text-red-800 font-medium">Product Errors</span>
+                    </div>
+                    <div className="space-y-1">
+                      {Object.entries(fieldErrors)
+                        .filter(([key]) => key.startsWith('products'))
+                        .map(([key, error]) => (
+                          <p key={key} className="text-red-700 text-sm">{error}</p>
+                        ))}
+                    </div>
                   </motion.div>
                 )}
 

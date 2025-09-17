@@ -6,11 +6,11 @@ import { Cart } from '@/types/cart';
 export default async function CheckoutPage() {
   const loggedInUserRes = await getCurrentUser();
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
-  const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
-  const getCartDetails = getCartDetailsRes?.data?.data ?? {};
+  const cartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
+  const cartDetails = cartDetailsRes?.data?.data ?? {};
   return (
     <div className="min-h-screen bg-white">
-      <CheckoutClient cartDetails={getCartDetails as Cart} />
+      <CheckoutClient cartDetails={cartDetails as Cart} />
     </div>
   );
 }

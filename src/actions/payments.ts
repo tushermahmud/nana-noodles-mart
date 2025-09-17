@@ -2,19 +2,19 @@
 
 import { revalidateTag } from 'next/cache';
 import { PAYMENTS_ENDPOINTS } from '@/api/payments';
-import { APIResponse } from '@/types/common';
-import { PaymentIntent, PaymentMethod, PaymentDetails } from '@/types/payments';
+import { PaymentMethod, PaymentIntentRequest } from '@/types/payments';
 import { performFetch } from '@/lib/apiUtils';
 
-export async function createPaymentIntent(data: {
-  amount: number;
-  currency?: string;
-  metadata?: Record<string, string>;
-}) {
-  const res = await performFetch<PaymentIntent>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {
+export async function createPaymentIntent(data: PaymentIntentRequest) {
+  const res = await performFetch<any>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
+  if (res?.isSuccess) {
+    revalidateTag('getCart');
+    revalidateTag('getCartDetails');
+  }
+  console.log(res);
 
   return res;
 }

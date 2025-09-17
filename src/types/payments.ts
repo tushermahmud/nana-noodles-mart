@@ -14,6 +14,28 @@ export interface PaymentMethod {
   isDefault: boolean;
 }
 
+export interface PaymentIntentRequest {
+  products: Array<{
+    name: string;
+    price: number;
+    quantity: number;
+    description: string;
+    product_id: string;
+  }>;
+  contact_first_name: string;
+  contact_last_name: string;
+  contact_email: string;
+  contact_phone: string;
+  shipping_address: string;
+  shipping_city: string;
+  shipping_state: string;
+  shipping_zip_code: string;
+  shipping_method: string;
+  shipping_cost: number;
+  shipping_days: string;
+}
+  
+
 export interface PaymentHistory {
   id: string;
   amount: number;
