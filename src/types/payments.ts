@@ -34,7 +34,6 @@ export interface PaymentIntentRequest {
   shipping_cost: number;
   shipping_days: string;
 }
-  
 
 export interface PaymentHistory {
   id: string;

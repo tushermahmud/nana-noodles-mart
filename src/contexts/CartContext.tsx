@@ -90,7 +90,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
 
   const loadFromServer = async () => {
-    try {
+    /* try {
       const res: any = await getCartAction('324234234');
       const data = res?.data || res?.data?.data || res; // accept multiple shapes
       const items: CartItem[] = (data?.items || []).map((it: any) => ({
@@ -104,7 +104,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: 'SET_CART', payload: recalc(items) });
     } catch (e) {
       // silent; UX stays empty
-    }
+    } */
   };
 
   useEffect(() => {

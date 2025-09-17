@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import { Cart } from '@/types/cart';
@@ -29,8 +30,6 @@ interface CheckoutForm {
 }
 
 export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
-  const { state, clearCart } = useCart();
-  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -86,9 +85,6 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
   const handlePaymentSuccess = () => {
     setPaymentSuccess(true);
     setPaymentError(null);
-    setTimeout(() => {
-      clearCart();
-    }, 2000);
   };
 
   const handlePaymentError = (error: string) => {
@@ -96,24 +92,27 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
     setIsProcessing(false);
   };
 
+  const cartProducts = cartDetails?.cart ?? [];
   const subtotal =
-  cartDetails?.cart?.reduce((acc, item) => acc + item.product?.price * item.quantity, 0) ?? 0;
+    cartProducts?.reduce(
+      (acc, item) => acc + Number(item?.product?.price) * Number(item?.quantity),
+      0
+    ) ?? 0;
   const shipping = shippingMethods.find((m) => m.id === shippingMethod)?.price || 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
-  const numberOfCartItems = cartDetails?.cart?.length < 1;
-
+  const numberOfCartItems = cartProducts?.length < 1;
 
   const buildPayload = (): CheckoutInput => {
     const selected = shippingMethods.find((m) => m.id === shippingMethod);
     const payload: CheckoutInput = {
-       products: cartDetails?.cart?.map((item) => ({
-         name: item.product.name,
-         price: Number(item.product.price),
-         quantity: Number(item.quantity),
-         description: item.product.description,
-         product_id: item.product.id,
-       })),
+      products: cartProducts?.map((item) => ({
+        name: item.product.name,
+        price: Number(item.product.price),
+        quantity: Number(item.quantity),
+        description: item.product.description,
+        product_id: item.product.id,
+      })),
       contact_first_name: formData.firstName,
       contact_last_name: formData.lastName,
       contact_email: formData.email,
@@ -134,7 +133,7 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
       setIsProcessing(true);
       setFieldErrors({});
       setPaymentError(null);
-      
+
       const payload = buildPayload();
       const parsed = checkoutSchema.parse(payload);
       const res = await createPaymentIntent(parsed);
@@ -242,11 +241,15 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           value={formData.firstName}
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
                           className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                            getFieldError('contact_first_name') ? 'border-red-500' : 'border-gray-300'
+                            getFieldError('contact_first_name')
+                              ? 'border-red-500'
+                              : 'border-gray-300'
                           }`}
                         />
                         {getFieldError('contact_first_name') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_first_name')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('contact_first_name')}
+                          </p>
                         )}
                       </div>
                       <div>
@@ -259,11 +262,15 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           value={formData.lastName}
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
                           className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                            getFieldError('contact_last_name') ? 'border-red-500' : 'border-gray-300'
+                            getFieldError('contact_last_name')
+                              ? 'border-red-500'
+                              : 'border-gray-300'
                           }`}
                         />
                         {getFieldError('contact_last_name') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_last_name')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('contact_last_name')}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -282,7 +289,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           }`}
                         />
                         {getFieldError('contact_email') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_email')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('contact_email')}
+                          </p>
                         )}
                       </div>
                       <div>
@@ -299,7 +308,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           }`}
                         />
                         {getFieldError('contact_phone') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('contact_phone')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('contact_phone')}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -328,7 +339,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                         }`}
                       />
                       {getFieldError('shipping_address') && (
-                        <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_address')}</p>
+                        <p className="text-red-500 text-sm mt-1">
+                          {getFieldError('shipping_address')}
+                        </p>
                       )}
                     </div>
                     <div className="grid md:grid-cols-3 gap-4">
@@ -346,7 +359,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           }`}
                         />
                         {getFieldError('shipping_city') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_city')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('shipping_city')}
+                          </p>
                         )}
                       </div>
                       <div>
@@ -363,7 +378,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           }`}
                         />
                         {getFieldError('shipping_state') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_state')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('shipping_state')}
+                          </p>
                         )}
                       </div>
                       <div>
@@ -376,11 +393,15 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                           value={formData.zipCode}
                           onChange={(e) => handleInputChange('zipCode', e.target.value)}
                           className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                            getFieldError('shipping_zip_code') ? 'border-red-500' : 'border-gray-300'
+                            getFieldError('shipping_zip_code')
+                              ? 'border-red-500'
+                              : 'border-gray-300'
                           }`}
                         />
                         {getFieldError('shipping_zip_code') && (
-                          <p className="text-red-500 text-sm mt-1">{getFieldError('shipping_zip_code')}</p>
+                          <p className="text-red-500 text-sm mt-1">
+                            {getFieldError('shipping_zip_code')}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -442,7 +463,10 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                       >
                         {isProcessing ? 'Processing...' : 'Pay Now'}
                       </Button>
-                      <Button variant="outline" onClick={() => handlePaymentError('Payment failed. Try again.')}>
+                      <Button
+                        variant="outline"
+                        onClick={() => handlePaymentError('Payment failed. Try again.')}
+                      >
                         Simulate Error
                       </Button>
                     </div>
@@ -464,25 +488,34 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-gray-900">Items ({cartDetails?.cart?.length})</h3>
-                  {cartDetails?.cart?.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-3">
-                      <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                        <img
-                          src={item.product.image}
-                          alt={item.product.name}
-                          className="w-full h-full object-cover"
-                        />
+                  <h3 className="font-semibold text-gray-900">
+                    Items ({cartDetails?.cart?.length})
+                  </h3>
+                  {cartProducts.length > 0 &&
+                    cartProducts?.map((item) => (
+                      <div key={item.id} className="flex items-center space-x-3">
+                        <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                          <Image
+                            src={item?.product?.imageUrl}
+                            alt={item?.product?.name}
+                            className="w-full h-full object-cover"
+                            width={80}
+                            height={80}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-medium text-gray-900 truncate">
+                            {item?.product?.name}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Qty: {Number(item?.quantity)} * ${item?.product?.price}
+                          </p>
+                        </div>
+                        <span className="text-sm font-semibold text-gray-900">
+                          ${(Number(item?.product?.price) * Number(item?.quantity)).toFixed(2)}
+                        </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-900 truncate">{item.product.name}</h4>
-                        <p className="text-sm text-gray-600">Qty: {item.product.quantity}</p>
-                      </div>
-                      <span className="text-sm font-semibold text-gray-900">
-                        ${(item.product.price * item.product.quantity).toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
+                    ))}
                 </div>
 
                 <div className="space-y-3 border-t border-gray-200 pt-4">
@@ -537,7 +570,7 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                 )}
 
                 {/* Product validation errors */}
-                {Object.keys(fieldErrors).some(key => key.startsWith('products')) && (
+                {Object.keys(fieldErrors).some((key) => key.startsWith('products')) && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -551,7 +584,9 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
                       {Object.entries(fieldErrors)
                         .filter(([key]) => key.startsWith('products'))
                         .map(([key, error]) => (
-                          <p key={key} className="text-red-700 text-sm">{error}</p>
+                          <p key={key} className="text-red-700 text-sm">
+                            {error}
+                          </p>
                         ))}
                     </div>
                   </motion.div>
