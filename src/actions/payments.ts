@@ -8,7 +8,7 @@ import { performFetch } from '@/lib/apiUtils';
 
 export async function createPaymentIntent(data: {
   amount: number;
-  currency?: string;  
+  currency?: string;
   metadata?: Record<string, string>;
 }) {
   const res = await performFetch<PaymentIntent>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {

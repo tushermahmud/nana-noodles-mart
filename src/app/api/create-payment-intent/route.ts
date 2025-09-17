@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
+const stripe = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   ? new Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, {
       apiVersion: '2025-08-27.basil',
     })
-  : null; 
+  : null;
 
 export async function POST(request: NextRequest) {
   try {

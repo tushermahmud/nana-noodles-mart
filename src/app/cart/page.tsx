@@ -36,8 +36,8 @@ const CartPage = () => {
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
             <p className="text-gray-600 mb-8 max-w-md">
-              Looks like you haven&apos;t added any delicious ramen to your cart yet. Start shopping to
-              fill it up!
+              Looks like you haven&apos;t added any delicious ramen to your cart yet. Start shopping
+              to fill it up!
             </p>
             <div className="space-x-4">
               <Link href="/products">
