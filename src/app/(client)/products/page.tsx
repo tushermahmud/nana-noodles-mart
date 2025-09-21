@@ -1,7 +1,7 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ProductsClient from '@/components/products/ProductsClient';
-import { getAllProducts, getProducts, getPublicCategories } from '@/fetchers/products';
+import { getAllProducts, getPublicCategories } from '@/fetchers/products';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getCart } from '@/fetchers/cart';
 import { Cart } from '@/types/cart';
@@ -39,6 +39,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         totalCount={totalCount}
         pageSize={limit}
         initialQuery={q}
+        loggedInUser={loggedInUser}
         cartDetails={getCartDetails as Cart}
         categories={publicCategories}
       />

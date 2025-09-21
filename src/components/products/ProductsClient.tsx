@@ -18,7 +18,7 @@ type Props = {
   pageSize?: number;
   initialQuery?: string;
   cartDetails?: Cart;
-  loggedInUser?: User;
+  loggedInUser?: User | null;
   categories: Category[];
 };
 
@@ -41,13 +41,7 @@ export default function ProductsClient({
 
   // Read q from URL (Navbar controls it)
   const q = searchParams.get('q') || initialQuery;
-  const cartId =
-    cartDetails &&
-    cartDetails?.cart &&
-    cartDetails?.cart.length > 0 &&
-    cartDetails?.cart[0]?.cart_id
-      ? cartDetails?.cart[0]?.cart_id
-      : '';
+  const cartId = loggedInUser?.cart_id ?? "";
   // Prevent rapid duplicate loads
   const loadingRef = useRef(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -81,15 +75,16 @@ export default function ProductsClient({
       setDisplayedProducts((prev) => {
         const existingIds = new Set(prev.map((p: any) => p.id));
         const unique = newRows.filter((p: any) => !existingIds.has(p.id));
+        const nextLength = prev.length + unique.length;
+        setHasMore(nextLength < newCount);
         return [...prev, ...unique];
       });
       setCurrentPage(nextPage);
-      setHasMore((prev) => displayedProducts.length + newRows.length < newCount);
     } finally {
       setLoading(false);
       loadingRef.current = false;
     }
-  }, [loading, hasMore, currentPage, pageSize, totalCount, displayedProducts.length, q]);
+  }, [loading, hasMore, currentPage, pageSize, totalCount, q]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !hasMore) return;
@@ -123,9 +118,7 @@ export default function ProductsClient({
             loggedInUser={loggedInUser}
           />
 
-          {hasMore && (
-            <div ref={sentinelRef} id="infinite-scroll-sentinel" className="h-1 w-full" />
-          )}
+          <div ref={sentinelRef} id="infinite-scroll-sentinel" className="h-1 w-full" />
 
           {loading && (
             <motion.div

@@ -47,3 +47,17 @@ export async function getPaymentDetails(paymentId: string) {
 
   return res;
 }
+
+export async function getPaymentTransactionDetails(transactionId: string) {
+  const res = await performFetch<any>(
+    PAYMENTS_ENDPOINTS.GET_PAYMENT_TRANSACTION_DETAILS(transactionId),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getPaymentDetails', `getPaymentDetails-${transactionId}`],
+      },
+    }
+  );
+
+  return res;
+}

@@ -7,7 +7,7 @@ import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
-import UserAuth from '@/components/auth/UserAuth';
+import UserMenu from '@/components/layout/UserMenu';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Cart } from '@/types/cart';
 
@@ -161,8 +161,8 @@ export default function NavbarClient({ initialCartCount = 0, cartDetails }: Prop
               )}
             </motion.a>
 
-            {/* User Authentication */}
-            <UserAuth />
+            {/* User Menu */}
+            <UserMenu />
           </div>
 
           {/* Mobile Menu Button */}
@@ -247,8 +247,8 @@ export default function NavbarClient({ initialCartCount = 0, cartDetails }: Prop
                   )}
                 </motion.a>
 
-                {/* Mobile User Authentication */}
-                <UserAuth isMobile={true} />
+                {/* Mobile User Menu */}
+                <UserMenu isMobile={true} />
               </div>
             </motion.div>
           )}

@@ -1,16 +1,31 @@
 import { ORDERS_ENDPOINTS } from '@/api/orders';
-import { Order } from '@/types/orders';
+import { Order, OrderDetailsResponse } from '@/types/orders';
 import { PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
 
 export async function getOrders(params?: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<Order>>(
-    getQueryEndpoint(ORDERS_ENDPOINTS.GET_ORDERS, params || {}),
+  const res = await performFetch<PaginatedAPIResponse<OrderDetailsResponse>>(
+    getQueryEndpoint(ORDERS_ENDPOINTS.GET_ADMIN_ORDERS, params || {}),
     {
       method: 'GET',
       next: {
         tags: ['getOrders'],
+      },
+    }
+  );
+
+
+  return res;
+}
+
+export async function getAdminOrders(params?: PaginationParams) {
+  const res = await performFetch<PaginatedAPIResponse<OrderDetailsResponse>>(
+    getQueryEndpoint(ORDERS_ENDPOINTS.GET_ADMIN_ORDERS, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getAdminOrders'],
       },
     }
   );

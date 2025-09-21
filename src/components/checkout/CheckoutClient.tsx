@@ -30,6 +30,7 @@ interface CheckoutForm {
 }
 
 export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
+  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -82,9 +83,10 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
     return fieldErrors[field] || null;
   };
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = (url: string) => {
     setPaymentSuccess(true);
     setPaymentError(null);
+    router.push(url ?? '');
   };
 
   const handlePaymentError = (error: string) => {
@@ -137,13 +139,11 @@ export default function CheckoutClient({ cartDetails }: { cartDetails: Cart }) {
       const payload = buildPayload();
       const parsed = checkoutSchema.parse(payload);
       const res = await createPaymentIntent(parsed);
-      console.log(res);
       if (!res?.isSuccess) {
         throw new Error(res?.message || 'Failed to create payment');
       }
       toast.success(res?.message || 'Payment created successfully');
-      window.location.href = res?.data?.data?.data?.url ?? '';
-      handlePaymentSuccess();
+      handlePaymentSuccess(res?.data?.data?.session?.url ?? '');
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errors: Record<string, string> = {};

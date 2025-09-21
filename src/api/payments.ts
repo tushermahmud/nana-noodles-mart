@@ -10,6 +10,7 @@ export const PAYMENTS_ENDPOINTS = {
   SET_DEFAULT_PAYMENT_METHOD: (methodId: string) => `${BASE_URL}/payments/methods/${methodId}`,
   GET_PAYMENT_HISTORY: `${BASE_URL}/payments/history`,
   GET_PAYMENT_DETAILS: (paymentId: string) => `${BASE_URL}/payments/${paymentId}`,
+  GET_PAYMENT_TRANSACTION_DETAILS: (transactionId: string) => `${BASE_URL}/payment/stripe/payment-transactions/${transactionId}`,
   CREATE_SETUP_INTENT: `${BASE_URL}/payments/setup-intent`,
   VALIDATE_COUPON: `${BASE_URL}/payments/validate-coupon`,
 };

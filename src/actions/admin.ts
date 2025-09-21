@@ -5,6 +5,7 @@ import { APIResponse } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { CATEGORIES_ENDPOINTS } from '@/api/products';
 import { Category } from '@/types/products';
+import { ADMIN_ENDPOINTS } from '@/api/admin';
 
 export async function createCategory(data: FormData) {
   const res = await performFetch<APIResponse<Category>>(CATEGORIES_ENDPOINTS.CREATE_CATEGORY, {
@@ -38,6 +39,20 @@ export async function deleteCategory(id: string) {
 
   if (res?.isSuccess) {
     revalidateTag('getAdminCategories');
+  }
+
+  return res;
+}
+
+export async function updateOrderStatus(transaction_id: string, delivery_status: string) {
+  const res = await performFetch<APIResponse>(ADMIN_ENDPOINTS.UPDATE_ORDER_STATUS(transaction_id), {
+    method: 'PATCH',
+    body: { delivery_status },
+  });
+  console.log('res', res);
+  
+  if (res?.isSuccess) {
+    revalidateTag('getAdminOrders');
   }
 
   return res;
