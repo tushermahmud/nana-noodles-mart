@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -13,12 +12,12 @@ import { OrderDetails } from '@/types/orders';
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
-  const transaction_id = searchParams.get('transaction_id') || "";
-  
-  const [orderId, setOrderId] = useState("N/A");
+  const transaction_id = searchParams.get('transaction_id') || '';
+
+  const [orderId, setOrderId] = useState('N/A');
   const [amount, setAmount] = useState(0);
-  const [currency, setCurrency] = useState("USD");
-  const [email, setEmail] = useState("");
+  const [currency, setCurrency] = useState('USD');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,14 +30,14 @@ export default function PaymentSuccessPage() {
       try {
         const getTransactionDetails = await getPaymentTransactionDetails(transaction_id);
         const transactionDetails = getTransactionDetails?.data?.data ?? {};
-        
+
         setOrderId(transactionDetails?.orderId ?? transaction_id);
         setAmount(transactionDetails?.amount ?? 0);
-        setCurrency(transactionDetails?.currency ?? "USD");
-        setEmail(transactionDetails?.contact_email ?? "");
+        setCurrency(transactionDetails?.currency ?? 'USD');
+        setEmail(transactionDetails?.contact_email ?? '');
       } catch (error) {
         console.error('Error fetching transaction details:', error);
-        setOrderId(transaction_id || "N/A");
+        setOrderId(transaction_id || 'N/A');
       } finally {
         setLoading(false);
       }
@@ -46,8 +45,6 @@ export default function PaymentSuccessPage() {
 
     fetchTransactionDetails();
   }, [transaction_id]);
-
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-32 pb-20">
@@ -84,13 +81,13 @@ export default function PaymentSuccessPage() {
                   <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
                     <p className="text-sm text-gray-600">Order ID</p>
                     <p className="font-semibold text-gray-900 break-all">
-                      {loading ? "Loading..." : orderId}
+                      {loading ? 'Loading...' : orderId}
                     </p>
                   </div>
                   <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
                     <p className="text-sm text-gray-600">Amount Paid</p>
                     <p className="font-semibold text-gray-900">
-                      {loading ? "Loading..." : `${currency} ${amount.toFixed(2)}`}
+                      {loading ? 'Loading...' : `${currency} ${amount.toFixed(2)}`}
                     </p>
                   </div>
                 </div>
@@ -108,7 +105,9 @@ export default function PaymentSuccessPage() {
                     <Mail className="w-5 h-5 text-blue-700 mt-0.5" />
                     <div>
                       <p className="text-blue-800 font-medium">Receipt sent</p>
-                      <p className="text-blue-700 text-sm">A copy of your receipt was sent to {email}.</p>
+                      <p className="text-blue-700 text-sm">
+                        A copy of your receipt was sent to {email}.
+                      </p>
                     </div>
                   </div>
                 )}
@@ -134,7 +133,10 @@ export default function PaymentSuccessPage() {
                   </Button>
                 </Link>
                 <Link href="/">
-                  <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center gap-2"
+                  >
                     <Home className="w-4 h-4" />
                     Go to Homepage
                   </Button>
@@ -150,5 +152,3 @@ export default function PaymentSuccessPage() {
     </div>
   );
 }
-
-

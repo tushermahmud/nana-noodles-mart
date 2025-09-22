@@ -6,22 +6,22 @@ import { Button } from '@/components/ui/button';
 import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from '@/contexts/CartContext';
 import UserMenu from '@/components/layout/UserMenu';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Cart } from '@/types/cart';
+import { User } from '@/types/auth';
 
 type Props = {
   user?: any | null;
   initialCartCount?: number;
   cartDetails?: Cart;
+  loggedInUser?: User | null;
 };
 
-export default function NavbarClient({ initialCartCount = 0, cartDetails }: Props) {
+export default function NavbarClient({ initialCartCount = 0, cartDetails, loggedInUser }: Props) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const { state } = useCart();
   const numberOfCartItems = cartDetails?.cart?.length ?? 0;
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -162,7 +162,7 @@ export default function NavbarClient({ initialCartCount = 0, cartDetails }: Prop
             </motion.a>
 
             {/* User Menu */}
-            <UserMenu />
+            <UserMenu loggedInUser={loggedInUser} />
           </div>
 
           {/* Mobile Menu Button */}
@@ -248,7 +248,7 @@ export default function NavbarClient({ initialCartCount = 0, cartDetails }: Prop
                 </motion.a>
 
                 {/* Mobile User Menu */}
-                <UserMenu isMobile={true} />
+                <UserMenu isMobile={true} loggedInUser={loggedInUser} />
               </div>
             </motion.div>
           )}

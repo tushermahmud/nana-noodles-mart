@@ -8,7 +8,6 @@ import ProfileEditForm from './ProfileEditForm';
 import { User } from '@/types/auth';
 import Image from 'next/image';
 
-
 interface ProfileClientProps {
   user: User | null;
 }
@@ -70,7 +69,7 @@ const ProfileClient = ({ user }: ProfileClientProps) => {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">
-                    { user?.first_name} { user?.last_name}
+                    {user?.first_name} {user?.last_name}
                   </h3>
                   <p className="text-gray-600">{user?.email}</p>
                 </div>

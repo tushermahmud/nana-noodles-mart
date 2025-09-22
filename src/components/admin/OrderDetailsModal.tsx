@@ -43,7 +43,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
 
   const handleStatusUpdate = async () => {
     if (isUpdating) return;
-    
+
     setIsUpdating(true);
     try {
       const response = await updateOrderStatus(order.order_id, newStatus);
@@ -54,7 +54,6 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
       } else {
         toast.error('Failed to update order status');
       }
-      
     } catch (error) {
       console.error('Error updating order status:', error);
       toast.error('An error occurred while updating the order status');
@@ -116,7 +115,11 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
                   Shipping Address
                 </h3>
                 <p className="text-gray-900">{order.transaction_details.shipping_address}</p>
-                <p className="text-gray-900">{order.transaction_details.shipping_city}, {order.transaction_details.shipping_state} {order.transaction_details.shipping_zip_code}</p>
+                <p className="text-gray-900">
+                  {order.transaction_details.shipping_city},{' '}
+                  {order.transaction_details.shipping_state}{' '}
+                  {order.transaction_details.shipping_zip_code}
+                </p>
               </div>
 
               {/* Order Items */}
@@ -142,7 +145,9 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-lg font-bold text-gray-900">${order.total_price.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-gray-900">
+                      ${order.total_price.toFixed(2)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -245,7 +250,9 @@ const OrderDetailsModal = ({ isOpen, onClose, order }: OrderDetailsModalProps) =
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Reference Number</span>
-                    <span className="text-gray-900 break-all">{order.transaction_details.reference_number}</span>
+                    <span className="text-gray-900 break-all">
+                      {order.transaction_details.reference_number}
+                    </span>
                   </div>
                 </div>
               </div>

@@ -18,26 +18,27 @@ interface OrdersClientProps {
 const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [showOrderDetailsModal, setShowOrderDetailsModal] = useState(false);
   const [selectedOrderForDetails, setSelectedOrderForDetails] = useState<OrderDetails | null>(null);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
-  const [selectedOrderForDownload, setSelectedOrderForDownload] = useState<OrderDetails | null>(null);
+  const [selectedOrderForDownload, setSelectedOrderForDownload] = useState<OrderDetails | null>(
+    null
+  );
   const orders = initialOrders;
 
   // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
-      
+
       if (searchTerm.trim()) {
         params.set('search', searchTerm.trim());
       } else {
         params.delete('search');
       }
-      
-      
+
       const newUrl = params.toString() ? `?${params.toString()}` : '';
       router.push(`/admin/orders${newUrl}`);
     }, 500);
@@ -53,9 +54,7 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
       order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.delivery_status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.items.some(item => 
-        item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      order.items.some((item) => item.product_name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const getStatusColor = (status: string) => {
@@ -139,7 +138,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
               </tr>
             </thead>
             <tbody>
-              ${order.items.map(item => `
+              ${order.items
+                .map(
+                  (item) => `
                 <tr>
                   <td>${item.product_name}</td>
                   <td>${item.product_id}</td>
@@ -147,7 +148,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                   <td>${order.transaction_details.currency.toUpperCase()} ${item.unit_price.toFixed(2)}</td>
                   <td>${order.transaction_details.currency.toUpperCase()} ${item.total_price.toFixed(2)}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join('')}
             </tbody>
           </table>
 
@@ -169,7 +172,7 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
     printWindow.document.write(htmlContent);
     printWindow.document.close();
     printWindow.focus();
-    
+
     // Wait for content to load then print
     setTimeout(() => {
       printWindow.print();
@@ -215,10 +218,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
               {searchTerm ? 'No orders found' : 'No orders available'}
             </h3>
             <p className="text-gray-600">
-              {searchTerm 
+              {searchTerm
                 ? `No orders match your search for "${searchTerm}"`
-                : 'There are no orders to display at the moment.'
-              }
+                : 'There are no orders to display at the moment.'}
             </p>
             {searchTerm && (
               <button
@@ -243,104 +245,112 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
               </tr>
             </thead>
             <tbody>
-            {filteredOrders.map((order, index) => (
-              <React.Fragment key={order.order_id}>
-                {index > 0 && (
-                  <tr>
-                    <td colSpan={7} className="h-4"></td>
-                  </tr>
-                )}
-                <tr className="border-2 border-gray-300 hover:bg-gray-50">
-                {/* Order ID */}
-                <td className="py-4 px-4 align-middle">
-                  <span className="font-medium text-gray-900">{order.order_id}</span>
-                </td>
-                
-                {/* Customer */}
-                <td className="py-4 px-4 align-middle">
-                  <div>
-                    <p className="font-medium text-gray-900">{order.customer_name}</p>
-                    <p className="text-sm text-gray-500">{order.customer_email}</p>
-                  </div>
-                </td>
-                
-                {/* Items - All products in one cell, vertically centered */}
-                <td className="py-4 px-4 align-middle">
-                  <div className="space-y-2">
-                    {order.items.map((item, index) => (
-                      <div key={item.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-2 border">
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900 text-sm">{item.product_name}</p>
-                          <p className="text-xs text-gray-500">ID: {item.product_id}</p>
-                        </div>
-                        <div className="flex items-center space-x-3 text-sm">
-                          <span className="text-gray-600">Qty: {item.quantity}</span>
-                          <span className="text-gray-600">
-                            {order.transaction_details.currency.toUpperCase()} {item.unit_price.toFixed(2)}
-                          </span>
-                          <span className="font-medium text-gray-900">
-                            {order.transaction_details.currency.toUpperCase()} {item.total_price.toFixed(2)}
-                          </span>
-                        </div>
+              {filteredOrders.map((order, index) => (
+                <React.Fragment key={order.order_id}>
+                  {index > 0 && (
+                    <tr>
+                      <td colSpan={7} className="h-4"></td>
+                    </tr>
+                  )}
+                  <tr className="border-2 border-gray-300 hover:bg-gray-50">
+                    {/* Order ID */}
+                    <td className="py-4 px-4 align-middle">
+                      <span className="font-medium text-gray-900">{order.order_id}</span>
+                    </td>
+
+                    {/* Customer */}
+                    <td className="py-4 px-4 align-middle">
+                      <div>
+                        <p className="font-medium text-gray-900">{order.customer_name}</p>
+                        <p className="text-sm text-gray-500">{order.customer_email}</p>
                       </div>
-                    ))}
-                  </div>
-                </td>
-                
-                {/* Total */}
-                <td className="py-4 px-4 align-middle">
-                  <span className="font-bold text-gray-900">
-                    {order.transaction_details.currency.toUpperCase()} {order.total_price.toFixed(2)}
-                  </span>
-                </td>
-                
-                {/* Status */}
-                <td className="py-4 px-4 align-middle">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.delivery_status)}`}
-                  >
-                    {order.delivery_status.charAt(0).toUpperCase() + order.delivery_status.slice(1)}
-                  </span>
-                </td>
-                
-                {/* Date */}
-                <td className="py-4 px-4 align-middle">
-                  <span className="text-sm text-gray-600">{order.created_at}</span>
-                </td>
-                
-                {/* Actions */}
-                <td className="py-4 px-4 align-middle">
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleViewOrder(order)}
-                      title="View Order Details"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDownloadOrderDetails(order)}
-                      title="Download Order Details"
-                    >
-                      <Download className="w-4 h-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" title="Edit Order">
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </td>
-                </tr>
-              </React.Fragment>
-            ))}
+                    </td>
+
+                    {/* Items - All products in one cell, vertically centered */}
+                    <td className="py-4 px-4 align-middle">
+                      <div className="space-y-2">
+                        {order.items.map((item, index) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between bg-gray-50 rounded-lg p-2 border"
+                          >
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900 text-sm">
+                                {item.product_name}
+                              </p>
+                              <p className="text-xs text-gray-500">ID: {item.product_id}</p>
+                            </div>
+                            <div className="flex items-center space-x-3 text-sm">
+                              <span className="text-gray-600">Qty: {item.quantity}</span>
+                              <span className="text-gray-600">
+                                {order.transaction_details.currency.toUpperCase()}{' '}
+                                {item.unit_price.toFixed(2)}
+                              </span>
+                              <span className="font-medium text-gray-900">
+                                {order.transaction_details.currency.toUpperCase()}{' '}
+                                {item.total_price.toFixed(2)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+
+                    {/* Total */}
+                    <td className="py-4 px-4 align-middle">
+                      <span className="font-bold text-gray-900">
+                        {order.transaction_details.currency.toUpperCase()}{' '}
+                        {order.total_price.toFixed(2)}
+                      </span>
+                    </td>
+
+                    {/* Status */}
+                    <td className="py-4 px-4 align-middle">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.delivery_status)}`}
+                      >
+                        {order.delivery_status.charAt(0).toUpperCase() +
+                          order.delivery_status.slice(1)}
+                      </span>
+                    </td>
+
+                    {/* Date */}
+                    <td className="py-4 px-4 align-middle">
+                      <span className="text-sm text-gray-600">{order.created_at}</span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="py-4 px-4 align-middle">
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewOrder(order)}
+                          title="View Order Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDownloadOrderDetails(order)}
+                          title="Download Order Details"
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm" title="Edit Order">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                </React.Fragment>
+              ))}
             </tbody>
           </table>
         )}
       </div>
       <AdminPagination totalCount={count} defaultPageSize={5} />
-
 
       {/* Order Details Modal */}
       {showOrderDetailsModal && selectedOrderForDetails && (
@@ -409,8 +419,14 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                       <MapPin className="w-5 h-5 mr-2 text-pink-600" />
                       Shipping Address
                     </h3>
-                    <p className="text-gray-900">{selectedOrderForDownload.transaction_details.shipping_address}</p>
-                    <p className="text-gray-900">{selectedOrderForDownload.transaction_details.shipping_city}, {selectedOrderForDownload.transaction_details.shipping_state} {selectedOrderForDownload.transaction_details.shipping_zip_code}</p>
+                    <p className="text-gray-900">
+                      {selectedOrderForDownload.transaction_details.shipping_address}
+                    </p>
+                    <p className="text-gray-900">
+                      {selectedOrderForDownload.transaction_details.shipping_city},{' '}
+                      {selectedOrderForDownload.transaction_details.shipping_state}{' '}
+                      {selectedOrderForDownload.transaction_details.shipping_zip_code}
+                    </p>
                   </div>
 
                   {/* Order Items */}
@@ -436,7 +452,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
                         <span className="text-lg font-semibold text-gray-900">Total</span>
-                        <span className="text-lg font-bold text-gray-900">${selectedOrderForDownload.total_price.toFixed(2)}</span>
+                        <span className="text-lg font-bold text-gray-900">
+                          ${selectedOrderForDownload.total_price.toFixed(2)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -454,7 +472,8 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedOrderForDownload.status)}`}
                       >
-                        {selectedOrderForDownload.status.charAt(0).toUpperCase() + selectedOrderForDownload.status.slice(1)}
+                        {selectedOrderForDownload.status.charAt(0).toUpperCase() +
+                          selectedOrderForDownload.status.slice(1)}
                       </span>
                     </div>
                   </div>
@@ -465,7 +484,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Order Date</span>
-                        <span className="text-gray-900 break-all">{selectedOrderForDownload.created_at}</span>
+                        <span className="text-gray-900 break-all">
+                          {selectedOrderForDownload.created_at}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Payment Method</span>
@@ -473,7 +494,9 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Reference Number</span>
-                        <span className="text-gray-900 break-all">{selectedOrderForDownload.transaction_details.reference_number}</span>
+                        <span className="text-gray-900 break-all">
+                          {selectedOrderForDownload.transaction_details.reference_number}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -482,17 +505,17 @@ const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
 
               {/* Actions */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200 mt-6">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setShowDownloadModal(false);
                     setSelectedOrderForDownload(null);
-                  }} 
+                  }}
                   className="px-6 py-2"
                 >
                   Close
                 </Button>
-                <Button 
+                <Button
                   onClick={handleDownloadPDF}
                   className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
                 >

@@ -3,17 +3,27 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, UserCircle, Settings, ShoppingBag, Heart, ChevronDown } from 'lucide-react';
+import {
+  User as UserIcon,
+  LogOut,
+  UserCircle,
+  Settings,
+  ShoppingBag,
+  Heart,
+  ChevronDown,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/actions/auth';
 import { toast } from 'sonner';
+import { User } from '@/types/auth';
 
 interface UserMenuProps {
   isMobile?: boolean;
+  loggedInUser?: User | null;
 }
 
-const UserMenu = ({ isMobile = false }: UserMenuProps) => {
+const UserMenu = ({ isMobile = false, loggedInUser }: UserMenuProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,6 +49,7 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setIsLoggedIn(data.isLoggedIn || false);
           setUserData(data.user || null);
         } else {
@@ -93,6 +104,7 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
       setIsLoading(false);
     }
   };
+  console.log(userData);
 
   if (isLoading) {
     return (
@@ -115,8 +127,10 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
               className="flex items-center space-x-2 border-2 border-pink-200 hover:border-pink-300 text-pink-600 hover:text-pink-700"
             >
               <UserCircle className="w-4 h-4" />
-              <span>{userData?.name || userData?.email || 'User'}</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
+              <span>{loggedInUser?.first_name ?? 'User'}</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`}
+              />
             </Button>
           </div>
         )}
@@ -130,17 +144,17 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                 {userData?.name || userData?.email || 'User'}
               </span>
             </div>
-            
+
             <Link href="/profile" className="block">
               <Button
                 variant="ghost"
                 className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50"
               >
-                <User className="w-4 h-4 mr-2" />
+                <UserIcon className="w-4 h-4 mr-2" />
                 Profile
               </Button>
             </Link>
-            
+
             <Link href="/orders" className="block">
               <Button
                 variant="ghost"
@@ -150,7 +164,18 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                 My Orders
               </Button>
             </Link>
-            
+            {loggedInUser && loggedInUser?.type === 'admin' && (
+              <Link href="/admin" className="block">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50"
+                >
+                  <ShoppingBag className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              </Link>
+            )}
+
             <Button
               onClick={handleLogout}
               variant="ghost"
@@ -180,12 +205,8 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                     <UserCircle className="w-6 h-6 text-pink-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {userData?.name || 'User'}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {userData?.email || ''}
-                    </p>
+                    <p className="text-sm font-medium text-gray-900">{userData?.name || 'User'}</p>
+                    <p className="text-xs text-gray-500">{userData?.email || ''}</p>
                   </div>
                 </div>
               </div>
@@ -197,11 +218,11 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                     variant="ghost"
                     className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-none"
                   >
-                    <User className="w-4 h-4 mr-3" />
+                    <UserIcon className="w-4 h-4 mr-3" />
                     Profile
                   </Button>
                 </Link>
-                
+
                 <Link href="/orders" className="block">
                   <Button
                     variant="ghost"
@@ -211,6 +232,18 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                     My Orders
                   </Button>
                 </Link>
+
+                {loggedInUser && loggedInUser?.type === 'admin' && (
+                  <Link href="/admin" className="block">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-none"
+                    >
+                      <ShoppingBag className="w-4 h-4 mr-3" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                )}
               </div>
 
               {/* Logout */}
@@ -243,7 +276,7 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
             isMobile ? 'w-full' : ''
           }`}
         >
-          <User className="w-4 h-4 mr-2" />
+          <UserIcon className="w-4 h-4 mr-2" />
           Login
         </Button>
       </Link>

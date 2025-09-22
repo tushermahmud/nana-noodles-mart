@@ -50,7 +50,7 @@ export async function updateOrderStatus(transaction_id: string, delivery_status:
     body: { delivery_status },
   });
   console.log('res', res);
-  
+
   if (res?.isSuccess) {
     revalidateTag('getAdminOrders');
   }

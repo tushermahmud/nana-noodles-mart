@@ -20,13 +20,15 @@ export default async function Home() {
   const publicCategoriesRes = await getPublicCategories();
   const publicCategories = publicCategoriesRes?.data?.data ?? [];
   return (
-<div
+    <div
       className="min-h-screen"
       style={{
         background:
           'linear-gradient(180deg, #FD7399 0%, rgba(253, 115, 153, 0.15) 35%, #FD7399 100%)',
       }}
-    >      <Navbar cartDetails={getCartDetails as Cart} />
+    >
+      {' '}
+      <Navbar cartDetails={getCartDetails as Cart} loggedInUser={loggedInUser} />
       <Hero />
       <Categories categories={publicCategories} />
       <VirtualStore

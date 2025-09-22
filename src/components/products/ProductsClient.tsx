@@ -41,7 +41,7 @@ export default function ProductsClient({
 
   // Read q from URL (Navbar controls it)
   const q = searchParams.get('q') || initialQuery;
-  const cartId = loggedInUser?.cart_id ?? "";
+  const cartId = loggedInUser?.cart_id ?? '';
   // Prevent rapid duplicate loads
   const loadingRef = useRef(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);

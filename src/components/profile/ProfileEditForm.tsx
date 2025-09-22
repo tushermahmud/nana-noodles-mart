@@ -13,16 +13,20 @@ import Image from 'next/image';
 
 // Zod schema for profile validation
 const profileSchema = z.object({
-  first_name: z.string().min(2, 'First name must be at least 2 characters').max(50, 'First name must be less than 50 characters'),
-  last_name: z.string().min(2, 'Last name must be at least 2 characters').max(50, 'Last name must be less than 50 characters'),
+  first_name: z
+    .string()
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must be less than 50 characters'),
+  last_name: z
+    .string()
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must be less than 50 characters'),
   email: z.email('Please enter a valid email address'),
   phone: z.string().optional().or(z.literal('')),
   image: z.any().optional(), // For file upload
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
-
-
 
 interface ProfileEditFormProps {
   user: User | null;
@@ -59,15 +63,15 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
         toast.error('Please select a valid image file');
         return;
       }
-      
+
       // Validate file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image size must be less than 5MB');
         return;
       }
-      
+
       setSelectedImage(file);
-      
+
       // Create preview URL
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -101,7 +105,7 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
       }
 
       const result = await updateUserProfile(formData as any);
-      
+
       if (result?.isSuccess) {
         toast.success('Profile updated successfully');
         onCancel();
@@ -156,11 +160,9 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
               </button>
             )}
           </div>
-          
+
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Profile Image
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
             <div className="flex items-center space-x-4">
               <input
                 ref={fileInputRef}
@@ -179,13 +181,13 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
                 <Camera className="w-4 h-4" />
                 <span>Choose Image</span>
               </Button>
-              <span className="text-sm text-gray-500">
-                JPG, PNG up to 5MB
-              </span>
+              <span className="text-sm text-gray-500">JPG, PNG up to 5MB</span>
             </div>
             {errors.image && (
               <p className="mt-1 text-sm text-red-600">
-                {typeof errors.image === 'string' ? errors.image : (errors.image as any)?.message || 'Invalid image'}
+                {typeof errors.image === 'string'
+                  ? errors.image
+                  : (errors.image as any)?.message || 'Invalid image'}
               </p>
             )}
           </div>
@@ -238,9 +240,7 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               placeholder="Enter your email"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
           </div>
 
           {/* Phone Field */}
@@ -255,21 +255,14 @@ const ProfileEditForm = ({ user, onCancel }: ProfileEditFormProps) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               placeholder="Enter your phone number"
             />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-            )}
+            {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
       <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleCancel}
-          disabled={isSubmitting}
-        >
+        <Button type="button" variant="outline" onClick={handleCancel} disabled={isSubmitting}>
           Cancel
         </Button>
         <Button

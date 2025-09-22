@@ -74,7 +74,7 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
               />
               {/* Category Badge */}
               <div className="absolute top-2 right-2 bg-gradient-to-r from-gray-800 to-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                {product?.category?.name || "Uncategorized"}
+                {product?.category?.name || 'Uncategorized'}
               </div>
               {/* Popular */}
               {product.popular && (

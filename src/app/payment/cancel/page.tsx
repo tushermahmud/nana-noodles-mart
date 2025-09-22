@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -60,13 +60,19 @@ export default function PaymentCancelPage() {
                   </Button>
                 </Link>
                 <Link href="/cart">
-                  <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center gap-2"
+                  >
                     <ShoppingCart className="w-4 h-4" />
                     View Cart
                   </Button>
                 </Link>
                 <Link href="/">
-                  <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center gap-2"
+                  >
                     <Home className="w-4 h-4" />
                     Go Home
                   </Button>
@@ -79,5 +85,3 @@ export default function PaymentCancelPage() {
     </div>
   );
 }
-
-

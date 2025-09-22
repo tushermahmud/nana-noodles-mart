@@ -5,17 +5,17 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Package, 
-  Calendar, 
-  DollarSign, 
-  Eye, 
+import {
+  Package,
+  Calendar,
+  DollarSign,
+  Eye,
   Download,
   Truck,
   MapPin,
   Phone,
   Mail,
-  X
+  X,
 } from 'lucide-react';
 import { OrderDetails } from '@/types/orders';
 
@@ -96,12 +96,16 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
           
           <div class="section">
             <h2>Order Items</h2>
-            ${order.items.map(item => `
+            ${order.items
+              .map(
+                (item) => `
               <div class="item">
                 <span>${item.product_name} (Qty: ${item.quantity})</span>
                 <span>${formatCurrency(item.total_price)}</span>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
             <div class="item total">
               <span>Total</span>
               <span>${formatCurrency(order.total_price)}</span>
@@ -133,9 +137,11 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
           <div className="text-center py-16">
             <Package className="w-24 h-24 text-gray-400 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4">No Orders Yet</h2>
-            <p className="text-gray-600 mb-8">You haven't placed any orders yet. Start shopping to see your orders here!</p>
-            <Button 
-              onClick={() => window.location.href = '/products'}
+            <p className="text-gray-600 mb-8">
+              You haven't placed any orders yet. Start shopping to see your orders here!
+            </p>
+            <Button
+              onClick={() => (window.location.href = '/products')}
               className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white px-8 py-3"
             >
               Start Shopping
@@ -170,8 +176,7 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                         Order ID: #{order.order_id}
                       </CardTitle>
                       <div className="break-all font-semibold">
-                      Transaction ID: #{order?.transaction_id ?? ""}
-
+                        Transaction ID: #{order?.transaction_id ?? ''}
                       </div>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-gray-600">
                         <div className="flex items-center">
@@ -185,11 +190,12 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                       </div>
                     </div>
                     <Badge className={getStatusColor(order.delivery_status)}>
-                      {order.delivery_status.charAt(0).toUpperCase() + order.delivery_status.slice(1)}
+                      {order.delivery_status.charAt(0).toUpperCase() +
+                        order.delivery_status.slice(1)}
                     </Badge>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Order Items */}
@@ -220,8 +226,13 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                         Shipping
                       </h3>
                       <div className="text-sm text-gray-600">
-                        <p>{order.transaction_details.shipping_city}, {order.transaction_details.shipping_state}</p>
-                        <p className="mt-1 break-all">Reference: {order.transaction_details.reference_number}</p>
+                        <p>
+                          {order.transaction_details.shipping_city},{' '}
+                          {order.transaction_details.shipping_state}
+                        </p>
+                        <p className="mt-1 break-all">
+                          Reference: {order.transaction_details.reference_number}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -302,9 +313,13 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                       <MapPin className="w-5 h-5 mr-2 text-pink-600" />
                       Shipping Address
                     </h3>
-                    <p className="text-gray-900">{selectedOrder.transaction_details.shipping_address}</p>
+                    <p className="text-gray-900">
+                      {selectedOrder.transaction_details.shipping_address}
+                    </p>
                     <p className="text-gray-900 mt-1">
-                      {selectedOrder.transaction_details.shipping_city}, {selectedOrder.transaction_details.shipping_state} {selectedOrder.transaction_details.shipping_zip_code}
+                      {selectedOrder.transaction_details.shipping_city},{' '}
+                      {selectedOrder.transaction_details.shipping_state}{' '}
+                      {selectedOrder.transaction_details.shipping_zip_code}
                     </p>
                   </div>
 
@@ -323,16 +338,22 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                           <div>
                             <p className="font-medium text-gray-900">{item.product_name}</p>
                             <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                            <p className="text-sm text-gray-600">Unit Price: {formatCurrency(item.unit_price)}</p>
+                            <p className="text-sm text-gray-600">
+                              Unit Price: {formatCurrency(item.unit_price)}
+                            </p>
                           </div>
-                          <p className="font-medium text-gray-900">{formatCurrency(item.total_price)}</p>
+                          <p className="font-medium text-gray-900">
+                            {formatCurrency(item.total_price)}
+                          </p>
                         </div>
                       ))}
                     </div>
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
                         <span className="text-lg font-semibold text-gray-900">Total</span>
-                        <span className="text-lg font-bold text-gray-900">{formatCurrency(selectedOrder.total_price)}</span>
+                        <span className="text-lg font-bold text-gray-900">
+                          {formatCurrency(selectedOrder.total_price)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -348,7 +369,8 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                     </h3>
                     <div className="mb-4">
                       <Badge className={getStatusColor(selectedOrder.delivery_status)}>
-                        {selectedOrder.delivery_status.charAt(0).toUpperCase() + selectedOrder.delivery_status.slice(1)}
+                        {selectedOrder.delivery_status.charAt(0).toUpperCase() +
+                          selectedOrder.delivery_status.slice(1)}
                       </Badge>
                     </div>
                   </div>
@@ -359,7 +381,9 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Order Date</span>
-                        <span className="text-gray-900">{formatDate(selectedOrder.created_at_full)}</span>
+                        <span className="text-gray-900">
+                          {formatDate(selectedOrder.created_at_full)}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Payment Method</span>
@@ -367,7 +391,9 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Reference Number</span>
-                        <span className="text-gray-900 break-all">{selectedOrder.transaction_details.reference_number}</span>
+                        <span className="text-gray-900 break-all">
+                          {selectedOrder.transaction_details.reference_number}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -376,10 +402,14 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
 
               {/* Actions */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200 mt-6">
-                <Button variant="outline" onClick={() => setShowOrderDetails(false)} className="px-6 py-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowOrderDetails(false)}
+                  className="px-6 py-2"
+                >
                   Close
                 </Button>
-                <Button 
+                <Button
                   onClick={() => handleDownloadOrder(selectedOrder)}
                   className="px-6 py-2 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white"
                 >

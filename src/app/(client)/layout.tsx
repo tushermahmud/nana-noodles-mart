@@ -17,7 +17,7 @@ export default async function ClientLayout({ children }: { children: React.React
       }}
     >
       {' '}
-      <Navbar cartDetails={getCartDetails as Cart} />
+      <Navbar cartDetails={getCartDetails as Cart} loggedInUser={loggedInUser} />
       {children}
     </div>
   );

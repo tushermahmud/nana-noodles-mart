@@ -15,7 +15,6 @@ export async function getOrders(params?: PaginationParams) {
     }
   );
 
-
   return res;
 }
 
