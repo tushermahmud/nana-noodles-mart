@@ -53,3 +53,22 @@ export interface PaymentDetails extends PaymentHistory {
     createdAt: string;
   }>;
 }
+
+export interface PaymentTransaction {
+  id: string;
+  status: string;
+  raw_status: string | null;
+  provider: string | null;
+  amount: number;
+  currency: string;
+  paid_amount: number | null;
+  paid_currency: string | null;
+  created_at: string;
+  updated_at: string;
+  user: {
+    email: string;
+  };
+  order_items: Array<{
+    id: string;
+  }>;
+}

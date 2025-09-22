@@ -7,9 +7,7 @@ import {
   User as UserIcon,
   LogOut,
   UserCircle,
-  Settings,
   ShoppingBag,
-  Heart,
   ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';

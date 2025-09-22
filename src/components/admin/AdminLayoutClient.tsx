@@ -18,42 +18,10 @@ type AdminLayoutClientProps = {
 export default function AdminLayoutClient({ children, dashboardStats }: AdminLayoutClientProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [products] = useState(productsData);
-  const [categories] = useState(categoriesData);
-
-  // Mock orders data
-  const [orders] = useState([
-    {
-      id: 'ORD-001',
-      customer: 'John Doe',
-      email: 'john@example.com',
-      items: ['Premium Tonkotsu Ramen', 'Spicy Miso Ramen'],
-      total: 35.98,
-      status: 'pending',
-      date: '2024-01-15',
-      address: '123 Main St, City, State',
-    },
-    {
-      id: 'ORD-002',
-      customer: 'Jane Smith',
-      email: 'jane@example.com',
-      items: ['Vegetarian Ramen', 'Seafood Ramen'],
-      total: 32.99,
-      status: 'shipped',
-      date: '2024-01-14',
-      address: '456 Oak Ave, City, State',
-    },
-    {
-      id: 'ORD-003',
-      customer: 'Mike Johnson',
-      email: 'mike@example.com',
-      items: ['Premium Tonkotsu Ramen'],
-      total: 18.99,
-      status: 'delivered',
-      date: '2024-01-13',
-      address: '789 Pine Rd, City, State',
-    },
-  ]);
+  const products = dashboardStats?.totalProducts ?? 0;
+  const categories = dashboardStats?.totalCategories ?? 0;
+  const orders = dashboardStats?.totalOrders ?? 0;
+  const transactions = dashboardStats?.totalTransactions ?? 0;
 
   // Map icon strings to actual components
   const iconMap = {
@@ -69,11 +37,13 @@ export default function AdminLayoutClient({ children, dashboardStats }: AdminLay
     total: tab.total as keyof DashboardStats,
     count:
       tab.id === 'products'
-        ? products.length
+        ? products
         : tab.id === 'categories'
-          ? categories.length
+          ? categories
           : tab.id === 'orders'
-            ? orders.length
+            ? orders
+            : tab.id === 'transactions'
+              ? transactions
             : null,
   }));
 

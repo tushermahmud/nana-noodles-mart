@@ -12,7 +12,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   await requireAdmin();
   const dashboardStatsRes = await getDashboardStats();
   const dashboardStats = dashboardStatsRes?.data ?? null;
-  console.log(dashboardStats);
 
   return <AdminLayoutClient dashboardStats={dashboardStats}>{children}</AdminLayoutClient>;
 }

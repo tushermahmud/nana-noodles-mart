@@ -1,5 +1,5 @@
 import { PAYMENTS_ENDPOINTS } from '@/api/payments';
-import { PaymentMethod, PaymentDetails } from '@/types/payments';
+import { PaymentMethod, PaymentDetails, PaymentTransaction } from '@/types/payments';
 import { PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
@@ -55,6 +55,20 @@ export async function getPaymentTransactionDetails(transactionId: string) {
       method: 'GET',
       next: {
         tags: ['getPaymentDetails', `getPaymentDetails-${transactionId}`],
+      },
+    }
+  );
+
+  return res;
+}
+
+export async function getPaymentTransactions(params?: PaginationParams) {
+  const res = await performFetch<PaginatedAPIResponse<PaymentTransaction>>(
+    getQueryEndpoint(PAYMENTS_ENDPOINTS.GET_PAYMENT_TRANSACTIONS, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getPaymentTransactions'],
       },
     }
   );

@@ -10,7 +10,6 @@ import {
   RegisterRequest,
   RegisterResponse,
   User,
-  ForgotPasswordRequest,
   ForgotPasswordResponse,
 } from '@/types/auth';
 import { performFetch } from '@/lib/apiUtils';

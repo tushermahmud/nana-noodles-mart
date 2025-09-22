@@ -21,9 +21,9 @@
     "count": null
   },
   {
-    "id": "analytics",
-    "total": "totalUsers",
-    "label": "Analytics",
+    "id": "transactions",
+    "total": "totalTransactions",
+    "label": "Transactions",
     "icon": "BarChart3",
     "count": null
   }

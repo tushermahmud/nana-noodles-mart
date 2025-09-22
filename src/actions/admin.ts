@@ -44,8 +44,8 @@ export async function deleteCategory(id: string) {
   return res;
 }
 
-export async function updateOrderStatus(transaction_id: string, delivery_status: string) {
-  const res = await performFetch<APIResponse>(ADMIN_ENDPOINTS.UPDATE_ORDER_STATUS(transaction_id), {
+export async function updateOrderStatus(orderId: string, delivery_status: string) {
+  const res = await performFetch<APIResponse>(ADMIN_ENDPOINTS.UPDATE_ORDER_STATUS(orderId), {
     method: 'PATCH',
     body: { delivery_status },
   });
@@ -58,43 +58,3 @@ export async function updateOrderStatus(transaction_id: string, delivery_status:
   return res;
 }
 
-/* export async function updatePaymentStatus(paymentId: string, status: string) {
-  const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_PAYMENT_STATUS(paymentId), {
-    method: 'PATCH',
-    body: { status },
-  });
-
-  if (res.isSuccess) {
-    revalidateTag('getAdminPayments');
-    revalidateTag('getPaymentHistory');
-    revalidateTag('getPaymentDetails');
-  }
-
-  return res;
-} */
-
-/* export async function exportOrders(filters?: {
-  startDate?: string;
-  endDate?: string;
-  status?: string;
-}) {
-  const res = await performFetch<{ downloadUrl: string }>(ADMIN_ENDPOINTS.EXPORT_ORDERS, {
-    method: 'POST',
-    body: filters,
-  });
-
-  return res;
-}
-
-export async function exportUsers(filters?: {
-  startDate?: string;
-  endDate?: string;
-  role?: string;
-}) {
-  const res = await performFetch<{ downloadUrl: string }>(ADMIN_ENDPOINTS.EXPORT_USERS, {
-    method: 'POST',
-    body: filters,
-  });
-
-  return res;
-} */

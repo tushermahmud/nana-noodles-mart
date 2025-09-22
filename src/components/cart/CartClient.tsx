@@ -4,15 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, CreditCard, Truck } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { Cart } from '@/types/cart';
 import Image from 'next/image';
 import { updateCartItem } from '@/actions/cart';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
 import { removeCartItem } from '@/actions/cart';
+import { clearCart } from '@/actions/cart';
 
 type CartClientProps = {
   cartDetails?: Cart;
@@ -54,8 +53,17 @@ export default function CartClient({ cartDetails }: CartClientProps) {
       toast.error(getErrorMessage(error));
     }
   };
-  const clearCart = () => {
-    return;
+  const handleClearCart = async () => {
+    try {
+      const res = await clearCart();
+      if (res?.isSuccess) {
+        toast.success(res?.message ?? 'Cart cleared successfully');
+      } else {
+        toast.error(res?.message ?? 'Failed to clear cart');
+      }
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   if (numberOfCartItems === 0) {
@@ -218,7 +226,7 @@ export default function CartClient({ cartDetails }: CartClientProps) {
               <div className="mt-6 text-right">
                 <Button
                   variant="outline"
-                  onClick={() => clearCart()}
+                  onClick={() => handleClearCart()}
                   className="text-red-600 border-red-600 hover:bg-red-50"
                 >
                   Clear Cart
