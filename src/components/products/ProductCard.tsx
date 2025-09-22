@@ -3,8 +3,7 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ShoppingCart, Heart, Flame, Plus, Minus } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+import { ArrowRight, ShoppingCart, Flame } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,7 +30,6 @@ export default function ProductCard({ product, cartDetails, loggedInUser }: Prod
   const inStock = product?.quantity > 0;
   const features = product?.features?.split(',') ?? [];
   const handleAddToCart = async () => {
-    debugger;
     try {
       if (loggedInUser?.cart_id) {
         const res = await addToCart({

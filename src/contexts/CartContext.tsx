@@ -6,7 +6,6 @@ import {
   updateCartItem as updateCartItemAction,
   clearCart as clearCartAction,
 } from '@/actions/cart';
-import { getCart as getCartAction } from '@/fetchers/cart';
 import { removeCartItem as removeFromCartAction } from '@/actions/cart';
 export interface CartItem {
   id: string;
@@ -87,7 +86,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
-  const [loading, setLoading] = useState(false);
 
   const loadFromServer = async () => {
     /* try {
@@ -114,7 +112,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = async (item: Omit<CartItem, 'quantity'>) => {
     dispatch({ type: 'OPTIMISTIC_ADD', payload: item });
     try {
-      await addToCartAction({ productId: item.id, quantity: 1 });
+      await addToCartAction({ cartId: '324234234', product_id: item.id, product_quantity: 1 });
       await loadFromServer();
     } catch (e) {
       await loadFromServer();
@@ -134,7 +132,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const updateQuantity = async (id: string, quantity: number) => {
     dispatch({ type: 'OPTIMISTIC_UPDATE', payload: { id, quantity } });
     try {
-      await updateCartItemAction(id, '324234234', quantity);
+      await updateCartItemAction({ cartId: '324234234', product_id: id, product_quantity: quantity });
       await loadFromServer();
     } catch (e) {
       await loadFromServer();

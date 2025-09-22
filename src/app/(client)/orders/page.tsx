@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getOrders } from '@/fetchers/orders';
 import OrdersClient from '@/components/orders/OrdersClient';

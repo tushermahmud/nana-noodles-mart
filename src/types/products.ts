@@ -16,6 +16,16 @@ export interface Product extends BaseEntity {
   original_price: number;
 }
 
+
+export interface ShelfData {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ComponentType<any>;
+  color: string;
+  products: Product[];
+}
+
 export interface ProductCategory {
   id: string;
   name: string;
@@ -58,4 +68,14 @@ export interface SearchParams {
   sort?: string;
   order?: 'asc' | 'desc';
   filters?: ProductFilters;
+}
+
+export interface BasketProduct {
+  product: Product;
+  position: 'first' | 'second' | 'third';
+}
+
+export interface VirtualStoreProps {
+  products?: Product[];
+  shelves?: ShelfData[];
 }

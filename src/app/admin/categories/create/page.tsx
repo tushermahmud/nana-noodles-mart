@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { CategoryCreateForm } from '@/components/admin/CategoryCreateForm';
 
 export default function CreateCategoryPage() {

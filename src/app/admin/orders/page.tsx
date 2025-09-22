@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getOrders } from '@/fetchers/orders';
 import OrdersClient from '@/components/admin/OrdersClient';
 import { OrderDetails } from '@/types/orders';

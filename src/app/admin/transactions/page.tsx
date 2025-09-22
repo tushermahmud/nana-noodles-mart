@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getPaymentTransactions } from '@/fetchers/payments';
 import TransactionsSection from '@/components/admin/TransactionsSection';
 

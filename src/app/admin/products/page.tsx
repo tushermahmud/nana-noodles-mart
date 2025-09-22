@@ -1,9 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { ProductsSection } from '@/components/admin/ProductsSection';
 import { ProductsActions } from '@/components/admin/ProductsActions';
 import { getAdminByCategories, getAdminProducts } from '@/fetchers/admin';
 import { SearchInput } from '@/components/admin/SearchInput';
-import { Category, Product } from '@/types/products';
-import type { Pagination } from '@/types/common';
 
 type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string; search?: string }>;

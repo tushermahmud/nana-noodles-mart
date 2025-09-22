@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, ShoppingCart, Heart, Flame, Star, Clock, Users } from 'lucide-react';
 import Link from 'next/link';
-import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
 import { Product } from '@/types/products';
 import { Cart } from '@/types/cart';

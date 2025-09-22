@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/sections/Hero';
 import Categories from '@/components/sections/Categories';
@@ -9,6 +10,7 @@ import { Product } from '@/types/products';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getCart } from '@/fetchers/cart';
 import { Cart } from '@/types/cart';
+
 
 export default async function Home() {
   const productsRes = await getProducts();

@@ -8,9 +8,7 @@ import { ArrowLeft, Truck, Shield, CheckCircle, MapPin, User } from 'lucide-reac
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCart } from '@/contexts/CartContext';
 import { Cart } from '@/types/cart';
-import { BASE_URL } from '@/config/env';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errorUtils';
 import { checkoutSchema, type CheckoutInput } from '@/schemas/checkout.schema';

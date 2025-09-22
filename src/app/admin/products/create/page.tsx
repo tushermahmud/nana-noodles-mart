@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { ProductCreateForm } from '@/components/admin/ProductCreateForm';
 import { getAdminByCategories } from '@/fetchers/admin';
 

@@ -16,4 +16,4 @@ export { default as ProductModal } from './modal/ProductModal';
 export { useVirtualStore } from './hooks/useVirtualStore';
 
 // Types
-export type { Product, ShelfData, BasketProduct, VirtualStoreProps } from './types';
+export type { Product, ShelfData, BasketProduct, VirtualStoreProps } from '@/types/products';

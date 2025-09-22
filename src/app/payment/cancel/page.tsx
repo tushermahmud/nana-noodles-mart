@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { XCircle, AlertTriangle, RotateCcw, ShoppingCart, Home } from 'lucide-react';
 
-export default function PaymentCancelPage() {
+function Content() {
   const searchParams = useSearchParams();
   const reason = searchParams.get('reason') || '';
   const lastOrderId = searchParams.get('orderId') || searchParams.get('order_id') || '';
@@ -83,5 +84,13 @@ export default function PaymentCancelPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentCancelPage() {
+  return (
+    <Suspense fallback={null}>
+      <Content />
+    </Suspense>
   );
 }

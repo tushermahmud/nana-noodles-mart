@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import CheckoutClient from '@/components/checkout/CheckoutClient';
 import { getCurrentUser } from '@/fetchers/auth';
 import { getCart } from '@/fetchers/cart';

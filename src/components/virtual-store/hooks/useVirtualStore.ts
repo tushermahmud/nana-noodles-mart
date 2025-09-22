@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Product, ShelfData } from '../types';
+import { Product, ShelfData } from '@/types/products';
 
 interface UseVirtualStoreProps {
   initialProducts?: Product[];

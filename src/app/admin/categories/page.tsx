@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getAdminByCategories } from '@/fetchers/admin';
 import CategoriesClient from '@/components/admin/CategoriesClient';
 import { Category } from '@/types/products';

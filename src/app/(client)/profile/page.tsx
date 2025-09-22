@@ -1,5 +1,5 @@
+export const dynamic = 'force-dynamic';
 import { getCurrentUser } from '@/fetchers/auth';
-import { redirect } from 'next/navigation';
 import ProfileClient from '@/components/profile/ProfileClient';
 
 export default async function ProfilePage() {

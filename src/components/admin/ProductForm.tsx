@@ -126,7 +126,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    debugger;
     e.preventDefault();
     const result = validateForm();
     if (!result.ok) return;
@@ -163,7 +162,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     }
     try {
       const res = await updateProduct(String(formData.id), fd);
-      debugger;
       if (res?.isSuccess) {
         onSave({ ...formData, ...result.data } as unknown as Product);
         toast.success(res?.message ?? 'Product updated successfully');
