@@ -119,12 +119,12 @@ const CategoryForm = ({ isOpen, onClose, category, onSave, inline = false }: Cat
 
       const result = await updateCategory(values.id || '', formData);
 
-      if (result?.success) {
-        toast.success(result?.message ?? 'Category updated successfully');
-        onSave(result?.data ?? values);
+      if (result.isSuccess) {
+        onSave(result.data ?? values);
+        toast.success(result.message ?? 'Category updated successfully');
         onClose();
       } else {
-        toast.error(result?.message ?? 'Failed to update category');
+        toast.error(result.message ?? 'Failed to update category');
       }
     } catch (error) {
       toast.error(getErrorMessage(error));

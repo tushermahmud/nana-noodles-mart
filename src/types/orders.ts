@@ -2,8 +2,54 @@ import { BaseEntity } from './common';
 import { Product } from './products';
 import { User } from './auth';
 
+// Backend API response structure
+
+export interface OrderDetailsResponse {
+  rows: OrderDetails[];
+  count: number;
+}
+
+export interface OrderDetails {
+  order_id: string;
+  transaction_id?: string;
+  delivery_status: string;
+  customer_name: string;
+  customer_email: string;
+  items: OrderItemDetails[];
+  total_price: number;
+  status: string;
+  created_at: string;
+  created_at_full: string;
+  transaction_details: TransactionDetails;
+}
+
+export interface OrderItemDetails {
+  id: string;
+  product_name: string;
+  product_id: string;
+  product: {
+    id: string;
+    name: string;
+  };
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+}
+
+export interface TransactionDetails {
+  amount: number;
+  currency: string;
+  reference_number: string;
+  shipping_address: string;
+  shipping_city: string;
+  shipping_state: string;
+  shipping_zip_code: string;
+}
+
+// Legacy types (keeping for backward compatibility)
 export interface Order extends BaseEntity {
   userId: string;
+  transaction_id?: string;
   user?: User;
   items: OrderItem[];
   total: number;

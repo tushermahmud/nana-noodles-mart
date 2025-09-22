@@ -4,7 +4,7 @@ import { APIResponse } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 
 export async function getCurrentUser() {
-  const res = await performFetch<User>(AUTH_ENDPOINTS.GET_CURRENT_USER, {
+  const res = await performFetch<APIResponse<User>>(AUTH_ENDPOINTS.GET_CURRENT_USER, {
     method: 'GET',
     next: {
       tags: ['getCurrentUser'],

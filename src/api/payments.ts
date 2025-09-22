@@ -1,7 +1,7 @@
 import { BASE_URL } from '@/config/env';
 
 export const PAYMENTS_ENDPOINTS = {
-  CREATE_PAYMENT_INTENT: `${BASE_URL}/payments/create-intent`,
+  CREATE_PAYMENT_INTENT: `${BASE_URL}/payment/stripe/create-payment`,
   CONFIRM_PAYMENT: `${BASE_URL}/payments/confirm`,
   PROCESS_REFUND: `${BASE_URL}/payments/refund`,
   GET_PAYMENT_METHODS: `${BASE_URL}/payments/methods`,
@@ -10,6 +10,9 @@ export const PAYMENTS_ENDPOINTS = {
   SET_DEFAULT_PAYMENT_METHOD: (methodId: string) => `${BASE_URL}/payments/methods/${methodId}`,
   GET_PAYMENT_HISTORY: `${BASE_URL}/payments/history`,
   GET_PAYMENT_DETAILS: (paymentId: string) => `${BASE_URL}/payments/${paymentId}`,
+  GET_PAYMENT_TRANSACTIONS: `${BASE_URL}/admin/payment-transaction`,
+  GET_PAYMENT_TRANSACTION_DETAILS: (transactionId: string) =>
+    `${BASE_URL}/payment/stripe/payment-transactions/${transactionId}`,
   CREATE_SETUP_INTENT: `${BASE_URL}/payments/setup-intent`,
   VALIDATE_COUPON: `${BASE_URL}/payments/validate-coupon`,
 };

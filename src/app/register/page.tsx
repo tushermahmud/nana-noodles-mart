@@ -13,7 +13,7 @@ import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowRight, ChefHat, Check } from
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errorUtils';
 
 const registerSchema = z
@@ -37,6 +37,8 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get('next') || '/';
 
   const {
     register,
@@ -71,9 +73,10 @@ const RegisterPage = () => {
         type: 'user',
       });
       debugger;
-      if (res?.success) {
+      if (res?.isSuccess) {
         toast.success(res.message ?? 'Account created successfully. Please sign in.');
-        router.push('/login');
+        const loginUrl = nextUrl !== '/' ? `/login?next=${encodeURIComponent(nextUrl)}` : '/login';
+        router.push(loginUrl);
       } else {
         throw new Error(res?.message ?? 'Registration failed');
       }

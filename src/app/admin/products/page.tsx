@@ -1,6 +1,6 @@
 import { ProductsSection } from '@/components/admin/ProductsSection';
 import { ProductsActions } from '@/components/admin/ProductsActions';
-import { getAdminCategories, getAdminProducts } from '@/fetchers/admin';
+import { getAdminByCategories, getAdminProducts } from '@/fetchers/admin';
 import { SearchInput } from '@/components/admin/SearchInput';
 import { Category, Product } from '@/types/products';
 import type { Pagination } from '@/types/common';
@@ -14,7 +14,8 @@ export default async function AdminProducts({ searchParams }: Props) {
   const page = Number.parseInt(params?.page ?? '1');
   const limit = Number.parseInt(params?.pageSize ?? '5');
   const q = params?.search ?? '';
-  const categoriesRes = await getAdminCategories();
+  const categoriesRes = await getAdminByCategories();
+
   const categories = categoriesRes?.data ?? [];
 
   const productsRes = await getAdminProducts({
@@ -22,8 +23,9 @@ export default async function AdminProducts({ searchParams }: Props) {
     limit,
     q,
   });
-  const filteredProducts = productsRes?.data?.products ?? [];
-  const pagination = productsRes?.data?.pagination as Pagination | undefined;
+  const filteredProducts = productsRes?.data?.rows ?? [];
+  const pagination = productsRes?.data?.count;
+  console.log(q);
   return (
     <>
       {/* Search and Actions */}
@@ -35,18 +37,9 @@ export default async function AdminProducts({ searchParams }: Props) {
       </div>
 
       <ProductsSection
-        filteredProducts={filteredProducts as Product[]}
-        pagination={
-          pagination ?? {
-            currentPage: page,
-            totalPages: 1,
-            totalCount: filteredProducts.length,
-            limit,
-            hasNextPage: false,
-            hasPrevPage: false,
-          }
-        }
-        categories={categories as Category[]}
+        filteredProducts={filteredProducts}
+        count={pagination ?? 0}
+        categories={categories}
       />
     </>
   );

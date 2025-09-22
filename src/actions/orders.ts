@@ -27,7 +27,7 @@ export async function createOrder(data: {
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getCart');
     revalidateTag('getCartCount');
@@ -42,7 +42,7 @@ export async function updateOrderStatus(id: string, status: Order['status']) {
     body: JSON.stringify({ status }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -57,7 +57,7 @@ export async function updatePaymentStatus(id: string, paymentStatus: Order['paym
     body: JSON.stringify({ paymentStatus }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -72,7 +72,7 @@ export async function addTrackingNumber(id: string, trackingNumber: string) {
     body: JSON.stringify({ trackingNumber }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -87,7 +87,7 @@ export async function cancelOrder(id: string, reason?: string) {
     body: JSON.stringify({ reason }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getAdminOrders');
@@ -115,7 +115,7 @@ export async function requestReturn(
     }
   );
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
   }

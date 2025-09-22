@@ -13,7 +13,7 @@ import { Eye, EyeOff, Mail, Lock, ArrowRight, ChefHat } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errorUtils';
 
 const loginSchema = z.object({
@@ -26,6 +26,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get('next') || '/';
 
   const {
     register,
@@ -47,10 +49,10 @@ const LoginPage = () => {
         password: values.password,
       });
 
-      if (res?.success) {
+      if (res?.isSuccess) {
         debugger;
         toast.success(res?.message ?? 'Login successful!');
-        router.push('/');
+        router.push(nextUrl);
       } else {
         throw new Error(res?.message ?? 'Login failed');
       }

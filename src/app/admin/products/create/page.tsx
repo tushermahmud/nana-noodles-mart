@@ -1,9 +1,8 @@
 import { ProductCreateForm } from '@/components/admin/ProductCreateForm';
-import { getAdminCategories } from '@/fetchers/admin';
-import { Category } from '@/types/products';
+import { getAdminByCategories } from '@/fetchers/admin';
 
 export default async function CreateProductPage() {
-  const categoriesRes = await getAdminCategories();
+  const categoriesRes = await getAdminByCategories();
   const categories = categoriesRes?.data ?? [];
 
   return (
@@ -14,7 +13,7 @@ export default async function CreateProductPage() {
           <p className="text-gray-600 mt-2">Add a new product to your inventory</p>
         </div>
 
-        <ProductCreateForm categories={categories as Category[]} />
+        <ProductCreateForm categories={categories} />
       </div>
     </div>
   );

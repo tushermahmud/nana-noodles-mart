@@ -31,8 +31,7 @@ type CategoriesClientProps = {
   categories: Category[];
 };
 
-const CategoriesClient = ({ categories: initialCategories }: CategoriesClientProps) => {
-  const [categories, setCategories] = useState(initialCategories);
+const CategoriesClient = ({ categories }: CategoriesClientProps) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -62,11 +61,6 @@ const CategoriesClient = ({ categories: initialCategories }: CategoriesClientPro
     return ColorComponent?.bg || 'from-pink-500 to-orange-500';
   };
 
-  const handleSaveCategory = (categoryData: any) => {
-    setCategories((prev) => prev.map((c) => (c.id === categoryData.id ? categoryData : c)));
-    setEditingItem(null);
-  };
-
   const handleEditItem = (item: any) => {
     setEditingItem(item);
     setShowAddModal(true);
@@ -85,8 +79,7 @@ const CategoriesClient = ({ categories: initialCategories }: CategoriesClientPro
       setConfirmOpen(false);
       setPendingDeleteId(null);
       toast.success((res as any)?.message ?? 'Category deleted successfully');
-      if ((res as any)?.success) {
-        setCategories((prev) => prev.filter((c) => c.id !== pendingDeleteId));
+      if (res?.isSuccess) {
         router.refresh();
       }
     } catch (error) {
@@ -117,7 +110,7 @@ const CategoriesClient = ({ categories: initialCategories }: CategoriesClientPro
 
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category) => (
+        {categories.map((category: Category) => (
           <motion.div
             key={category.id}
             whileHover={{ scale: 1.02 }}
@@ -170,7 +163,7 @@ const CategoriesClient = ({ categories: initialCategories }: CategoriesClientPro
             setShowAddModal(false);
             setEditingItem(null);
           }}
-          onSave={handleSaveCategory}
+          onSave={() => {}}
           category={editingItem as unknown as Category}
         />
       )}

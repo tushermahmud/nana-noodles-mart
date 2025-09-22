@@ -6,14 +6,19 @@ export interface Product extends BaseEntity {
   price: number;
   image: string;
   categoryId: string;
-  category?: Category;
-  isAvailable: boolean;
-  stock: number;
+  category?: ProductCategory;
+  quantity: number;
   popular: boolean;
   tags?: string[];
   imageUrl: string;
   spice_level: number;
   features: string;
+  original_price: number;
+}
+
+export interface ProductCategory {
+  id: string;
+  name: string;
 }
 
 export interface Category {
@@ -29,6 +34,13 @@ export interface Category {
   color?: string;
   features?: string[];
   products?: Product[];
+  productsCount?: number;
+  totalCount?: number;
+}
+
+export interface ProductByCategory {
+  category: Category;
+  productsWithImageUrl: Product[];
 }
 
 export interface ProductFilters {

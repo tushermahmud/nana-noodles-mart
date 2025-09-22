@@ -6,68 +6,51 @@ import { performFetch } from '@/lib/apiUtils';
 import { APIResponse } from '@/types/common';
 import { Product } from '@/types/products';
 import { PRODUCTS_ENDPOINTS } from '@/api/products';
+import { Order } from '@/types/orders';
 
 export async function createProduct(productData: FormData) {
-  try {
-    const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.CREATE_PRODUCT, {
-      method: 'POST',
-      body: productData,
-    });
+  const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.CREATE_PRODUCT, {
+    method: 'POST',
+    body: productData,
+  });
 
-    if (res?.success) {
-      revalidateTag('getAdminProducts');
-      return { success: true, data: res.data };
-    }
-
-    return { success: false, message: res?.message || 'Failed to create product' };
-  } catch (error) {
-    console.error('Error creating product:', error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Failed to create product',
-    };
+  if (res?.isSuccess) {
+    revalidateTag('getAdminProducts');
   }
+  return res;
 }
 
 export async function updateProduct(id: string, productData: FormData) {
-  try {
-    const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.UPDATE_PRODUCT(id), {
-      method: 'PATCH',
-      body: productData,
-    });
+  const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.UPDATE_PRODUCT(id), {
+    method: 'PATCH',
+    body: productData,
+  });
 
-    if (res?.success) {
-      revalidateTag('getAdminProducts');
-      return { success: true, data: res.data };
-    }
-
-    return { success: false, message: res?.message || 'Failed to update product' };
-  } catch (error) {
-    console.error('Error updating product:', error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Failed to update product',
-    };
+  if (res?.isSuccess) {
+    revalidateTag('getAdminProducts');
   }
+
+  return res;
 }
 
 export async function deleteProduct(id: string) {
-  try {
-    const res = await performFetch<APIResponse<null>>(PRODUCTS_ENDPOINTS.DELETE_PRODUCT(id), {
-      method: 'DELETE',
-    });
+  const res = await performFetch<APIResponse<null>>(PRODUCTS_ENDPOINTS.DELETE_PRODUCT(id), {
+    method: 'DELETE',
+  });
 
-    if (res?.success) {
-      revalidateTag('getAdminProducts');
-      return { success: true };
-    }
-
-    return { success: false, message: res?.message || 'Failed to delete product' };
-  } catch (error) {
-    console.error('Error deleting product:', error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Failed to delete product',
-    };
+  if (res?.isSuccess) {
+    revalidateTag('getAdminProducts');
   }
+
+  return res;
+}
+
+export async function userDashboardOrders() {
+  const res = await performFetch<APIResponse<Order[]>>(PRODUCTS_ENDPOINTS.USER_DASHBOARD_ORDERS, {
+    method: 'GET',
+  });
+
+  console.log(res);
+
+  return res;
 }

@@ -1,12 +1,11 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { ADMIN_ENDPOINTS } from '@/api/admin';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { APIResponse } from '@/types/common';
-import { AdminStats } from '@/types/admin';
 import { performFetch } from '@/lib/apiUtils';
 import { CATEGORIES_ENDPOINTS } from '@/api/products';
 import { Category } from '@/types/products';
+import { ADMIN_ENDPOINTS } from '@/api/admin';
 
 export async function createCategory(data: FormData) {
   const res = await performFetch<APIResponse<Category>>(CATEGORIES_ENDPOINTS.CREATE_CATEGORY, {
@@ -14,7 +13,7 @@ export async function createCategory(data: FormData) {
     body: data,
   });
 
-  if (res && res?.success) {
+  if (res && res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 
@@ -26,8 +25,7 @@ export async function updateCategory(id: string, data: FormData) {
     method: 'PATCH',
     body: data,
   });
-
-  if (res && res?.success) {
+  if (res && res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 
@@ -39,61 +37,24 @@ export async function deleteCategory(id: string) {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getAdminCategories');
   }
 
   return res;
 }
 
-export async function getAdminCategories() {
-  const res = await performFetch<APIResponse<Category[]>>(CATEGORIES_ENDPOINTS.GET_CATEGORIES, {
-    method: 'GET',
-    next: {
-      tags: ['getAdminCategories'],
-    },
-  });
-
-  return res;
-}
-
-/* export async function updatePaymentStatus(paymentId: string, status: string) {
-  const res = await performFetch(ADMIN_ENDPOINTS.UPDATE_PAYMENT_STATUS(paymentId), {
+export async function updateOrderStatus(orderId: string, delivery_status: string) {
+  const res = await performFetch<APIResponse>(ADMIN_ENDPOINTS.UPDATE_ORDER_STATUS(orderId), {
     method: 'PATCH',
-    body: { status },
+    body: { delivery_status },
   });
+  console.log('res', res);
 
-  if (res.isSuccess) {
-    revalidateTag('getAdminPayments');
-    revalidateTag('getPaymentHistory');
-    revalidateTag('getPaymentDetails');
+  if (res?.isSuccess) {
+    revalidateTag('getAdminOrders');
   }
 
   return res;
-} */
-
-/* export async function exportOrders(filters?: {
-  startDate?: string;
-  endDate?: string;
-  status?: string;
-}) {
-  const res = await performFetch<{ downloadUrl: string }>(ADMIN_ENDPOINTS.EXPORT_ORDERS, {
-    method: 'POST',
-    body: filters,
-  });
-
-  return res;
 }
 
-export async function exportUsers(filters?: {
-  startDate?: string;
-  endDate?: string;
-  role?: string;
-}) {
-  const res = await performFetch<{ downloadUrl: string }>(ADMIN_ENDPOINTS.EXPORT_USERS, {
-    method: 'POST',
-    body: filters,
-  });
-
-  return res;
-} */

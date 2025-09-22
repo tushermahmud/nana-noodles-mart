@@ -1,5 +1,5 @@
 import { ADMIN_ENDPOINTS } from '@/api/admin';
-import { AdminPledge, ProductRow, AdminStats, CategoryRow } from '@/types/admin';
+import { ProductRow, DashboardStats } from '@/types/admin';
 import { UserInfo } from '@/types/auth';
 import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
@@ -21,7 +21,7 @@ export async function getAdminUsers(params: PaginationParams) {
 }
 
 export async function getAdminProducts(params: PaginationParams) {
-  const res = await performFetch<ProductRow>(
+  const res = await performFetch<PaginatedAPIResponse<Product>>(
     getQueryEndpoint(ADMIN_ENDPOINTS.GET_ADMIN_PRODUCTS, params),
     {
       method: 'GET',
@@ -30,18 +30,27 @@ export async function getAdminProducts(params: PaginationParams) {
       },
     }
   );
-  console.log(res);
-  return res;
+  return res?.data;
 }
 
-export async function getAdminCategories() {
+export async function getDashboardStats() {
+  const res = await performFetch<APIResponse<DashboardStats>>(ADMIN_ENDPOINTS.GET_DASHBOARD_STATS, {
+    method: 'GET',
+    next: {
+      tags: ['getDashboardStats'],
+    },
+  });
+  return res?.data;
+}
+
+export async function getAdminByCategories() {
   const res = await performFetch<APIResponse<Category[]>>(ADMIN_ENDPOINTS.GET_ADMIN_CATEGORIES, {
     method: 'GET',
     next: {
       tags: ['getAdminCategories'],
     },
   });
-  return res;
+  return res?.data;
 }
 
 export async function getAdminOrders(params: PaginationParams) {
@@ -73,7 +82,7 @@ export async function getAdminPayments(params: PaginationParams) {
 }
 
 export async function getAdminStats() {
-  const res = await performFetch<AdminStats>(ADMIN_ENDPOINTS.GET_ADMIN_STATS, {
+  const res = await performFetch<DashboardStats>(ADMIN_ENDPOINTS.GET_ADMIN_STATS, {
     method: 'GET',
     next: {
       tags: ['getAdminStats'],

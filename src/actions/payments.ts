@@ -2,19 +2,19 @@
 
 import { revalidateTag } from 'next/cache';
 import { PAYMENTS_ENDPOINTS } from '@/api/payments';
-import { APIResponse } from '@/types/common';
-import { PaymentIntent, PaymentMethod, PaymentDetails } from '@/types/payments';
+import { PaymentMethod, PaymentIntentRequest } from '@/types/payments';
 import { performFetch } from '@/lib/apiUtils';
 
-export async function createPaymentIntent(data: {
-  amount: number;
-  currency?: string;
-  metadata?: Record<string, string>;
-}) {
-  const res = await performFetch<PaymentIntent>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {
+export async function createPaymentIntent(data: PaymentIntentRequest) {
+  const res = await performFetch<any>(PAYMENTS_ENDPOINTS.CREATE_PAYMENT_INTENT, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
+  if (res?.isSuccess) {
+    revalidateTag('getCart');
+    revalidateTag('getCartDetails');
+  }
+  console.log(res);
 
   return res;
 }
@@ -29,7 +29,7 @@ export async function confirmPayment(data: { paymentIntentId: string; orderId: s
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getOrders');
     revalidateTag('getOrder');
     revalidateTag('getPaymentHistory');
@@ -52,7 +52,7 @@ export async function processRefund(data: {
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentHistory');
     revalidateTag('getPaymentDetails');
   }
@@ -66,7 +66,7 @@ export async function addPaymentMethod(data: { paymentMethodId: string; isDefaul
     body: JSON.stringify(data),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -78,7 +78,7 @@ export async function removePaymentMethod(methodId: string) {
     method: 'DELETE',
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 
@@ -91,7 +91,7 @@ export async function setDefaultPaymentMethod(methodId: string) {
     body: JSON.stringify({ isDefault: true }),
   });
 
-  if (res?.success) {
+  if (res?.isSuccess) {
     revalidateTag('getPaymentMethods');
   }
 

@@ -1,17 +1,16 @@
 import { Product } from './products';
 
 export interface CartItem {
+  cart_id: string;
+  created_at: string;
   id: string;
-  productId: string;
-  product: Product;
+  product_id: string;
   quantity: number;
-  price: number;
+  unit_price: string;
+  updated_at: string;
+  product: Product;
 }
 
 export interface Cart {
-  id: string;
-  userId: string;
-  items: CartItem[];
-  total: number;
-  itemCount: number;
+  cart: CartItem[];
 }

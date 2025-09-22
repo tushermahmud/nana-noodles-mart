@@ -4,8 +4,8 @@ import { Product } from '@/types/products';
 import { APIResponse } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 
-export async function getCart() {
-  const res = await performFetch<Cart>(CART_ENDPOINTS.GET_CART, {
+export async function getCart(cartId: string) {
+  const res = await performFetch<APIResponse<Cart>>(CART_ENDPOINTS.GET_CART(cartId), {
     method: 'GET',
     next: {
       tags: ['getCart'],
@@ -20,17 +20,6 @@ export async function getCartItemCount() {
     method: 'GET',
     next: {
       tags: ['getCartCount'],
-    },
-  });
-
-  return res;
-}
-
-export async function getSavedItems() {
-  const res = await performFetch<Product[]>(CART_ENDPOINTS.GET_SAVED_ITEMS, {
-    method: 'GET',
-    next: {
-      tags: ['getSavedItems'],
     },
   });
 

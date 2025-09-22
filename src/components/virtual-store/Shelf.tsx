@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import BasketGrid from './basket/BasketGrid';
-import { ShelfData, Product } from './types';
+import { ShelfData } from './types';
+import { Product } from '@/types/products';
 
 interface ShelfProps {
   shelf: ShelfData;

@@ -7,8 +7,8 @@ export interface AdminPledge {
 }
 
 export interface ProductRow {
-  products: Product[];
-  pagination: Pagination;
+  row: Product[];
+  count: number;
 }
 
 export interface CategoryRow {
@@ -16,13 +16,11 @@ export interface CategoryRow {
   pagination: Pagination;
 }
 
-export interface AdminStats {
-  totalUsers: number;
+export interface DashboardStats {
   totalProducts: number;
+  totalCategories: number;
   totalOrders: number;
+  totalUsers: number;
   totalRevenue: number;
-  pendingOrders: number;
-  completedOrders: number;
-  cancelledOrders: number;
-  averageOrderValue: number;
+  totalTransactions: number;
 }

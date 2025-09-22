@@ -1,25 +1,29 @@
 [
   {
     "id": "products",
+    "total": "totalProducts",
     "label": "Products",
     "icon": "Package",
     "count": null
   },
   {
     "id": "categories",
+    "total": "totalCategories",
     "label": "Categories",
     "icon": "Tag",
     "count": null
   },
   {
     "id": "orders",
+    "total": "totalOrders",
     "label": "Orders",
     "icon": "ShoppingCart",
     "count": null
   },
   {
-    "id": "analytics",
-    "label": "Analytics",
+    "id": "transactions",
+    "total": "totalTransactions",
+    "label": "Transactions",
     "icon": "BarChart3",
     "count": null
   }

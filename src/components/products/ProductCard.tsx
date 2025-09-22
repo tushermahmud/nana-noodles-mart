@@ -7,46 +7,56 @@ import { ArrowRight, ShoppingCart, Heart, Flame, Plus, Minus } from 'lucide-reac
 import { useCart } from '@/contexts/CartContext';
 import { useState } from 'react';
 import Link from 'next/link';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice: number;
-  image: string;
-  category: string;
-  popular: boolean;
-  inStock: boolean;
-  spiceLevel: number;
-  features: string[];
-}
+import Image from 'next/image';
+import { Product } from '@/types/products';
+import { User } from '@/types/auth';
+import { Cart } from '@/types/cart';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/errorUtils';
+import { addToCart } from '@/actions/cart';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: Product;
+  cartDetails: Cart | null;
+  loggedInUser: User | null;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
-  const { addItem, state, removeItem, updateQuantity } = useCart();
+export default function ProductCard({ product, cartDetails, loggedInUser }: ProductCardProps) {
+  const router = useRouter();
   const [isAdding, setIsAdding] = useState(false);
-
-  const cartItem = state.items.find((item) => item.id === product.id);
+  const cartItems = cartDetails?.cart ?? [];
+  console.log(cartItems);
+  console.log(product);
+  const cartItem = cartItems.find((item) => item?.product?.id === product?.id.toString());
   const isInCart = !!cartItem;
-
-  const handleAddToCart = () => {
-    if (!product.inStock) return;
-
-    setIsAdding(true);
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      category: product.category,
-    });
-
-    // Reset button state after animation
-    setTimeout(() => setIsAdding(false), 1000);
+  const inStock = product?.quantity > 0;
+  const features = product?.features?.split(',') ?? [];
+  console.log(cartItem);
+  console.log(isInCart);
+  const handleAddToCart = async () => {
+    debugger;
+    try {
+      if (loggedInUser?.cart_id) {
+        const res = await addToCart({
+          cartId: loggedInUser?.cart_id,
+          product_id: product.id,
+          product_quantity: 1,
+        });
+        if (res?.isSuccess) {
+          toast.success(res?.message ?? 'Product added to cart');
+        } else {
+          toast.error(res?.message ?? 'Failed to add product to cart');
+        }
+      } else {
+        toast.error('Please login to add product to cart');
+        router.push('/login');
+      }
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -56,10 +66,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {/* Product Image - Clickable */}
           <Link href={`/products/${product.id}`}>
             <div className="w-full h-48 rounded-xl overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300 relative cursor-pointer">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-400"
+              <Image
+                src={product?.imageUrl ?? ''}
+                alt={product?.name}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-400"
+                sizes="(max-width: 1024px) 100vw, 400px"
+                priority={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
@@ -78,7 +91,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </Link>
 
           {/* Popular Badge with gold accent */}
-          {product.popular && (
+          {product?.popular && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -91,11 +104,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Category Badge with black theme */}
           <div className="absolute top-2 right-2 bg-gradient-to-r from-gray-800 to-black text-white px-3 py-1 rounded-full text-xs font-bold pop-text shadow-lg">
-            {product.category}
+            {product?.category?.name ?? ''}
           </div>
 
           {/* Out of Stock Badge */}
-          {!product.inStock && (
+          {!inStock && (
             <div className="absolute top-12 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold anime-glow">
               Out of Stock
             </div>
@@ -112,17 +125,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {/* Product Title - Clickable */}
         <Link href={`/products/${product.id}`}>
           <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-pink-600 transition-colors anime-title cursor-pointer">
-            {product.name}
+            {product?.name ?? ''}
           </CardTitle>
         </Link>
       </CardHeader>
 
       <CardContent className="pt-0">
-        <p className="text-gray-600 mb-4 leading-relaxed pop-text">{product.description}</p>
+        <p className="text-gray-600 mb-4 leading-relaxed pop-text">{product?.description ?? ''}</p>
 
         {/* Features with gold/cream accents */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {product.features.map((feature, i) => (
+          {features?.map((feature, i) => (
             <span
               key={i}
               className="px-3 py-1 bg-gradient-to-r from-yellow-50 to-orange-50 text-amber-700 text-xs rounded-full font-semibold pop-text border border-amber-200 shadow-sm"
@@ -136,7 +149,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex items-center mb-4 p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-100">
           <Flame className="w-4 h-4 text-red-500 mr-2" />
           <span className="text-sm text-gray-700 font-semibold pop-text">
-            Spice Level: {product.spiceLevel}/5
+            Spice Level: {product?.spice_level ?? 1}/5 {product?.spice_level ?? 1}
           </span>
           {/* Spice level indicator with gold/cream dots */}
           <div className="ml-auto flex space-x-1">
@@ -144,7 +157,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <div
                 key={i}
                 className={`w-2 h-2 rounded-full ${
-                  i < product.spiceLevel
+                  i < (product?.spice_level ?? 1)
                     ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
                     : 'bg-gray-200'
                 }`}
@@ -157,19 +170,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-pink-50 to-orange-50 rounded-lg border border-pink-100">
           <div className="flex items-center space-x-2">
             <span className="text-2xl font-black text-pink-600 anime-title">${product.price}</span>
-            {product.originalPrice > product.price && (
+            {product?.original_price > product.price && (
               <span className="text-lg text-gray-400 line-through pop-text">
-                ${product.originalPrice}
+                ${product?.original_price ?? 0}
               </span>
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-pink-600 hover:text-pink-700 hover:bg-pink-100 rounded-full transition-all duration-300"
-          >
-            <Heart className="w-4 h-4" />
-          </Button>
         </div>
 
         {/* Action Buttons */}
@@ -183,7 +189,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 : 'bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white border-pink-500 hover:border-pink-600'
             }`}
             onClick={handleAddToCart}
-            disabled={!product.inStock || isAdding}
+            disabled={!inStock || isAdding}
           >
             {isAdding ? (
               <motion.div
@@ -199,11 +205,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ) : (
               <>
                 <ShoppingCart className="w-4 h-4 mr-2" />
-                {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                {inStock ? 'Add to Cart' : 'Out of Stock'}
               </>
             )}
           </Button>
-          <Link href={`/products/${product.id}`}>
+          <Link href={`/products/${product?.id ?? ''}`}>
             <Button
               variant="outline"
               size="sm"
@@ -216,6 +222,4 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </CardContent>
     </Card>
   );
-};
-
-export default ProductCard;
+}

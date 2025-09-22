@@ -1,31 +1,61 @@
 import { PRODUCTS_ENDPOINTS, CATEGORIES_ENDPOINTS } from '@/api/products';
-import { Product, Category, SearchParams, ProductFilters } from '@/types/products';
-import { PaginatedAPIResponse, PaginationParams } from '@/types/common';
+import {
+  Product,
+  Category,
+  SearchParams,
+  ProductFilters,
+  ProductByCategory,
+} from '@/types/products';
+import { APIResponse, PaginatedAPIResponse, PaginationParams } from '@/types/common';
 import { performFetch } from '@/lib/apiUtils';
 import { getQueryEndpoint } from '@/lib/utils';
 
 // Product Fetchers
-export async function getProducts(params?: SearchParams) {
-  const res = await performFetch<PaginatedAPIResponse<Product>>(
-    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_PRODUCTS, params || {}),
-    {
-      method: 'GET',
-      next: {
-        tags: ['getProducts'],
-      },
-    }
-  );
+export async function getProducts() {
+  const res = await performFetch<APIResponse<Product[]>>(PRODUCTS_ENDPOINTS.GET_PRODUCTS, {
+    method: 'GET',
+    next: {
+      tags: ['homeProducts'],
+    },
+  });
 
   return res;
 }
 
+export async function getAllProducts(params?: PaginationParams) {
+  const res = await performFetch<PaginatedAPIResponse<Product>>(
+    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_ALL_PRODUCTS, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getAllProducts'],
+      },
+    }
+  );
+  return res?.data;
+}
+
 export async function getProduct(id: string) {
-  const res = await performFetch<Product>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {
+  const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.GET_PRODUCT(id), {
     method: 'GET',
     next: {
-      tags: ['getProduct', `getProduct-${id}`],
+      tags: ['homeProduct', `homeProduct-${id}`],
     },
   });
+
+  return res;
+}
+
+export async function getRelatedProducts(id: string) {
+  const res = await performFetch<APIResponse<Product[]>>(
+    PRODUCTS_ENDPOINTS.GET_RELATED_PRODUCTS(id),
+    {
+      method: 'GET',
+      next: {
+        tags: ['relatedProducts', `relatedProducts-${id}`],
+      },
+    }
+  );
 
   return res;
 }
@@ -49,20 +79,6 @@ export async function searchProducts(searchTerm: string, filters?: ProductFilter
   return res;
 }
 
-export async function getProductsByCategory(categoryId: string, params?: PaginationParams) {
-  const res = await performFetch<PaginatedAPIResponse<Product>>(
-    getQueryEndpoint(CATEGORIES_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY(categoryId), params || {}),
-    {
-      method: 'GET',
-      next: {
-        tags: ['getProductsByCategory', `getProductsByCategory-${categoryId}`],
-      },
-    }
-  );
-
-  return res;
-}
-
 export async function getFeaturedProducts(limit?: number) {
   const params = limit ? { limit } : undefined;
 
@@ -72,22 +88,6 @@ export async function getFeaturedProducts(limit?: number) {
       method: 'GET',
       next: {
         tags: ['getFeaturedProducts'],
-      },
-    }
-  );
-
-  return res;
-}
-
-export async function getRelatedProducts(productId: string, limit?: number) {
-  const params = limit ? { limit } : undefined;
-
-  const res = await performFetch<Product[]>(
-    getQueryEndpoint(PRODUCTS_ENDPOINTS.GET_RELATED_PRODUCTS(productId), params || {}),
-    {
-      method: 'GET',
-      next: {
-        tags: ['getRelatedProducts', `getRelatedProducts-${productId}`],
       },
     }
   );
@@ -106,6 +106,35 @@ export async function getCategories(params?: PaginationParams) {
       },
     }
   );
+
+  return res;
+}
+
+export async function getPublicCategories(params?: PaginationParams) {
+  const res = await performFetch<APIResponse<Category[]>>(
+    getQueryEndpoint(CATEGORIES_ENDPOINTS.GET_PUBLIC_CATEGORIES, params || {}),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getPublicCategories'],
+      },
+    }
+  );
+
+  return res;
+}
+
+export async function getProductsByCategory(categoryId: string) {
+  const res = await performFetch<APIResponse<ProductByCategory>>(
+    CATEGORIES_ENDPOINTS.GET_PRODUCTS_BY_CATEGORY(categoryId),
+    {
+      method: 'GET',
+      next: {
+        tags: ['getProductsByCategory', `getProductsByCategory-${categoryId}`],
+      },
+    }
+  );
+  console.log('🔄 PRODUCTS BY CATEGORY: Products by category:', res);
 
   return res;
 }

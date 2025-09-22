@@ -4,7 +4,14 @@ import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AUTH_ENDPOINTS } from '@/api/auth';
-import { LoginResponse, LoginRequest, RegisterRequest, RegisterResponse, User } from '@/types/auth';
+import {
+  LoginResponse,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResponse,
+  User,
+  ForgotPasswordResponse,
+} from '@/types/auth';
 import { performFetch } from '@/lib/apiUtils';
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
@@ -12,15 +19,18 @@ import { SessionData, sessionOptions } from '@/lib/session';
 export async function loginUser(data: LoginRequest) {
   const res = await performFetch<LoginResponse>(AUTH_ENDPOINTS.LOGIN, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
+    includeAuthorization: false,
   });
 
-  if (res && res?.success) {
+  if (res && res?.isSuccess && res?.data) {
     const cookieStore = await cookies();
     const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
     session.isLoggedIn = true;
-    session.accessToken = res.data?.authorization?.access_token;
-    session.refreshToken = res.data?.authorization?.refresh_token;
+    session.accessToken = res.data.data?.token;
+    session.refreshToken = res.data.data?.refreshToken;
+    session.user_id = res.data.data?.user?.id;
+    session.role = res.data.data?.user?.type ?? 'user';
     await session.save();
     revalidateTag('getCurrentUser');
   }
@@ -28,12 +38,24 @@ export async function loginUser(data: LoginRequest) {
   return res;
 }
 
+export async function forgotPassword(email: string) {
+  const res = await performFetch<ForgotPasswordResponse>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+    method: 'POST',
+    body: { email },
+    includeAuthorization: false,
+  });
+  if (res && res?.isSuccess) {
+    return res;
+  }
+}
+
 export async function registerUser(data: RegisterRequest) {
   const res = await performFetch<RegisterResponse>(AUTH_ENDPOINTS.REGISTER, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
+    includeAuthorization: false,
   });
-  if (res && res?.success) {
+  if (res && res?.isSuccess) {
     revalidateTag('getCurrentUser');
   }
 
@@ -49,7 +71,7 @@ export async function logoutUser() {
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
   session.destroy();
 
-  if (res.success) {
+  if (res.isSuccess) {
     revalidateTag('getCurrentUser');
   }
 
@@ -59,10 +81,10 @@ export async function logoutUser() {
 export async function updateUserProfile(data: Partial<User>) {
   const res = await performFetch<User>(AUTH_ENDPOINTS.UPDATE_PROFILE, {
     method: 'PATCH',
-    body: JSON.stringify(data),
+    body: data,
   });
 
-  if (res.success) {
+  if (res.isSuccess) {
     revalidateTag('getCurrentUser');
   }
 
@@ -78,19 +100,10 @@ export async function changePassword(data: { currentPassword: string; newPasswor
   return res;
 }
 
-export async function requestPasswordReset(email: string) {
-  const res = await performFetch<void>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
-    method: 'POST',
-    body: JSON.stringify({ email }),
-  });
-
-  return res;
-}
-
-export async function resetPassword(data: { token: string; newPassword: string }) {
+export async function resetPassword(data: { email: string; token: string; newPassword: string }) {
   const res = await performFetch<void>(AUTH_ENDPOINTS.RESET_PASSWORD, {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: data,
   });
 
   return res;
@@ -102,7 +115,7 @@ export async function verifyEmail(token: string) {
     body: JSON.stringify({ token }),
   });
 
-  if (res.success) {
+  if (res.isSuccess) {
     revalidateTag('getCurrentUser');
   }
 
@@ -115,6 +128,61 @@ export async function resendVerificationEmail() {
   });
 
   return res;
+}
+
+// NEW: Refresh token functionality
+export async function refreshAccessToken() {
+  try {
+    const cookieStore = await cookies();
+    const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+    console.log('session', session);
+    if (!session?.refreshToken) {
+      console.log('❌ No refresh token available');
+      return { success: false, message: 'No refresh token available' };
+    }
+
+    console.log('🔄 AUTH_MAIN: Attempting to refresh token...');
+    console.log(
+      '🔄 AUTH_MAIN: Current refresh token (first 20 chars):',
+      session.refreshToken.substring(0, 20) + '...'
+    );
+    console.log('🔄 AUTH_MAIN: User ID:', session.user_id);
+
+    const refreshPromise = performFetch<LoginResponse>(AUTH_ENDPOINTS.REFRESH_TOKEN, {
+      method: 'POST',
+      body: { refresh_token: session.refreshToken, user_id: session.user_id },
+      includeAuthorization: false,
+    });
+
+    const res = await refreshPromise;
+    if (res && res?.isSuccess && res?.data) {
+      console.log('✅ AUTH_MAIN: Token refresh successful!');
+      console.log(
+        '✅ AUTH_MAIN: New access token (first 20 chars):',
+        res.data.data?.token?.substring(0, 20) + '...'
+      );
+      console.log(
+        '✅ AUTH_MAIN: New refresh token (first 20 chars):',
+        res.data.data?.refreshToken?.substring(0, 20) + '...'
+      );
+      // Update session with new tokens
+      session.accessToken = res.data.data?.token;
+      session.refreshToken = res.data.data?.refreshToken;
+      await session.save();
+
+      return {
+        success: true,
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+      };
+    }
+
+    console.log('❌ AUTH_MAIN: Token refresh failed:', res?.message);
+    return { success: false, message: 'Token refresh failed' };
+  } catch (error) {
+    console.error('❌ AUTH_MAIN: Token refresh error:', error);
+    return { success: false, message: 'Token refresh error' };
+  }
 }
 
 export async function getSessionTokenClient() {

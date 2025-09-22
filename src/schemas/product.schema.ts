@@ -7,10 +7,10 @@ export const createProductSchema = z.object({
     .min(2, 'Product name must be at least 2 characters')
     .max(100, 'Product name must be less than 100 characters'),
 
-  category: z
+  categoryId: z
     .string()
     .optional()
-    .transform((val) => (val && val.trim().length > 0 ? val : 'all products')),
+    .transform((val) => (val && val.trim().length > 0 ? val : '')),
 
   description: z
     .string()
@@ -19,6 +19,12 @@ export const createProductSchema = z.object({
     .max(500, 'Description must be less than 500 characters'),
 
   price: z
+    .number()
+    .positive('Price must be a positive number')
+    .min(0.01, 'Price must be at least $0.01')
+    .max(9999.99, 'Price must be less than $10,000'),
+
+  original_price: z
     .number()
     .positive('Price must be a positive number')
     .min(0.01, 'Price must be at least $0.01')

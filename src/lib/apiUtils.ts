@@ -1,92 +1,139 @@
-import { APIResponse } from '@/types/common';
+import { getSession } from '@/actions/auth.actions';
 
-interface FetchOptions extends RequestInit {
-  next?: {
-    tags?: string[];
-    revalidate?: number;
-  };
-}
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-async function getServerAccessToken(): Promise<string | null> {
-  if (typeof window !== 'undefined') return null;
-  try {
-    const { cookies } = await import('next/headers');
-    const { getIronSession } = await import('iron-session');
-    const { sessionOptions } = await import('@/lib/session');
-    const cookieStore = await cookies();
-    const session = await getIronSession<{ accessToken?: string }>(cookieStore, sessionOptions);
-    return session?.accessToken ?? null;
-  } catch {
-    return null;
-  }
+type CustomFetchResponse<T> = {
+  isSuccess: boolean;
+  statusCode: number;
+  message: string;
+  errorCode: string | null;
+  data: T | null;
+  errorDetails?: string;
+};
+
+interface RequestOptions {
+  method: HttpMethod;
+  body?: string | object | FormData | null;
+  additionalHeaders?: Record<string, string>;
+  includeAuthorization?: boolean;
+  next?: NextFetchRequestConfig;
+  cache?: RequestCache;
+  signal?: AbortSignal | null;
 }
 
 export async function performFetch<T>(
   url: string,
-  options: FetchOptions = {}
-): Promise<APIResponse<T>> {
+  options: RequestOptions
+): Promise<CustomFetchResponse<T>> {
   const {
-    next,
-    headers = {},
+    method,
     body,
-    ...fetchOptions
-  } = options as FetchOptions & { headers: Record<string, any> };
+    additionalHeaders,
+    includeAuthorization = true,
+    next,
+    cache,
+    signal = AbortSignal.timeout(60000),
+  } = options;
 
-  // Add auth token if available
-  const clientToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-  const serverToken = typeof window === 'undefined' ? await getServerAccessToken() : null;
-  const token = clientToken || serverToken;
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  const headers: Record<string, string> = {
+    ...additionalHeaders,
+  };
 
-  // Normalize body & set headers appropriately
-  let normalizedBody: BodyInit | undefined;
-  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+  const session = await getSession();
 
-  if (isFormData) {
-    normalizedBody = body as BodyInit;
-    // IMPORTANT: Let the browser/node set the multipart boundary
-    if ('Content-Type' in headers) delete headers['Content-Type'];
-  } else if (body instanceof Blob) {
-    normalizedBody = body as BodyInit;
-  } else if (typeof body === 'string') {
-    normalizedBody = body as BodyInit;
-    // Default JSON when caller passed a string body and didn't set content type
-    if (!headers['Content-Type']) headers['Content-Type'] = 'application/json';
-  } else if (body !== undefined && body !== null) {
-    normalizedBody = JSON.stringify(body);
-    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
-  } else {
-    // No body
+  if (includeAuthorization && session?.accessToken) {
+    headers['Authorization'] = `Bearer ${session?.accessToken}`;
+  }
+
+  const requestOptions: RequestInit = {
+    method,
+    headers,
+    signal,
+  };
+
+  if (next) {
+    requestOptions.next = next;
+  }
+
+  if (cache) {
+    requestOptions.cache = cache;
+  }
+
+  if (['POST', 'PUT', 'PATCH'].includes(method)) {
+    if (body instanceof FormData) {
+      requestOptions.body = body;
+    } else if (body) {
+      requestOptions.body = JSON.stringify(body);
+      headers['Content-Type'] = 'application/json';
+    }
   }
 
   try {
-    const response = await fetch(url, {
-      ...fetchOptions,
-      headers,
-      body: normalizedBody,
-      next,
-    });
+    const response = await fetch(url, requestOptions);
+    const contentType = response.headers.get('content-type');
+    let data;
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        const textData = await response.text();
+        console.error(`🚨 JSON parsing failed for ${url}:`, jsonError);
+        return {
+          isSuccess: false,
+          statusCode: response.status,
+          message: 'Invalid JSON response from server',
+          errorCode: 'INVALID_JSON',
+          data: null,
+          errorDetails: textData,
+        };
+      }
+    } else {
+      const textData = await response.text();
+      console.error(`🚨 Non-JSON response from ${url}. Content-Type: ${contentType}`);
       return {
-        success: false,
-        message: (errorData as any).message || `HTTP ${response.status}: ${response.statusText}`,
+        isSuccess: false,
+        statusCode: response.status,
+        message: 'Server returned non-JSON response',
+        errorCode: 'NON_JSON_RESPONSE',
         data: null,
+        errorDetails: textData,
       };
     }
 
-    const data = await response.json();
+    if (!response.ok) {
+      // eslint-disable-next-line no-console
+      console.log(`🚨responseNotOk:url(${url})`, {
+        requestOptions,
+        response,
+        data,
+      });
+      return {
+        isSuccess: false,
+        statusCode: response.status,
+        message: data.msg || 'Ocorreu um erro',
+        errorCode: data.code || null,
+        data: data || null,
+        errorDetails: JSON.stringify(data),
+      };
+    }
+
     return {
-      success: (data as any).success,
-      message: (data as any).message || 'Success',
-      data: (data as any).data || data,
+      isSuccess: true,
+      statusCode: response.status,
+      message: data.msg ?? 'Success',
+      errorCode: null,
+      data: data as T,
     };
   } catch (error) {
+    // eslint-disable-next-line no-console
     return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Network error',
+      isSuccess: false,
+      statusCode: 500,
+      message: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido',
+      errorCode: null,
       data: null,
+      errorDetails: error instanceof Error ? error.stack : undefined,
     };
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import Basket from './Basket';
-import { Product } from '../types';
+import { Product } from '@/types/products';
 
 interface BasketGridProps {
   products: Product[];

@@ -1,9 +1,15 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
-
+import React, { createContext, useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import {
+  addToCart as addToCartAction,
+  updateCartItem as updateCartItemAction,
+  clearCart as clearCartAction,
+} from '@/actions/cart';
+import { getCart as getCartAction } from '@/fetchers/cart';
+import { removeCartItem as removeFromCartAction } from '@/actions/cart';
 export interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -18,11 +24,11 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> }
-  | { type: 'REMOVE_ITEM'; payload: number }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }
-  | { type: 'CLEAR_CART' }
-  | { type: 'LOAD_CART'; payload: CartState };
+  | { type: 'SET_CART'; payload: CartState }
+  | { type: 'OPTIMISTIC_ADD'; payload: Omit<CartItem, 'quantity'> }
+  | { type: 'OPTIMISTIC_REMOVE'; payload: string }
+  | { type: 'OPTIMISTIC_UPDATE'; payload: { id: string; quantity: number } }
+  | { type: 'RESET' };
 
 const initialState: CartState = {
   items: [],
@@ -30,79 +36,39 @@ const initialState: CartState = {
   itemCount: 0,
 };
 
+function recalc(items: CartItem[]): CartState {
+  const total = items.reduce((s, it) => s + it.price * it.quantity, 0);
+  const itemCount = items.reduce((s, it) => s + it.quantity, 0);
+  return { items, total, itemCount };
+}
+
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
-    case 'ADD_ITEM': {
-      const existingItem = state.items.find((item) => item.id === action.payload.id);
-
-      if (existingItem) {
-        const updatedItems = state.items.map((item) =>
-          item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-
-        const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-
-        return {
-          ...state,
-          items: updatedItems,
-          total: newTotal,
-          itemCount: newItemCount,
-        };
-      } else {
-        const newItem = { ...action.payload, quantity: 1 };
-        const newItems = [...state.items, newItem];
-        const newTotal = newItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const newItemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
-
-        return {
-          ...state,
-          items: newItems,
-          total: newTotal,
-          itemCount: newItemCount,
-        };
-      }
-    }
-
-    case 'REMOVE_ITEM': {
-      const updatedItems = state.items.filter((item) => item.id !== action.payload);
-      const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        ...state,
-        items: updatedItems,
-        total: newTotal,
-        itemCount: newItemCount,
-      };
-    }
-
-    case 'UPDATE_QUANTITY': {
-      const updatedItems = state.items
-        .map((item) =>
-          item.id === action.payload.id
-            ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-            : item
-        )
-        .filter((item) => item.quantity > 0);
-
-      const newTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      const newItemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        ...state,
-        items: updatedItems,
-        total: newTotal,
-        itemCount: newItemCount,
-      };
-    }
-
-    case 'CLEAR_CART':
-      return initialState;
-
-    case 'LOAD_CART':
+    case 'SET_CART':
       return action.payload;
-
+    case 'OPTIMISTIC_ADD': {
+      const existing = state.items.find((i) => i.id === action.payload.id);
+      const items = existing
+        ? state.items.map((i) =>
+            i.id === action.payload.id ? { ...i, quantity: i.quantity + 1 } : i
+          )
+        : [...state.items, { ...action.payload, quantity: 1 }];
+      return recalc(items);
+    }
+    case 'OPTIMISTIC_REMOVE': {
+      const items = state.items.filter((i) => i.id !== action.payload);
+      return recalc(items);
+    }
+    case 'OPTIMISTIC_UPDATE': {
+      const items = state.items
+        .map((i) =>
+          i.id === action.payload.id ? { ...i, quantity: Math.max(0, action.payload.quantity) } : i
+        )
+        .filter((i) => i.quantity > 0);
+      return recalc(items);
+    }
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }
@@ -110,68 +76,89 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
 interface CartContextType {
   state: CartState;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void;
+  addItem: (item: Omit<CartItem, 'quantity'>) => Promise<void>;
+  removeItem: (id: string) => Promise<void>;
+  updateQuantity: (id: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  reload: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
-  const [isClient, setIsClient] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Set client flag on mount
+  const loadFromServer = async () => {
+    /* try {
+      const res: any = await getCartAction('324234234');
+      const data = res?.data || res?.data?.data || res; // accept multiple shapes
+      const items: CartItem[] = (data?.items || []).map((it: any) => ({
+        id: it.id || it.productId,
+        name: it.product?.name ?? it.name,
+        price: Number(it.price ?? it.product?.price ?? 0),
+        image: it.product?.imageUrl ?? it.imageUrl ?? it.image,
+        quantity: Number(it.quantity ?? 1),
+        category: it.product?.category ?? it.category ?? '',
+      }));
+      dispatch({ type: 'SET_CART', payload: recalc(items) });
+    } catch (e) {
+      // silent; UX stays empty
+    } */
+  };
+
   useEffect(() => {
-    setIsClient(true);
+    loadFromServer();
   }, []);
 
-  // Load cart from localStorage on mount (client-side only)
-  useEffect(() => {
-    if (!isClient) return;
-
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        dispatch({ type: 'LOAD_CART', payload: parsedCart });
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
+  const addItem = async (item: Omit<CartItem, 'quantity'>) => {
+    dispatch({ type: 'OPTIMISTIC_ADD', payload: item });
+    try {
+      await addToCartAction({ productId: item.id, quantity: 1 });
+      await loadFromServer();
+    } catch (e) {
+      await loadFromServer();
     }
-    setIsHydrated(true);
-  }, [isClient]);
-
-  // Save cart to localStorage whenever it changes (client-side only)
-  useEffect(() => {
-    if (!isClient || !isHydrated) return;
-
-    localStorage.setItem('cart', JSON.stringify(state));
-  }, [state, isClient, isHydrated]);
-
-  const addItem = (item: Omit<CartItem, 'quantity'>) => {
-    dispatch({ type: 'ADD_ITEM', payload: item });
   };
 
-  const removeItem = (id: number) => {
-    dispatch({ type: 'REMOVE_ITEM', payload: id });
+  const removeItem = async (id: string) => {
+    dispatch({ type: 'OPTIMISTIC_REMOVE', payload: id });
+    try {
+      await removeFromCartAction(id, '324234234');
+      await loadFromServer();
+    } catch (e) {
+      await loadFromServer();
+    }
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
-    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+  const updateQuantity = async (id: string, quantity: number) => {
+    dispatch({ type: 'OPTIMISTIC_UPDATE', payload: { id, quantity } });
+    try {
+      await updateCartItemAction(id, '324234234', quantity);
+      await loadFromServer();
+    } catch (e) {
+      await loadFromServer();
+    }
   };
 
-  const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
+  const clearCart = async () => {
+    dispatch({ type: 'RESET' });
+    try {
+      await clearCartAction();
+      await loadFromServer();
+    } catch (e) {
+      await loadFromServer();
+    }
   };
 
-  return (
-    <CartContext.Provider value={{ state, addItem, removeItem, updateQuantity, clearCart }}>
-      {children}
-    </CartContext.Provider>
+  const reload = async () => loadFromServer();
+
+  const value = useMemo(
+    () => ({ state, addItem, removeItem, updateQuantity, clearCart, reload }),
+    [state]
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {
