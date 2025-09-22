@@ -134,7 +134,6 @@ export async function getProductsByCategory(categoryId: string) {
       },
     }
   );
-  console.log('🔄 PRODUCTS BY CATEGORY: Products by category:', res);
 
   return res;
 }

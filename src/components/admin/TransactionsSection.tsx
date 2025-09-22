@@ -11,10 +11,19 @@ type Props = {
 
 export default function TransactionsSection({ rows, count }: Props) {
   const formatCurrency = (amount: number, currency: string) =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: (currency || 'usd').toUpperCase() }).format(amount);
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: (currency || 'usd').toUpperCase(),
+    }).format(amount);
 
   const formatDate = (iso: string) =>
-    new Date(iso).toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    new Date(iso).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
   return (
     <>
@@ -55,7 +64,9 @@ export default function TransactionsSection({ rows, count }: Props) {
                       : 'bg-red-100 text-red-800';
                     const label = isSuccess ? 'Succeeded' : 'Failed';
                     return (
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}`}
+                      >
                         {label}
                       </span>
                     );
@@ -77,5 +88,3 @@ export default function TransactionsSection({ rows, count }: Props) {
     </>
   );
 }
-
-

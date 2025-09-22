@@ -3,13 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import {
-  User as UserIcon,
-  LogOut,
-  UserCircle,
-  ShoppingBag,
-  ChevronDown,
-} from 'lucide-react';
+import { User as UserIcon, LogOut, UserCircle, ShoppingBag, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/actions/auth';
@@ -47,7 +41,6 @@ const UserMenu = ({ isMobile = false, loggedInUser }: UserMenuProps) => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setIsLoggedIn(data.isLoggedIn || false);
           setUserData(data.user || null);
         } else {
@@ -102,7 +95,6 @@ const UserMenu = ({ isMobile = false, loggedInUser }: UserMenuProps) => {
       setIsLoading(false);
     }
   };
-  console.log(userData);
 
   if (isLoading) {
     return (

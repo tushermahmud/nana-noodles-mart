@@ -23,6 +23,5 @@ export default async function OrdersPage({ searchParams }: Props) {
   });
   const orders = ordersRes?.data?.data?.rows || [];
   const count = ordersRes?.data?.data?.count || 0;
-  console.log(orders)
   return <OrdersClient initialOrders={orders as unknown as OrderDetails[]} count={count} />;
 }

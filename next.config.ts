@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['localhost', '127.0.0.1', 'localhost:4000'],
+    domains: ['localhost', '127.0.0.1', 'localhost:4000', 'backend.nanasnoodlemart.com'],
   },
 };
 

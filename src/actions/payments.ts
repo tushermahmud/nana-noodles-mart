@@ -14,7 +14,6 @@ export async function createPaymentIntent(data: PaymentIntentRequest) {
     revalidateTag('getCart');
     revalidateTag('getCartDetails');
   }
-  console.log(res);
 
   return res;
 }

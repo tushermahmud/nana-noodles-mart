@@ -26,14 +26,10 @@ export default function ProductCard({ product, cartDetails, loggedInUser }: Prod
   const router = useRouter();
   const [isAdding, setIsAdding] = useState(false);
   const cartItems = cartDetails?.cart ?? [];
-  console.log(cartItems);
-  console.log(product);
   const cartItem = cartItems.find((item) => item?.product?.id === product?.id.toString());
   const isInCart = !!cartItem;
   const inStock = product?.quantity > 0;
   const features = product?.features?.split(',') ?? [];
-  console.log(cartItem);
-  console.log(isInCart);
   const handleAddToCart = async () => {
     debugger;
     try {

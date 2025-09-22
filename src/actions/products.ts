@@ -50,7 +50,5 @@ export async function userDashboardOrders() {
     method: 'GET',
   });
 
-  console.log(res);
-
   return res;
 }

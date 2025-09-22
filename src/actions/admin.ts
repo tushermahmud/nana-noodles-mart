@@ -49,7 +49,6 @@ export async function updateOrderStatus(orderId: string, delivery_status: string
     method: 'PATCH',
     body: { delivery_status },
   });
-  console.log('res', res);
 
   if (res?.isSuccess) {
     revalidateTag('getAdminOrders');
@@ -57,4 +56,3 @@ export async function updateOrderStatus(orderId: string, delivery_status: string
 
   return res;
 }
-

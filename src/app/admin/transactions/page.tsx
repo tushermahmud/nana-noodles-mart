@@ -16,5 +16,3 @@ export default async function AdminTransactions({ searchParams }: Props) {
 
   return <TransactionsSection rows={rows} count={count} />;
 }
-
-

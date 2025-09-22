@@ -15,7 +15,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
   const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
   const cartDetails = getCartDetailsRes?.data?.data ?? null;
-  console.log('🔄 CART DETAILS: Cart details:', productsByCategory);
   if (!category) {
     return (
       <div className="min-h-screen bg-white">

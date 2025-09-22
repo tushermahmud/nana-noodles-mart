@@ -98,7 +98,6 @@ export default function CartClient({ cartDetails }: CartClientProps) {
       </div>
     );
   }
-  console.log(cartDetails);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-20">

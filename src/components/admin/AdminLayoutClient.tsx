@@ -44,7 +44,7 @@ export default function AdminLayoutClient({ children, dashboardStats }: AdminLay
             ? orders
             : tab.id === 'transactions'
               ? transactions
-            : null,
+              : null,
   }));
 
   // Get current active tab from pathname
