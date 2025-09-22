@@ -11,6 +11,7 @@ export const PRODUCTS_ENDPOINTS = {
   UPDATE_PRODUCT: (id: string) => `${BASE_URL}/admin/products/${id}`,
   DELETE_PRODUCT: (id: string) => `${BASE_URL}/admin/products/${id}`,
   UPLOAD_PRODUCT_IMAGE: (productId: string) => `${BASE_URL}/products/${productId}/image`,
+  USER_DASHBOARD_ORDERS: `${BASE_URL}/user/dashboard/all-orders`,
 };
 
 export const CATEGORIES_ENDPOINTS = {

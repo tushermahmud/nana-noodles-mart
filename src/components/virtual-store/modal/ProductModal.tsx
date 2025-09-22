@@ -74,7 +74,7 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
               />
               {/* Category Badge */}
               <div className="absolute top-2 right-2 bg-gradient-to-r from-gray-800 to-black text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                {product.category?.name}
+                {product?.category?.name || "Uncategorized"}
               </div>
               {/* Popular */}
               {product.popular && (
@@ -109,7 +109,7 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
           <div className="flex items-center mb-6 p-3 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-100">
             <Flame className="w-4 h-4 text-red-500 mr-2" />
             <span className="text-sm text-gray-700 font-semibold">
-              Spice Level: {product.spice_level}/5
+              Spice Level: {product?.spice_level ? product.spice_level : 0}/5
             </span>
             <div className="ml-auto flex space-x-1">
               {[...Array(5)].map((_, i) => (

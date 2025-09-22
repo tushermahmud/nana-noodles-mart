@@ -12,18 +12,16 @@ type Props = {
 
 export default async function OrdersPage({ searchParams }: Props) {
   const params = (await searchParams) || {};
-  const page = params.page || '1';
-  const limit = params.limit || '10';
+  const page = params.page ?? '1';
+  const limit = params.limit || '5';
   const search = params.search || '';
 
-  // Fetch orders from the backend
   const ordersRes = await getOrders({
     page: parseInt(page),
     limit: parseInt(limit),
     q: search,
   });
   const orders = ordersRes?.data?.data?.rows || [];
-  console.log('orders', orders);
-
-  return <OrdersClient initialOrders={orders as unknown as OrderDetails[]} />;
+  const count = ordersRes?.data?.data?.count || 0;
+  return <OrdersClient initialOrders={orders as unknown as OrderDetails[]} count={count} />;
 }

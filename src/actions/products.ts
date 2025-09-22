@@ -6,6 +6,7 @@ import { performFetch } from '@/lib/apiUtils';
 import { APIResponse } from '@/types/common';
 import { Product } from '@/types/products';
 import { PRODUCTS_ENDPOINTS } from '@/api/products';
+import { Order } from '@/types/orders';
 
 export async function createProduct(productData: FormData) {
   const res = await performFetch<APIResponse<Product>>(PRODUCTS_ENDPOINTS.CREATE_PRODUCT, {
@@ -40,6 +41,16 @@ export async function deleteProduct(id: string) {
   if (res?.isSuccess) {
     revalidateTag('getAdminProducts');
   }
+
+  return res;
+}
+
+export async function userDashboardOrders() {
+  const res = await performFetch<APIResponse<Order[]>>(PRODUCTS_ENDPOINTS.USER_DASHBOARD_ORDERS, {
+    method: 'GET',
+  });
+
+  console.log(res);
 
   return res;
 }

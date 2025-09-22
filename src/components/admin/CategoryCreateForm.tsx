@@ -25,22 +25,16 @@ export const CATEGORY_COLORS = [
 
 // Static icon options for categories
 const CATEGORY_ICONS = [
-  'Utensils',
-  'Coffee',
-  'Pizza',
-  'IceCream',
-  'Cake',
-  'Apple',
-  'Beef',
+  'Package',
+  'ChefHat',
+  'Flame',
+  'Leaf',
   'Fish',
-  'Wheat',
-  'Carrot',
-  'Cherry',
-  'Cookie',
-  'Egg',
-  'Grape',
-  'Lemon',
-  'Milk',
+  'Crown',
+  'Star',
+  'Heart',
+  'Zap',
+  'Shield',
 ];
 
 export const CategoryCreateForm = () => {
@@ -50,7 +44,7 @@ export const CategoryCreateForm = () => {
     name: '',
     description: '',
     image: '',
-    icon: 'Utensils',
+    icon: 'Package',
     color: 'Pink',
   });
 
@@ -191,7 +185,7 @@ export const CategoryCreateForm = () => {
                   errors.icon ? 'border-red-500' : 'border-gray-300'
                 }`}
               >
-                {CATEGORY_ICONS.map((icon) => (
+                {CATEGORY_ICONS.map((icon: string) => (
                   <option key={icon} value={icon}>
                     {icon}
                   </option>

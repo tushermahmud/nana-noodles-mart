@@ -82,7 +82,7 @@ export async function logoutUser() {
 export async function updateUserProfile(data: Partial<User>) {
   const res = await performFetch<User>(AUTH_ENDPOINTS.UPDATE_PROFILE, {
     method: 'PATCH',
-    body: JSON.stringify(data),
+    body: data,
   });
 
   if (res.isSuccess) {

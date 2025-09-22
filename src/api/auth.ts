@@ -6,7 +6,7 @@ export const AUTH_ENDPOINTS = {
   LOGOUT: `${BASE_URL}/auth/logout`,
   REFRESH_TOKEN: `${BASE_URL}/auth/refresh-token`,
   GET_CURRENT_USER: `${BASE_URL}/auth/me`,
-  UPDATE_PROFILE: `${BASE_URL}/auth/profile`,
+  UPDATE_PROFILE: `${BASE_URL}/auth/update`,
   CHANGE_PASSWORD: `${BASE_URL}/auth/change-password`,
   FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
   RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,

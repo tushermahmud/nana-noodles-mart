@@ -11,6 +11,7 @@ export interface OrderDetailsResponse {
 
 export interface OrderDetails {
   order_id: string;
+  transaction_id?: string;
   delivery_status: string;
   customer_name: string;
   customer_email: string;
@@ -48,6 +49,7 @@ export interface TransactionDetails {
 // Legacy types (keeping for backward compatibility)
 export interface Order extends BaseEntity {
   userId: string;
+  transaction_id?: string;
   user?: User;
   items: OrderItem[];
   total: number;

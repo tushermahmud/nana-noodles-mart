@@ -95,7 +95,7 @@ export const ProductsSection = ({ filteredProducts, count, categories }: Product
                   </td>
                   <td className="py-4 px-4">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                      {product?.category?.name ?? ''}
+                      {product?.category?.name ?? 'Uncategorized'}
                     </span>
                   </td>
                   <td className="py-4 px-4">

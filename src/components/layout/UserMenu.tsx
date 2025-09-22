@@ -151,26 +151,6 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
               </Button>
             </Link>
             
-            <Link href="/wishlist" className="block">
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50"
-              >
-                <Heart className="w-4 h-4 mr-2" />
-                Wishlist
-              </Button>
-            </Link>
-            
-            <Link href="/settings" className="block">
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-            </Link>
-            
             <Button
               onClick={handleLogout}
               variant="ghost"
@@ -229,26 +209,6 @@ const UserMenu = ({ isMobile = false }: UserMenuProps) => {
                   >
                     <ShoppingBag className="w-4 h-4 mr-3" />
                     My Orders
-                  </Button>
-                </Link>
-                
-                <Link href="/wishlist" className="block">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-none"
-                  >
-                    <Heart className="w-4 h-4 mr-3" />
-                    Wishlist
-                  </Button>
-                </Link>
-                
-                <Link href="/settings" className="block">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-none"
-                  >
-                    <Settings className="w-4 h-4 mr-3" />
-                    Settings
                   </Button>
                 </Link>
               </div>

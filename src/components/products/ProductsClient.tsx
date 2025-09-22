@@ -72,11 +72,21 @@ export default function ProductsClient({
       const data = await res.json();
       const newRows = data?.data?.rows || [];
       const newCount = data?.data?.count ?? totalCount;
+      // If backend returns no rows, stop further attempts
+      if (newRows.length === 0) {
+        setHasMore(false);
+        return;
+      }
       setDisplayedProducts((prev) => {
         const existingIds = new Set(prev.map((p: any) => p.id));
         const unique = newRows.filter((p: any) => !existingIds.has(p.id));
         const nextLength = prev.length + unique.length;
-        setHasMore(nextLength < newCount);
+        // If no unique results or server returned a short page, we're done
+        if (unique.length === 0 || newRows.length < pageSize) {
+          setHasMore(false);
+        } else {
+          setHasMore(nextLength < newCount);
+        }
         return [...prev, ...unique];
       });
       setCurrentPage(nextPage);

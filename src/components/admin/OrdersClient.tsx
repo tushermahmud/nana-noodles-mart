@@ -3,25 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, Edit, Search, Download, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import OrderDetailsComponent from '@/components/admin/OrderDetails';
 import OrderDetailsModal from '@/components/admin/OrderDetailsModal';
-import { Order, OrderDetails, OrderItemDetails } from '@/types/orders';
+import { Order, OrderDetails } from '@/types/orders';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Package, Truck, CheckCircle } from 'lucide-react';
+import { MapPin, Mail, Package, Truck } from 'lucide-react';
+import AdminPagination from '../common/AdminPagination';
 
 interface OrdersClientProps {
   initialOrders: OrderDetails[];
+  count: number;
 }
 
-const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
+const OrdersClient = ({ initialOrders, count }: OrdersClientProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [showOrderDetails, setShowOrderDetails] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showOrderDetailsModal, setShowOrderDetailsModal] = useState(false);
   const [selectedOrderForDetails, setSelectedOrderForDetails] = useState<OrderDetails | null>(null);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
@@ -39,8 +37,6 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
         params.delete('search');
       }
       
-      // Reset to page 1 when searching
-      params.set('page', '1');
       
       const newUrl = params.toString() ? `?${params.toString()}` : '';
       router.push(`/admin/orders${newUrl}`);
@@ -343,6 +339,8 @@ const OrdersClient = ({ initialOrders }: OrdersClientProps) => {
           </table>
         )}
       </div>
+      <AdminPagination totalCount={count} defaultPageSize={5} />
+
 
       {/* Order Details Modal */}
       {showOrderDetailsModal && selectedOrderForDetails && (

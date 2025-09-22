@@ -31,6 +31,7 @@ export default function AdminPagination({
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const page = searchParams.get('page');
+  const search = searchParams.get('search');
   const pageSize = searchParams.get('pageSize');
   const currentPage = page ? parseInt(page) : 1;
   const currentPageSize = pageSize ? parseInt(pageSize) : defaultPageSize;
@@ -48,6 +49,7 @@ export default function AdminPagination({
             ? getQueryEndpoint(pathName, {
                 page: currentPage - 1,
                 pageSize: currentPageSize,
+                search: search,
               })
             : undefined
         }
@@ -77,6 +79,7 @@ export default function AdminPagination({
           href={getQueryEndpoint(pathName, {
             page: i,
             pageSize: currentPageSize,
+            search: search,
           })}
         >
           {i}
@@ -102,6 +105,7 @@ export default function AdminPagination({
             ? getQueryEndpoint(pathName, {
                 page: currentPage + 1,
                 pageSize: currentPageSize,
+                search: search,
               })
             : undefined
         }

@@ -21,6 +21,7 @@ export interface User extends BaseEntity {
   country: string | null;
   state?: string | null;
   city: string | null;
+  avatar_url: string | null;
   address: string | null;
   zip_code: string | null;
   gender?: string | null;
