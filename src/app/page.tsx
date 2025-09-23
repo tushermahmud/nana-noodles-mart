@@ -18,7 +18,7 @@ export default async function Home() {
   const loggedInUserRes = await getCurrentUser();
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
   const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
-  const getCartDetails = getCartDetailsRes?.data?.data ?? {};
+  const cartDetails = getCartDetailsRes?.data?.data ?? {};
   const publicCategoriesRes = await getPublicCategories();
   const publicCategories = publicCategoriesRes?.data?.data ?? [];
   return (
@@ -30,13 +30,14 @@ export default async function Home() {
       }}
     >
       {' '}
-      <Navbar cartDetails={getCartDetails as Cart} loggedInUser={loggedInUser} />
+      <Navbar cartDetails={cartDetails as Cart} loggedInUser={loggedInUser} />
       <Hero />
       <Categories categories={publicCategories} />
       <VirtualStore
         products={products as Product[]}
         cartId={loggedInUser?.cart_id ?? ''}
         loggedInUser={loggedInUser}
+        cartDetails={cartDetails as Cart}
       />
       <AboutSection />
       <Footer />

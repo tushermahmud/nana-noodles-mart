@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { User } from '@/types/auth';
 import { getErrorMessage } from '@/lib/errorUtils';
 import { useRouter } from 'next/navigation';
+import { Cart } from '@/types/cart';
 
 interface VirtualStoreProps {
   products: Product[];
@@ -20,6 +21,7 @@ interface VirtualStoreProps {
   isProductsPage?: boolean;
   cartId: string;
   loggedInUser?: User | null;
+  cartDetails?: Cart;
 }
 
 const VirtualStore = ({
@@ -28,6 +30,7 @@ const VirtualStore = ({
   isProductsPage,
   cartId,
   loggedInUser,
+  cartDetails
 }: VirtualStoreProps) => {
   const { selectedProduct, isModalOpen, openModal, closeModal } = useVirtualStore({});
   const router = useRouter();
@@ -88,6 +91,7 @@ const VirtualStore = ({
 
       {/* Product Modal */}
       <ProductModal
+        cartDetails={cartDetails}
         isOpen={isModalOpen}
         product={selectedProduct}
         onClose={closeModal}

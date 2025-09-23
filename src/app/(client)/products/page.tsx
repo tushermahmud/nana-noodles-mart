@@ -23,7 +23,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   const loggedInUserRes = await getCurrentUser();
   const loggedInUser = loggedInUserRes?.data?.data ?? null;
   const getCartDetailsRes = await getCart(loggedInUser?.cart_id ?? '');
-  const getCartDetails = getCartDetailsRes?.data?.data ?? {};
+  const cartDetails = getCartDetailsRes?.data?.data ?? {};
   const publicCategoriesRes = await getPublicCategories();
   const publicCategories = publicCategoriesRes?.data?.data ?? [];
 
@@ -41,7 +41,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         pageSize={limit}
         initialQuery={q}
         loggedInUser={loggedInUser}
-        cartDetails={getCartDetails as Cart}
+        cartDetails={cartDetails as Cart}
         categories={publicCategories}
       />
       <Footer />

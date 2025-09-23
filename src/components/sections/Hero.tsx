@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Play, Video } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Hero = () => {
   return (
@@ -101,19 +102,24 @@ const Hero = () => {
               transition={{ delay: 0.8, duration: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
             >
+              <Link href="/products">
               <Button
                 size="lg"
                 variant="default"
-                className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white px-8 py-4 text-lg font-bold rounded-full shadow-xl hover:shadow-2xl border-2 border-pink-500 hover:border-pink-600 anime-glow btn-hover-effect"
+                className="bg-gradient-to-r cursor-pointer from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white px-8 py-4 text-lg font-bold rounded-full shadow-xl hover:shadow-2xl border-2 border-pink-500 hover:border-pink-600 anime-glow btn-hover-effect"
               >
                 Explore Products
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
-
+              </Link>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-2 border-pink-500 bg-white text-pink-600 hover:bg-pink-500 hover:text-white px-8 py-4 text-lg font-bold rounded-full shadow-lg hover:shadow-xl anime-border btn-hover-effect"
+                onClick={() => {
+                  const el = document.getElementById('about');
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
               >
                 <Play className="mr-2 w-5 h-5" />
                 Watch Our Story

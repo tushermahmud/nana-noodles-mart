@@ -6,15 +6,21 @@ import { Button } from '@/components/ui/button';
 import { Product } from '@/types/products';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Cart } from '@/types/cart';
 interface ProductModalProps {
   isOpen: boolean;
   product: Product | null;
   onClose: () => void;
   onAddToCart: (product: Product) => void;
+  cartDetails?: Cart;
 }
 
-const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalProps) => {
+const ProductModal = ({ isOpen, product, onClose, onAddToCart, cartDetails }: ProductModalProps) => {
   if (!isOpen || !product) return null;
+
+  const cartItems = cartDetails?.cart ?? [];
+  const cartItem = cartItems.find((item) => item?.product?.id === product?.id.toString());
+  const isInCart = !!cartItem;
 
   const handleAddToCart = () => {
     onAddToCart(product);
@@ -137,8 +143,11 @@ const ProductModal = ({ isOpen, product, onClose, onAddToCart }: ProductModalPro
           <div className="flex gap-4">
             <Button
               onClick={handleAddToCart}
-              className="flex-1 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-            >
+              className={`flex-1 font-bold border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
+                isInCart
+                  ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-green-500 hover:border-green-600'
+                  : 'bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white border-pink-500 hover:border-pink-600'
+              }`}            >
               <ShoppingCart className="w-5 h-5 mr-2" />
               Add to Cart
             </Button>

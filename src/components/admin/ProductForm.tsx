@@ -97,7 +97,10 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
       const dataForValidation = {
         id: String(formData.id),
         name: formData.name,
-        categoryId: formData.categoryId.length > 0 ? formData.categoryId : undefined,
+          categoryId:
+            formData.categoryId && formData.categoryId !== 'undefined'
+              ? formData.categoryId
+              : undefined,
         description: formData.description,
         price: Number(formData.price),
         image: formData.image,
@@ -135,7 +138,8 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
-    if (result.data.categoryId) {
+    debugger;
+    if (result.data.categoryId && result.data.categoryId !== 'undefined') {
       fd.append('categoryId', result.data.categoryId);
     }
     fd.append('description', result.data.description);
@@ -226,19 +230,24 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                 <select
-                  value={formData.categoryId.length > 0 ? formData.categoryId : 'undefined'}
-                  onChange={(e) => handleInputChange('categoryId', e.target.value)}
+                  value={formData.categoryId && formData.categoryId !== 'undefined' ? formData.categoryId : 'undefined'}
+                  onChange={(e) =>
+                    handleInputChange(
+                      'categoryId',
+                      e.target.value === 'undefined' ? '' : e.target.value
+                    )
+                  }
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                     errors.categoryId ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
-                  <option value={undefined}>Select Category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                  <option value={'undefined'}>All products (default)</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
                 {errors.categoryId && (
                   <p className="text-red-500 text-sm mt-1">{errors.categoryId}</p>
                 )}

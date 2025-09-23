@@ -25,6 +25,7 @@ export default function ForgotPasswordClient() {
     }
     setIsSubmitting(true);
     try {
+        debugger
       const res = await forgotPassword(email);
       if (res?.isSuccess) {
         toast.success(res?.message ?? 'If an account exists, a reset code has been sent to your email');

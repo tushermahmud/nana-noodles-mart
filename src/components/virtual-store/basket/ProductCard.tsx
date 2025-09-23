@@ -27,7 +27,7 @@ const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
 
       {/* Product info overlay */}
       <div className="absolute -bottom-[25px] gap-2 left-0 right-0 bg-[#BB8654] to-transparent p-1 h-[100px] border-3 border-[#CC9865] flex flex-col justify-center">
-        <h4 className="text-xs font-bold text-white truncate bg-[#BC935E] py-2 text-center">
+        <h4 className="text-xs px-2 font-bold text-white truncate bg-[#BC935E] py-2 text-center">
           {product.name}
         </h4>
         <hr className="border-[#9A7443] border-2" />

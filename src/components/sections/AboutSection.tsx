@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Users, Award, Heart, Clock, Star, Leaf, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 const AboutSection = () => {
   const stats = [
@@ -135,6 +136,7 @@ const AboutSection = () => {
               transition={{ duration: 0.6, delay: 1.2 }}
               viewport={{ once: true }}
             >
+              <Link href="/products">
               <Button
                 size="lg"
                 variant="default"
@@ -143,6 +145,8 @@ const AboutSection = () => {
                 Explore Products
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
+              </Link>
+              
             </motion.div>
           </motion.div>
 

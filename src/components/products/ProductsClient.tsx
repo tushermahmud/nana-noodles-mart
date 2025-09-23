@@ -126,6 +126,7 @@ export default function ProductsClient({
             isProductsPage={true}
             cartId={cartId}
             loggedInUser={loggedInUser}
+            cartDetails={cartDetails}
           />
 
           <div ref={sentinelRef} id="infinite-scroll-sentinel" className="h-1 w-full" />
