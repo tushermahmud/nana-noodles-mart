@@ -23,11 +23,11 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
     name: '',
     categoryId: '',
     description: '',
-    price: '',
-    original_price: '',
+    price: 0.00,
+    original_price: 0.00,
     image: '',
-    quantity: '',
-    spice_level: '',
+    quantity: 0,
+    spice_level: 1,
     features: [''] as string[],
     popular: false,
   });
@@ -79,18 +79,23 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
   };
 
   const validateForm = () => {
+    debugger
+    console.log('formData', formData.categoryId);
     try {
       const validationData = {
         name: formData.name,
-        categoryId: formData.categoryId,
+        categoryId: formData.categoryId.length > 0 ? formData.categoryId : undefined,
         description: formData.description,
-        price: parseFloat(formData.price) || 0,
+        price: formData.price ? Number(formData.price) : 0,
         image: formData.image,
-        quantity: parseInt(formData.quantity) || 0,
+        quantity: formData.quantity ? Number(formData.quantity) : 0,
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
-        original_price: parseFloat(formData.original_price) || 0,
+        original_price:
+          formData.original_price === 0 || formData.original_price === 0.00
+            ? undefined
+            : Number(formData.original_price),
       };
 
       createProductSchema.parse(validationData);
@@ -119,24 +124,31 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
     try {
       const validationData = {
         name: formData.name,
-        categoryId: formData.categoryId,
+        categoryId: formData.categoryId.length > 0 ? formData.categoryId : undefined,
         description: formData.description,
-        price: parseFloat(formData.price),
+        price: Number(formData.price),
         image: formData.image,
-        quantity: parseInt(formData.quantity),
+        quantity: (formData.quantity) ? Number(formData.quantity) : 0,
         spice_level: formData.spice_level,
         features: formData.features.filter((f) => f.trim() !== ''),
         popular: formData.popular,
-        original_price: parseFloat(formData.original_price ?? '0') || 0,
+        original_price:
+          formData.original_price === 0 || formData.original_price === 0.00
+            ? undefined
+            : Number(formData.original_price),
       };
 
       const validatedData = createProductSchema.parse(validationData);
       const productData = new FormData();
       productData.append('name', validatedData.name);
-      productData.append('categoryId', validatedData.categoryId);
+      if (validatedData.categoryId) {
+        productData.append('categoryId', validatedData.categoryId);
+      }
       productData.append('description', validatedData.description);
       productData.append('price', validatedData.price.toString());
-      productData.append('original_price', validatedData.original_price?.toString() ?? '0');
+      if (typeof validatedData.original_price === 'number') {
+        productData.append('original_price', validatedData.original_price.toString());
+      }
       productData.append('quantity', validatedData.quantity.toString());
       productData.append('spice_level', validatedData.spice_level.toString());
       if (validatedData.features && validatedData.features.length > 0) {
@@ -212,13 +224,13 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
                 Category (optional)
               </label>
               <select
-                value={formData.categoryId}
+                value={formData.categoryId.length > 0 ? formData.categoryId : 'undefined'}
                 onChange={(e) => handleInputChange('categoryId', e.target.value)}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                   errors.categoryId ? 'border-red-500' : 'border-gray-300'
                 }`}
               >
-                <option value="">All products (default)</option>
+                <option value={undefined}>All products (default)</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -272,7 +284,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
               <input
                 type="number"
                 step="0.01"
-                value={formData.original_price}
+                value={formData.original_price ?? ''}
                 onChange={(e) => handleInputChange('original_price', e.target.value)}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                   errors.original_price ? 'border-red-500' : 'border-gray-300'
@@ -314,7 +326,7 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Spice Level *</label>
               <select
-                value={formData.spice_level}
+                value={formData.spice_level ?? '1'}
                 onChange={(e) => handleInputChange('spice_level', Number(e.target.value))}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                   errors.spice_level ? 'border-red-500' : 'border-gray-300'

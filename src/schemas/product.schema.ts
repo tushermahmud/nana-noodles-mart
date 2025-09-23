@@ -24,11 +24,16 @@ export const createProductSchema = z.object({
     .min(0.01, 'Price must be at least $0.01')
     .max(9999.99, 'Price must be less than $10,000'),
 
+  // Optional; accepts '', null, undefined ⇒ undefined. If provided, coerces to number ≥ 0
   original_price: z
-    .number()
-    .positive('Price must be a positive number')
-    .min(0.01, 'Price must be at least $0.01')
-    .max(9999.99, 'Price must be less than $10,000'),
+    .preprocess((v) => {
+      if (v === '' || v === null || v === undefined) return undefined;
+      const n = Number(v);
+      return Number.isNaN(n) ? undefined : n;
+    },
+      z.number().min(0, 'Original price cannot be negative').max(9999.99, 'Price must be less than $10,000')
+    )
+    .optional(),
 
   image: z.string().min(1, 'Product image is required'),
 
@@ -51,11 +56,26 @@ export const createProductSchema = z.object({
     .default([]),
 
   popular: z.boolean().default(false),
-});
+}).refine(
+  (d) => d.original_price === undefined || d.original_price === 0 || d.original_price! > d.price,
+  {
+  path: ['original_price'],
+  message: 'Original price must be greater than current price',
+}
+)
 
-export const updateProductSchema = createProductSchema.partial().extend({
-  id: z.string().min(1, 'Product ID is required'),
-});
+export const updateProductSchema = createProductSchema
+  .partial()
+  .extend({
+    id: z.string().min(1, 'Product ID is required'),
+  })
+  .refine(
+    (d) => d.original_price === undefined || d.original_price === 0 || (typeof d.price === 'number' && d.original_price! > d.price),
+    {
+      path: ['original_price'],
+      message: 'Original price must be greater than current price',
+    }
+  );
 
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;

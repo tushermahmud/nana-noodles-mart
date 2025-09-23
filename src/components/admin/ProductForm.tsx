@@ -36,7 +36,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     categoryId: product?.categoryId || '',
     imageUrl: product?.imageUrl || '',
     popular: product?.popular || false,
-    spiceLevel: product?.spice_level || 1,
+    spice_level: product?.spice_level || 1,
     features: Array.isArray(product?.features)
       ? product.features
       : typeof product?.features === 'string'
@@ -97,17 +97,20 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
       const dataForValidation = {
         id: String(formData.id),
         name: formData.name,
-        categoryId: formData.categoryId,
+        categoryId: formData.categoryId.length > 0 ? formData.categoryId : undefined,
         description: formData.description,
-        price: parseFloat(String(formData.price) || '0'),
+        price: Number(formData.price),
         image: formData.image,
-        original_price: parseFloat(String(formData.original_price) || '0'),
-        quantity: parseFloat(String(formData.quantity) || '0'),
-
-        // Optional fields omitted if not needed by backend
-        spice_level: Number(formData.spiceLevel),
+        quantity: (formData.quantity) ? Number(formData.quantity) : 0,
+        spice_level: Number(formData.spice_level ?? '1'),
         features: (formData.features || []).filter((f: string) => f.trim() !== ''),
         popular: !!formData.popular,
+        original_price:
+          formData.original_price === 0 || formData.original_price === 0.00
+            ? undefined
+            : Number(formData.original_price),
+
+        // Optional fields omitted if not needed by backend
       } as any;
       updateProductSchema.parse(dataForValidation);
       setErrors({});
@@ -132,7 +135,9 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
-    fd.append('categoryId', result.data.categoryId || '');
+    if (result.data.categoryId) {
+      fd.append('categoryId', result.data.categoryId);
+    }
     fd.append('description', result.data.description);
     fd.append('price', String(result.data.price));
     if (result.data.quantity !== undefined) {
@@ -221,13 +226,13 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                 <select
-                  value={formData.categoryId as string}
+                  value={formData.categoryId.length > 0 ? formData.categoryId : 'undefined'}
                   onChange={(e) => handleInputChange('categoryId', e.target.value)}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
                     errors.categoryId ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
-                  <option value="">Select Category</option>
+                  <option value={undefined}>Select Category</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
@@ -281,7 +286,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 <input
                   type="number"
                   step="0.01"
-                  value={formData.original_price}
+                  value={formData.original_price ?? 0.00}
                   onChange={(e) => handleInputChange('original_price', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   placeholder="0.00"
@@ -292,7 +297,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <label className="block text-sm font-medium text-gray-700 mb-2">Quantity *</label>
               <input
                 type="number"
-                value={formData.quantity}
+                value={formData.quantity ?? 0}
                 onChange={(e) => handleInputChange('quantity', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 placeholder="Enter quantity"
@@ -305,7 +310,7 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
                 Product Image *
               </label>
               <ImageUploader
-                value={formData.imageUrl}
+                value={formData.imageUrl ?? ''}
                 onChange={(url) => handleInputChange('imageUrl', url)}
                 error={errors.image}
               />
@@ -316,8 +321,8 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Spice Level</label>
                 <select
-                  value={formData.spiceLevel}
-                  onChange={(e) => handleInputChange('spiceLevel', parseInt(e.target.value))}
+                  value={formData.spice_level}
+                  onChange={(e) => handleInputChange('spice_level', parseInt(e.target.value))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 >
                   <option value={1}>Mild (1)</option>
