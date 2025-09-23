@@ -4,11 +4,12 @@ import { getCart } from '@/fetchers/cart';
 import { getProductsByCategory } from '@/fetchers/products';
 
 type CategoryPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;  
 };
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const productsByCategoryRes = await getProductsByCategory(params.id);
+  const p = await params;
+  const productsByCategoryRes = await getProductsByCategory(p.id);
   const category = productsByCategoryRes?.data?.data?.category ?? null;
   const productsByCategory = productsByCategoryRes?.data?.data?.productsWithImageUrl ?? [];
   const loggedInUserRes = await getCurrentUser();

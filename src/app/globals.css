@@ -1,7 +1,4 @@
-/* Import anime/pop style fonts */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+/* Fonts loaded via next/font; keep fallback CSS variables */
 
 @import 'tailwindcss';
 
@@ -30,16 +27,16 @@ html {
 
 /* Anime/Pop Style Typography */
 body {
-  font-family: 'Fredoka', sans-serif;
+  font-family: var(--font-fredoka), system-ui, sans-serif;
 }
 
 .anime-title {
-  font-family: 'Righteous', cursive;
+  font-family: var(--font-righteous), cursive;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .pop-text {
-  font-family: 'Rubik', sans-serif;
+  font-family: var(--font-rubik), sans-serif;
   font-weight: 700;
 }
 
