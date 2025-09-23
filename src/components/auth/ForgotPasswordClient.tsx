@@ -25,13 +25,12 @@ export default function ForgotPasswordClient() {
     }
     setIsSubmitting(true);
     try {
-        debugger
       const res = await forgotPassword(email);
       if (res?.isSuccess) {
         toast.success(res?.message ?? 'If an account exists, a reset code has been sent to your email');
         setShowReset(true);
       } else {
-        toast.message(res?.message ?? 'Check your inbox if the email exists in our records');
+        toast.error(res?.message ?? 'Check your inbox if the email exists in our records');
       }
     } catch (err) {
       toast.error(getErrorMessage(err));
@@ -41,6 +40,7 @@ export default function ForgotPasswordClient() {
   };
 
   const onResetSubmit = async (e: React.FormEvent) => {
+    debugger
     e.preventDefault();
     if (!email || !otp || !password) {
       toast.error('Email, OTP and new password are required');
@@ -56,7 +56,7 @@ export default function ForgotPasswordClient() {
     }
     setIsSubmitting(true);
     try {
-      const res = await resetPassword({ email, otp, newPassword: password } as any);
+      const res = await resetPassword({ email, token: otp as string, password: password });
       if (res?.isSuccess) {
         toast.success(res?.message ?? 'Password has been reset successfully');
         router.push('/login');

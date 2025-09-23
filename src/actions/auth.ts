@@ -15,6 +15,7 @@ import {
 import { performFetch } from '@/lib/apiUtils';
 import { getIronSession } from 'iron-session';
 import { SessionData, sessionOptions } from '@/lib/session';
+import { APIResponse } from '@/types/common';
 
 export async function loginUser(data: LoginRequest) {
   const res = await performFetch<LoginResponse>(AUTH_ENDPOINTS.LOGIN, {
@@ -39,14 +40,12 @@ export async function loginUser(data: LoginRequest) {
 }
 
 export async function forgotPassword(email: string) {
-  const res = await performFetch<ForgotPasswordResponse>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
+  const res = await performFetch<APIResponse<ForgotPasswordResponse>>(AUTH_ENDPOINTS.FORGOT_PASSWORD, {
     method: 'POST',
     body: { email },
     includeAuthorization: false,
   });
-  if (res && res?.isSuccess) {
-    return res;
-  }
+  return res;
 }
 
 export async function registerUser(data: RegisterRequest) {
@@ -100,8 +99,8 @@ export async function changePassword(data: { currentPassword: string; newPasswor
   return res;
 }
 
-export async function resetPassword(data: { email: string; token: string; newPassword: string }) {
-  const res = await performFetch<void>(AUTH_ENDPOINTS.RESET_PASSWORD, {
+export async function resetPassword(data: { email: string; token: string; password: string }) {
+  const res = await performFetch<APIResponse<void>>(AUTH_ENDPOINTS.RESET_PASSWORD, {
     method: 'POST',
     body: data,
   });

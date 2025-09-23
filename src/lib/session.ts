@@ -11,10 +11,9 @@ export interface SessionData {
 
 const sessionPassword =
   process.env.NEXT_PUBLIC_SESSION_PASSWORD ||
-  process.env.NEXT_PUBLIC_SESSION_PASSWORD ||
   (process.env.NODE_ENV !== 'production'
-    ? 'dev-insecure-session-password-change-me-please-0123456789abcd'
-    : 'prod-insecure-session-password-change-me-please-0123456789abcd');
+    ? process.env.NEXT_PUBLIC_SESSION_PASSWORD||'dev-insecure-session-password-change-me-please-0123456789abcd'
+    : process.env.NEXT_PUBLIC_SESSION_PROD_PASSWORD||'prod-insecure-session-password-change-me-please-0123456789abcd');
 
 if (!sessionPassword) {
   throw new Error(
