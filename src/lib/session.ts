@@ -14,7 +14,7 @@ const sessionPassword =
   process.env.NEXT_PUBLIC_SESSION_PASSWORD ||
   (process.env.NODE_ENV !== 'production'
     ? 'dev-insecure-session-password-change-me-please-0123456789abcd'
-    : undefined);
+    : 'prod-insecure-session-password-change-me-please-0123456789abcd');
 
 if (!sessionPassword) {
   throw new Error(
