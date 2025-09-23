@@ -40,7 +40,6 @@ export default function ForgotPasswordClient() {
   };
 
   const onResetSubmit = async (e: React.FormEvent) => {
-    debugger
     e.preventDefault();
     if (!email || !otp || !password) {
       toast.error('Email, OTP and new password are required');
