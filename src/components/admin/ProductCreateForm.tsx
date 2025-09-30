@@ -79,8 +79,6 @@ export const ProductCreateForm = ({ categories }: ProductCreateFormProps) => {
   };
 
   const validateForm = () => {
-    debugger
-    console.log('formData', formData.categoryId);
     try {
       const validationData = {
         name: formData.name,

@@ -138,7 +138,6 @@ const ProductForm = ({ isOpen, onClose, product, categories, onSave }: ProductFo
     // Build FormData to mirror Postman request
     const fd = new FormData();
     fd.append('name', result.data.name);
-    debugger;
     if (result.data.categoryId && result.data.categoryId !== 'undefined') {
       fd.append('categoryId', result.data.categoryId);
     }

@@ -165,18 +165,22 @@ const AboutSection = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
               className="relative w-full h-96 lg:h-[500px] bg-gray-200 rounded-3xl overflow-hidden shadow-lg"
+              style={{
+                backgroundImage: 'url(/test-bg.jpeg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <motion.div
                     animate={{ y: [-10, 10, -10] }}
                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                    className="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md"
+                    className="w-32 h-32 bg-white rounded-full mt-[140px] flex items-center justify-center mx-auto mb-6 shadow-md"
                   >
                     <span className="text-6xl">👵</span>
                   </motion.div>
-                  <h3 className="text-2xl font-black text-gray-800 mb-2">Nana's Kitchen</h3>
-                  <p className="text-lg text-gray-700 font-medium">Where tradition meets taste</p>
                 </div>
               </div>
             </motion.div>

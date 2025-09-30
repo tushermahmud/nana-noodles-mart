@@ -169,6 +169,12 @@ const Hero = () => {
                 animate={{ rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                 className="absolute inset-0 bg-gradient-to-br from-pink-200 via-orange-200 to-yellow-200 rounded-3xl shadow-2xl border-4 border-white"
+                style={{
+                  backgroundImage: 'url(/noodle-dark.jpeg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
               />
 
               {/* Overlay + Noodles + Text */}
@@ -176,15 +182,15 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-3xl"></div>
 
                 <div className="text-center relative z-10">
-                  <img
+                  {/* <img
                     src="/authentic-1.jpg"
                     alt="Noodles"
                     className="w-24 md:w-32 h-24 md:h-32 rounded-full"
-                  />
+                  /> */}
                   <motion.div
                     animate={{ y: [-10, 10, -10] }}
                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                    className="w-36 h-36 bg-white/20 rounded-full flex items-center justify-center mx-auto backdrop-blur-sm border-2 border-white/30"
+                    className="w-36 h-36 mt-[140px] bg-white/20 rounded-full flex items-center justify-center mx-auto backdrop-blur-sm border-2 border-white/30"
                   >
                     <video
                       width={500}
@@ -196,16 +202,16 @@ const Hero = () => {
                       className="rounded-full"
                     />
                   </motion.div>
-                  <img
+                  {/* <img
                     src="/authentic-2.jpg"
                     alt="Noodles"
                     className="w-24 md:w-28 h-24 md:h-28 rounded-full mb-8"
-                  />
+                  /> */}
 
-                  <h3 className="text-3xl font-black text-gray-800 mb-2">
+                  <h3 className="text-3xl font-black text-gray-200 mb-2">
                     Authentic Asian Flavors
                   </h3>
-                  <p className="text-lg text-gray-700 font-semibold">Made with love & tradition</p>
+                  <p className="text-lg text-gray-200 font-semibold">Made with love & tradition</p>
                 </div>
 
                 {/* Floating Elements */}
